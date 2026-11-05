@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	Music library. Rail, header, then the view:
+	500 square grid for albums and artists, 50 list for everything else.
+	Inside an album the album page takes over: cover and facts on the left,
+	tracks (53) on the right.
+-->
+<window>
+	<defaultcontrol always="true">500</defaultcontrol>
+	<backgroundcolor>navy900</backgroundcolor>
+	<views>500,53,50</views>
+	<!-- rail cursor starts on Music (the list starts at Home) -->
+	<include>ScreenEase</include>
+	<controls>
+		<include content="Box">
+			<param name="width" value="1920" />
+			<param name="height" value="1080" />
+		</include>
+
+		<!-- ============ library header ============ -->
+		<control type="group">
+			<visible>!$EXP[AlbumPage]</visible>
+			<control type="label">
+				<left>96</left>
+				<top>124</top>
+				<width>900</width>
+				<height>84</height>
+				<aligny>center</aligny>
+				<font>title</font>
+				<textcolor>white</textcolor>
+				<scroll>false</scroll>
+				<label>$VAR[MusicTitle]</label>
+			</control>
+			<control type="label">
+				<left>96</left>
+				<top>218</top>
+				<width>900</width>
+				<height>30</height>
+				<font>small</font>
+				<textcolor>gray400</textcolor>
+				<label>$VAR[MusicCount]</label>
+			</control>
+		</control>
+
+		<!-- ============ 500: square grid ============ -->
+		<control type="panel" id="500">
+			<onright>noop</onright>
+			<!-- Movies/Music: Back at the collection root leaves the section -->
+			<onback condition="$EXP[MusicRoot]">ActivateWindow(Home)</onback>
+			<left>89</left>
+			<top>268</top>
+			<width>1740</width>
+			<height>812</height>
+			<orientation>vertical</orientation>
+			<scrolltime tween="cubic" easing="out">350</scrolltime>
+			<onleft>noop</onleft>
+			<onup>9040</onup>
+			<ondown>noop</ondown>
+			<viewtype label="Covers">bigicon</viewtype>
+			<visible>!$EXP[AlbumPage]</visible>
+			<itemlayout width="236" height="320">
+				<include content="CoverItem"><param name="id" value="500" /></include>
+			</itemlayout>
+			<focusedlayout width="236" height="320">
+				<include content="CoverItem"><param name="id" value="500" /><param name="focused" value="true" /></include>
+			</focusedlayout>
+		</control>
+
+		<!-- ============ 50: list ============ -->
+		<control type="list" id="50">
+			<!-- Movies/Music: Back at the collection root leaves the section -->
+			<onback condition="$EXP[MusicRoot]">ActivateWindow(Home)</onback>
+			<left>96</left>
+			<top>268</top>
+			<width>1728</width>
+			<height>812</height>
+			<orientation>vertical</orientation>
+			<scrolltime tween="cubic" easing="out">300</scrolltime>
+			<onleft>noop</onleft>
+			<onup>9040</onup>
+			<ondown>noop</ondown>
+			<viewtype label="List">list</viewtype>
+			<!-- first visit: posters/covers, then whatever you pick with the Layout chip -->
+			<onfocus condition="Container.Content(albums) + !Skin.HasSetting(oak_view_albums)">Container.SetViewMode(500)</onfocus>
+			<onfocus condition="Container.Content(albums) + !Skin.HasSetting(oak_view_albums)">Skin.SetBool(oak_view_albums)</onfocus>
+			<!-- first visit: posters/covers, then whatever you pick with the Layout chip -->
+			<onfocus condition="Container.Content(artists) + !Skin.HasSetting(oak_view_artists)">Container.SetViewMode(500)</onfocus>
+			<onfocus condition="Container.Content(artists) + !Skin.HasSetting(oak_view_artists)">Skin.SetBool(oak_view_artists)</onfocus>
+			<visible>!$EXP[AlbumPage]</visible>
+			<itemlayout width="1728" height="104">
+				<include>ListRow</include>
+			</itemlayout>
+			<focusedlayout width="1728" height="104">
+				<include content="Box">
+					<param name="top" value="2" />
+					<param name="width" value="1728" />
+					<param name="height" value="100" />
+					<param name="color" value="navy800" />
+					<param name="visible" value="Control.HasFocus(50)" />
+				</include>
+				<include content="FocusRing">
+					<param name="top" value="2" />
+					<param name="width" value="1728" />
+					<param name="height" value="100" />
+					<param name="visible" value="Control.HasFocus(50)" />
+				</include>
+				<include>ListRow</include>
+			</focusedlayout>
+		</control>
+
+		<!-- ============ album page ============ -->
+		<control type="group">
+			<visible>$EXP[AlbumPage]</visible>
+			<include content="Box">
+				<param name="left" value="184" />
+				<param name="top" value="96" />
+				<param name="width" value="440" />
+				<param name="height" value="440" />
+				<param name="color" value="navy800" />
+			</include>
+			<control type="image">
+				<left>96</left>
+				<top>96</top>
+				<width>440</width>
+				<height>440</height>
+				<aspectratio>scale</aspectratio>
+				<texture background="true">$INFO[Container.ListItemAbsolute(0).Art(thumb)]</texture>
+			</control>
+			<control type="label">
+				<left>96</left>
+				<top>568</top>
+				<width>440</width>
+				<height>24</height>
+				<font>label</font>
+				<textcolor>gray400</textcolor>
+				<label>Album$INFO[Container.ListItemAbsolute(0).Genre,  ·  ]</label>
+			</control>
+			<control type="label">
+				<left>96</left>
+				<top>598</top>
+				<width>440</width>
+				<height>40</height>
+				<font>head</font>
+				<textcolor>white</textcolor>
+				<scroll>false</scroll>
+				<label>$INFO[Container.ListItemAbsolute(0).Album]</label>
+			</control>
+			<control type="label">
+				<left>96</left>
+				<top>642</top>
+				<width>440</width>
+				<height>32</height>
+				<font>body</font>
+				<textcolor>gray200</textcolor>
+				<scroll>false</scroll>
+				<label>$INFO[Container.ListItemAbsolute(0).Artist]</label>
+			</control>
+			<control type="label">
+				<left>96</left>
+				<top>680</top>
+				<width>440</width>
+				<height>30</height>
+				<font>small</font>
+				<textcolor>gray400</textcolor>
+				<label>$INFO[Container.ListItemAbsolute(0).Year,,  ·  ]$INFO[Container.NumItems,, tracks]$INFO[Container.TotalTime,  ·  ]</label>
+			</control>
+			<control type="grouplist" id="9010">
+				<left>96</left>
+				<top>740</top>
+				<width>440</width>
+				<height>60</height>
+				<orientation>horizontal</orientation>
+				<itemgap>14</itemgap>
+				<onleft>noop</onleft>
+				<onright>53</onright>
+				<control type="button" id="9011">
+					<include>ButtonStyle</include>
+					<label>Play album</label>
+					<onclick>PlayMedia($ESCINFO[Container.FolderPath],isdir)</onclick>
+				</control>
+			</control>
+
+			<control type="list" id="53">
+				<onup>noop</onup>
+				<left>700</left>
+				<top>96</top>
+				<width>1124</width>
+				<height>960</height>
+				<orientation>vertical</orientation>
+				<scrolltime tween="cubic" easing="out">300</scrolltime>
+				<ondown>noop</ondown>
+				<viewtype label="Tracks">list</viewtype>
+				<visible>$EXP[AlbumPage]</visible>
+				<onleft>9010</onleft>
+				<itemlayout width="1124" height="76">
+					<include>TrackRow</include>
+				</itemlayout>
+				<focusedlayout width="1124" height="76">
+					<include content="Box">
+						<param name="top" value="2" />
+						<param name="width" value="1124" />
+						<param name="height" value="72" />
+						<param name="color" value="navy800" />
+						<param name="visible" value="Control.HasFocus(53)" />
+					</include>
+					<include content="FocusRing">
+						<param name="top" value="2" />
+						<param name="width" value="1124" />
+						<param name="height" value="72" />
+						<param name="visible" value="Control.HasFocus(53)" />
+					</include>
+					<include>TrackRow</include>
+				</focusedlayout>
+			</control>
+		</control>
+
+		<include>NowPlayingMini</include>
+		<include content="Rail">
+			<param name="onright" value="SetFocus($VAR[MusicView])" />
+		</include>
+		<include content="OptionsPanel">
+			<param name="return" value="$VAR[MusicView]" />
+			<param name="extras" value="OptionsMusic" />
+		</include>
+	</controls>
+</window>

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Smart playlist editor: type, name, rules (10), match, limit, order, group. Kodi ids 12-24. -->
+<window>
+	<defaultcontrol always="true">22</defaultcontrol>
+	<controls>
+		<include>DialogScrim</include>
+		<control type="group">
+			<left>260</left>
+			<top>70</top>
+			<include>DialogEase</include>
+			<include content="DialogPanel">
+				<param name="width" value="1400" />
+				<param name="height" value="940" />
+				<param name="heading_id" value="9002" />
+			</include>
+			<control type="label">
+				<left>40</left>
+				<top>32</top>
+				<width>1320</width>
+				<height>44</height>
+				<font>head</font>
+				<textcolor>white</textcolor>
+				<label>Smart playlist</label>
+			</control>
+			<control type="grouplist" id="500">
+				<onup>noop</onup>
+				<left>40</left>
+				<top>100</top>
+				<width>620</width>
+				<height>700</height>
+				<orientation>vertical</orientation>
+				<itemgap>2</itemgap>
+				<onright>10</onright>
+				<ondown>9001</ondown>
+				<include content="FormButton"><param name="id" value="22" /><param name="label" value="Type" /><param name="width" value="620" /></include>
+				<include content="FormButton"><param name="id" value="12" /><param name="label" value="Name" /><param name="width" value="620" /></include>
+				<include content="FormButton"><param name="id" value="16" /><param name="label" value="Items must match" /><param name="width" value="620" /></include>
+				<include content="FormButton"><param name="id" value="17" /><param name="label" value="Limit" /><param name="width" value="620" /></include>
+				<include content="FormButton"><param name="id" value="18" /><param name="label" value="Order by" /><param name="width" value="620" /></include>
+				<include content="FormButton"><param name="id" value="19" /><param name="label" value="Order" /><param name="width" value="620" /></include>
+				<include content="FormButton"><param name="id" value="23" /><param name="label" value="Group by" /><param name="width" value="620" /></include>
+				<include content="FormRadio"><param name="id" value="24" /><param name="label" value="Mixed groups" /><param name="width" value="620" /><param name="radiox" value="568" /></include>
+			</control>
+			<include content="PlainList"><param name="id" value="10" /><param name="left" value="684" /><param name="top" value="100" /><param name="width" value="676" /><param name="height" value="560" /><param name="onleft" value="500" /></include>
+			<control type="grouplist" id="9001">
+				<onleft>noop</onleft>
+				<onright>noop</onright>
+				<left>40</left>
+				<top>840</top>
+				<width>1320</width>
+				<height>60</height>
+				<orientation>horizontal</orientation>
+				<itemgap>14</itemgap>
+				<onup>500</onup>
+				<control type="button" id="13">
+					<include>ButtonStyle</include>
+					<label>Add rule</label>
+				</control>
+				<control type="button" id="14">
+					<include>ButtonStyle</include>
+					<label>Remove rule</label>
+				</control>
+				<control type="button" id="15">
+					<include>ButtonStyle</include>
+					<label>Edit rule</label>
+				</control>
+				<control type="button" id="20">
+					<include>ButtonStyle</include>
+					<label>OK</label>
+				</control>
+				<control type="button" id="21">
+					<include>ButtonStyle</include>
+					<label>Cancel</label>
+				</control>
+			</control>
+		</control>
+	</controls>
+</window>

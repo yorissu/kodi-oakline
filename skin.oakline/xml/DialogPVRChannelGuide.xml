@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- One channel's guide over live TV: programmes in 11 (time, title), the
+     focused one's plot underneath. Kodi sets the channel name in 2. -->
+<window>
+	<defaultcontrol always="true">11</defaultcontrol>
+	<animation type="WindowOpen" reversible="false">
+		<effect type="fade" start="0" end="100" time="180" />
+		<effect type="slide" start="80,0" end="0,0" time="240" tween="cubic" easing="out" />
+	</animation>
+	<animation type="WindowClose" reversible="false">
+		<effect type="fade" start="100" end="0" time="150" />
+	</animation>
+	<controls>
+		<control type="group">
+			<left>920</left>
+			<include content="Box">
+				<param name="width" value="1000" />
+				<param name="height" value="1080" />
+				<param name="color" value="navy950" />
+			</include>
+			<control type="label" id="2">
+				<left>48</left>
+				<top>48</top>
+				<width>900</width>
+				<height>48</height>
+				<font>head</font>
+				<textcolor>white</textcolor>
+			</control>
+			<control type="list" id="11">
+				<onup>noop</onup>
+				<ondown>noop</ondown>
+				<left>24</left>
+				<top>120</top>
+				<width>952</width>
+				<height>704</height>
+				<orientation>vertical</orientation>
+				<scrolltime tween="cubic" easing="out">250</scrolltime>
+				<itemlayout width="952" height="64">
+					<include content="PlainRow"><param name="width" value="904" /><param name="label" value="$INFO[ListItem.StartTime]   $INFO[ListItem.Label]" /></include>
+				</itemlayout>
+				<focusedlayout width="952" height="64">
+					<include content="PlainRowFocus"><param name="id" value="11" /><param name="width" value="952" /><param name="label" value="$INFO[ListItem.StartTime]   $INFO[ListItem.Label]" /></include>
+				</focusedlayout>
+			</control>
+			<control type="label">
+				<left>48</left>
+				<top>844</top>
+				<width>900</width>
+				<height>30</height>
+				<font>small</font>
+				<textcolor>gray400</textcolor>
+				<label>$INFO[ListItem.StartDate]$INFO[ListItem.StartTime,  ·  ]$INFO[ListItem.EndTime, – ]</label>
+			</control>
+			<control type="textbox">
+				<left>48</left>
+				<top>880</top>
+				<width>900</width>
+				<height>160</height>
+				<font>small</font>
+				<textcolor>gray200</textcolor>
+				<label>$INFO[ListItem.Plot]</label>
+			</control>
+		</control>
+	</controls>
+</window>

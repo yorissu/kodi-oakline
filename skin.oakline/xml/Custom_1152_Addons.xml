@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	Add-ons hub (rail > Add-ons): installed video add-ons to open, then the
+	ways to get more (repository, search, zip, updates, manage).
+	ids: 9200 video add-ons · 9210 get more · 9290 loader
+-->
+<window type="window" id="1152">
+	<defaultcontrol always="true">9199</defaultcontrol>
+	<backgroundcolor>navy900</backgroundcolor>
+	<include>ScreenEase</include>
+	<controls>
+		<include content="Box">
+			<param name="width" value="1920" />
+			<param name="height" value="1080" />
+		</include>
+		<control type="label">
+			<left>96</left>
+			<top>124</top>
+			<width>900</width>
+			<height>84</height>
+			<aligny>center</aligny>
+			<font>title</font>
+			<textcolor>white</textcolor>
+			<label>Add-ons</label>
+		</control>
+
+		<!-- ============ installed video add-ons ============ -->
+		<control type="label">
+			<left>96</left>
+			<top>260</top>
+			<width>1688</width>
+			<height>40</height>
+			<font>head</font>
+			<textcolor>white</textcolor>
+			<label>Video add-ons</label>
+		</control>
+		<control type="label">
+			<left>96</left>
+			<top>320</top>
+			<width>1688</width>
+			<height>40</height>
+			<font>body</font>
+			<textcolor>gray400</textcolor>
+			<label>No video add-ons installed yet. Get one from the repository below.</label>
+			<visible>!Integer.IsGreater(Container(9290).NumItems,0)</visible>
+		</control>
+		<!-- 9199 holds both rows: focus lands on the add-ons row, or on "Get more"
+		     while that row is still loading or empty (a list with no items can't
+		     take focus, and the screen would be left with nothing focused) -->
+		<control type="group" id="9199">
+			<defaultcontrol always="true">9200</defaultcontrol>
+			<control type="fixedlist" id="9200">
+				<onright>noop</onright>
+				<left>89</left>
+				<top>307</top>
+				<width>1740</width>
+				<height>300</height>
+				<orientation>horizontal</orientation>
+				<focusposition>0</focusposition>
+				<movement>0</movement>
+				<scrolltime tween="cubic" easing="out">300</scrolltime>
+				<onleft>noop</onleft>
+				<onup>SetFocus(9000,$VAR[TabIndex],absolute)</onup>
+				<ondown>9210</ondown>
+				<itemlayout width="236" height="300">
+					<include content="AddonTile"><param name="id" value="9200" /></include>
+				</itemlayout>
+				<focusedlayout width="236" height="300">
+					<include content="AddonTile"><param name="id" value="9200" /><param name="focused" value="true" /></include>
+				</focusedlayout>
+				<content target="videos">addons://sources/video/</content>
+			</control>
+			<!-- loader: decides the empty message (the list itself is never hidden) -->
+			<control type="list" id="9290">
+				<left>-4000</left>
+				<width>10</width>
+				<height>10</height>
+				<itemlayout width="10" height="10" />
+				<focusedlayout width="10" height="10" />
+				<content target="videos">addons://sources/video/</content>
+			</control>
+
+			<!-- ============ get more ============ -->
+			<control type="label">
+				<left>96</left>
+				<top>640</top>
+				<width>1688</width>
+				<height>40</height>
+				<font>head</font>
+				<textcolor>white</textcolor>
+				<label>Get more</label>
+			</control>
+			<control type="panel" id="9210">
+				<onright>noop</onright>
+				<ondown>noop</ondown>
+				<left>89</left>
+				<top>687</top>
+				<width>1748</width>
+				<height>393</height>
+				<orientation>vertical</orientation>
+				<onleft>noop</onleft>
+				<onup condition="Integer.IsGreater(Container(9200).NumItems,0)">9200</onup>
+				<onup condition="!Integer.IsGreater(Container(9200).NumItems,0)">SetFocus(9000,$VAR[TabIndex],absolute)</onup>
+				<itemlayout width="553" height="132">
+					<include content="Box">
+						<param name="left" value="7" />
+						<param name="top" value="7" />
+						<param name="width" value="525" />
+						<param name="height" value="108" />
+						<param name="color" value="navy800" />
+					</include>
+					<include>ActionTile</include>
+				</itemlayout>
+				<focusedlayout width="553" height="132">
+					<include content="Box">
+						<param name="left" value="7" />
+						<param name="top" value="7" />
+						<param name="width" value="525" />
+						<param name="height" value="108" />
+						<param name="color" value="navy800" />
+						<param name="visible" value="!Control.HasFocus(9210)" />
+					</include>
+					<include content="Box">
+						<param name="left" value="7" />
+						<param name="top" value="7" />
+						<param name="width" value="525" />
+						<param name="height" value="108" />
+						<param name="color" value="wood" />
+						<param name="visible" value="Control.HasFocus(9210)" />
+					</include>
+					<control type="group">
+						<visible>!Control.HasFocus(9210)</visible>
+						<include>ActionTile</include>
+					</control>
+					<control type="group">
+						<visible>Control.HasFocus(9210)</visible>
+						<include>ActionTileFocus</include>
+					</control>
+				</focusedlayout>
+				<content>
+					<item>
+						<label>Install from repository</label>
+						<label2>Browse add-ons by category</label2>
+						<icon>icons/store.png</icon>
+						<onclick>ActivateWindow(AddonBrowser,addons://repos/,return)</onclick>
+					</item>
+					<item>
+						<label>Search add-ons</label>
+						<label2>Find an add-on by name</label2>
+						<icon>icons/search.png</icon>
+						<onclick>ActivateWindow(AddonBrowser,addons://search/,return)</onclick>
+					</item>
+					<item>
+						<label>Install from zip file</label>
+						<label2>For add-ons that aren't in a repository</label2>
+						<icon>icons/zip.png</icon>
+						<onclick>InstallFromZip</onclick>
+					</item>
+					<item>
+						<label>Updates</label>
+						<label2>Add-ons with a newer version</label2>
+						<icon>icons/update.png</icon>
+						<onclick>ActivateWindow(AddonBrowser,addons://outdated/,return)</onclick>
+					</item>
+					<item>
+						<label>All installed add-ons</label>
+						<label2>Settings, disable, uninstall</label2>
+						<icon>icons/addons.png</icon>
+						<onclick>ActivateWindow(AddonBrowser,addons://user/,return)</onclick>
+					</item>
+				</content>
+			</control>
+
+		</control>
+
+		<include>NowPlayingMini</include>
+		<include content="Rail">
+			<param name="onright" value="SetFocus(9199)" />
+		</include>
+	</controls>
+</window>

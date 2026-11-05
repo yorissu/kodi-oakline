@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- In-game menu (Menu/OSD key while a game runs): resume, saves, players,
+     video, volume, controllers, reset, stop. Each opens Kodi's own window. -->
+<window>
+	<defaultcontrol always="true">1103</defaultcontrol>
+	<controls>
+		<include>DialogScrim</include>
+		<control type="group">
+			<left>96</left>
+			<top>96</top>
+			<include>DialogEase</include>
+			<include content="DialogPanel">
+				<param name="width" value="640" />
+				<param name="height" value="760" />
+				<param name="heading_id" value="9002" />
+			</include>
+			<control type="label">
+				<left>40</left>
+				<top>32</top>
+				<width>560</width>
+				<height>44</height>
+				<font>head</font>
+				<textcolor>white</textcolor>
+				<label>$INFO[Player.Title]</label>
+			</control>
+			<control type="list" id="1103">
+				<onup>noop</onup>
+				<ondown>noop</ondown>
+				<left>24</left>
+				<top>100</top>
+				<width>592</width>
+				<height>640</height>
+				<orientation>vertical</orientation>
+				<itemlayout width="592" height="64"><include content="PlainRow"><param name="width" value="560" /></include></itemlayout>
+				<focusedlayout width="592" height="64"><include content="PlainRowFocus"><param name="id" value="1103" /><param name="width" value="592" /></include></focusedlayout>
+				<content>
+					<item><label>Resume</label><onclick>Dialog.Close(gameosd)</onclick><onclick>Play</onclick></item>
+					<item><label>Saves</label><onclick>ActivateWindow(InGameSaves)</onclick></item>
+					<item><label>Players</label><onclick>ActivateWindow(GameAgents)</onclick></item>
+					<item><label>Video</label><onclick>ActivateWindow(GameVideoSettings)</onclick></item>
+					<item><label>Volume</label><onclick>ActivateWindow(GameVolume)</onclick></item>
+					<item><label>Controllers</label><onclick>ActivateWindow(GameControllers)</onclick></item>
+					<item><label>Reset</label><onclick>PlayerControl(Reset)</onclick></item>
+					<item><label>Stop</label><onclick>Stop</onclick></item>
+				</content>
+			</control>
+		</control>
+	</controls>
+</window>

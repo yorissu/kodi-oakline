@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	Folder / file picker (browsing for a source path, a zip file, a picture...).
+	Kodi lists into 450 (or 451, the same here), shows the path in 412.
+	ids: 411 heading · 413 OK · 414 cancel · 415 new folder · 416 flip
+-->
+<window>
+	<defaultcontrol always="true">450</defaultcontrol>
+	<controls>
+		<include>DialogScrim</include>
+		<control type="group">
+			<left>260</left>
+			<top>90</top>
+			<include>DialogEase</include>
+			<include content="DialogPanel">
+				<param name="width" value="1400" />
+				<param name="height" value="900" />
+				<param name="heading_id" value="411" />
+			</include>
+			<control type="label" id="412">
+				<left>40</left>
+				<top>84</top>
+				<width>1320</width>
+				<height>30</height>
+				<font>small</font>
+				<textcolor>gray400</textcolor>
+				<scroll>false</scroll>
+			</control>
+			<include content="Box">
+				<param name="left" value="40" />
+				<param name="top" value="126" />
+				<param name="width" value="1320" />
+				<param name="height" value="1" />
+				<param name="color" value="navy700" />
+			</include>
+			<control type="list" id="450">
+				<onup>noop</onup>
+				<left>40</left>
+				<top>140</top>
+				<width>1320</width>
+				<height>640</height>
+				<orientation>vertical</orientation>
+				<onright>9000</onright>
+				<ondown>9000</ondown>
+				<itemlayout width="1320" height="64"><include>SelectRow</include></itemlayout>
+				<focusedlayout width="1320" height="64"><include content="BrowserFocus"><param name="id" value="450" /></include></focusedlayout>
+			</control>
+			<control type="list" id="451">
+				<onup>noop</onup>
+				<left>40</left>
+				<top>140</top>
+				<width>1320</width>
+				<height>640</height>
+				<orientation>vertical</orientation>
+				<onright>9000</onright>
+				<ondown>9000</ondown>
+				<itemlayout width="1320" height="64"><include>SelectRow</include></itemlayout>
+				<focusedlayout width="1320" height="64"><include content="BrowserFocus"><param name="id" value="451" /></include></focusedlayout>
+			</control>
+			<control type="grouplist" id="9000">
+				<onleft>noop</onleft>
+				<onright>noop</onright>
+				<left>40</left>
+				<top>800</top>
+				<width>1320</width>
+				<height>60</height>
+				<orientation>horizontal</orientation>
+				<itemgap>16</itemgap>
+				<onup>450</onup>
+				<control type="button" id="413"><include>ButtonStyle</include><label>OK</label></control>
+				<control type="button" id="414"><include>ButtonStyle</include><label>Cancel</label></control>
+				<control type="button" id="415"><include>ButtonStyle</include><label>New folder</label></control>
+				<control type="button" id="416"><include>ButtonStyle</include><label>Flip image</label></control>
+			</control>
+		</control>
+	</controls>
+</window>

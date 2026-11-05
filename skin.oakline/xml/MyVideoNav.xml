@@ -1,0 +1,368 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	Video library (Movies, TV Shows, and anything else Kodi browses).
+	Rail on the left, a header with the focused item, then the view:
+	500 poster grid for movies and shows, 50 list for everything else.
+	A show's seasons (51) or episodes (52) get the show page instead: fanart
+	band, play button, seasons on the left, episodes on the right.
+-->
+<window>
+	<defaultcontrol always="true">500</defaultcontrol>
+	<backgroundcolor>navy900</backgroundcolor>
+	<views>500,51,52,50</views>
+	<!-- rail cursor starts on the section we opened (the list starts at Home) -->
+	<include>ScreenEase</include>
+	<controls>
+		<include content="Box">
+			<param name="width" value="1920" />
+			<param name="height" value="1080" />
+		</include>
+
+		<!-- ============ header ============ -->
+		<control type="label">
+			<left>96</left>
+			<top>124</top>
+			<width>900</width>
+			<height>84</height>
+			<aligny>center</aligny>
+			<font>title</font>
+			<textcolor>white</textcolor>
+			<scroll>false</scroll>
+			<label>$VAR[LibraryTitle]</label>
+			<visible>![Container.Content(seasons) | Container.Content(episodes)]</visible>
+		</control>
+		<control type="label">
+			<left>96</left>
+			<top>218</top>
+			<width>900</width>
+			<height>30</height>
+			<font>small</font>
+			<textcolor>gray400</textcolor>
+			<label>$VAR[LibraryCount]$VAR[WatchedNote]</label>
+			<visible>![Container.Content(seasons) | Container.Content(episodes)]</visible>
+		</control>
+
+		<!-- ============ 500: poster grid ============ -->
+		<control type="panel" id="500">
+			<onright>noop</onright>
+			<!-- Movies/Music: Back at the collection root leaves the section -->
+			<onback condition="$EXP[MoviesRoot]">ActivateWindow(Home)</onback>
+			<left>89</left>
+			<top>268</top>
+			<width>1740</width>
+			<height>812</height>
+			<orientation>vertical</orientation>
+			<scrolltime tween="cubic" easing="out">350</scrolltime>
+			<onleft>noop</onleft>
+			<onup>9040</onup>
+			<ondown>noop</ondown>
+			<viewtype label="Posters">bigicon</viewtype>
+			<visible>![Container.Content(seasons) | Container.Content(episodes)]</visible>
+			<itemlayout width="236" height="406" infoupdate="1000">
+				<include content="PosterItem"><param name="id" value="500" /></include>
+			</itemlayout>
+			<focusedlayout width="236" height="406" infoupdate="1000">
+				<include content="PosterItem"><param name="id" value="500" /><param name="focused" value="true" /></include>
+			</focusedlayout>
+		</control>
+
+		<!-- ============ 50: list for everything else ============ -->
+		<control type="list" id="50">
+			<!-- Movies/Music: Back at the collection root leaves the section -->
+			<onback condition="$EXP[MoviesRoot]">ActivateWindow(Home)</onback>
+			<left>96</left>
+			<top>268</top>
+			<width>1728</width>
+			<height>812</height>
+			<orientation>vertical</orientation>
+			<scrolltime tween="cubic" easing="out">300</scrolltime>
+			<onleft>noop</onleft>
+			<onup>9040</onup>
+			<ondown>noop</ondown>
+			<viewtype label="List">list</viewtype>
+			<onfocus condition="[String.IsEmpty(Container.Content) | Container.Content(files)] + !String.StartsWith(Container.FolderPath,plugin://) + !Skin.HasSetting(oak_view_files)">Container.SetViewMode(500)</onfocus>
+			<onfocus condition="[String.IsEmpty(Container.Content) | Container.Content(files)] + !String.StartsWith(Container.FolderPath,plugin://) + !Skin.HasSetting(oak_view_files)">Skin.SetBool(oak_view_files)</onfocus>
+			<!-- first visit: posters/covers, then whatever you pick with the Layout chip -->
+			<onfocus condition="Container.Content(movies) + !Skin.HasSetting(oak_view_movies)">Container.SetViewMode(500)</onfocus>
+			<onfocus condition="Container.Content(movies) + !Skin.HasSetting(oak_view_movies)">Skin.SetBool(oak_view_movies)</onfocus>
+			<!-- first visit: posters/covers, then whatever you pick with the Layout chip -->
+			<onfocus condition="Container.Content(tvshows) + !Skin.HasSetting(oak_view_tvshows)">Container.SetViewMode(500)</onfocus>
+			<onfocus condition="Container.Content(tvshows) + !Skin.HasSetting(oak_view_tvshows)">Skin.SetBool(oak_view_tvshows)</onfocus>
+			<visible>![Container.Content(seasons) | Container.Content(episodes)]</visible>
+			<itemlayout width="1728" height="104">
+				<include>ListRow</include>
+			</itemlayout>
+			<focusedlayout width="1728" height="104">
+				<include content="Box">
+					<param name="top" value="2" />
+					<param name="width" value="1728" />
+					<param name="height" value="100" />
+					<param name="color" value="navy800" />
+					<param name="visible" value="Control.HasFocus(50)" />
+				</include>
+				<include content="FocusRing">
+					<param name="top" value="2" />
+					<param name="width" value="1728" />
+					<param name="height" value="100" />
+					<param name="visible" value="Control.HasFocus(50)" />
+				</include>
+				<include>ListRow</include>
+			</focusedlayout>
+		</control>
+
+		<!-- ============ show page: a show's seasons or episodes ============ -->
+		<control type="group">
+			<left>0</left>
+			<top>48</top>
+			<visible>[Container.Content(seasons) | Container.Content(episodes)]</visible>
+			<include content="DetailsBand">
+				<param name="fanart" value="$VAR[ShowFanart]" />
+				<param name="kind" value="Series" />
+				<param name="title" value="$VAR[ShowTitle]" />
+				<param name="meta" value="$VAR[ShowMeta]" />
+				<param name="plot" value="$INFO[Container.ShowPlot]" />
+			</include>
+
+			<control type="grouplist" id="9010">
+				<onright>noop</onright>
+				<left>140</left>
+				<top>418</top>
+				<width>692</width>
+				<height>60</height>
+				<orientation>horizontal</orientation>
+				<itemgap>14</itemgap>
+				<ondown>SetFocus($VAR[ShowView])</ondown>
+				<onleft>noop</onleft>
+				<onup>9040</onup>
+				<control type="button" id="9001">
+					<include>ButtonStyle</include>
+					<label>$VAR[ShowPlayLabel]</label>
+					<onclick condition="!$EXP[LibraryShow]">PlayMedia($ESCINFO[Container(52).ListItemAbsolute(0).FileNameAndPath])</onclick>
+					<onclick condition="$EXP[LibraryShow] + Integer.IsGreater(Container(9300).NumItems,0)">PlayMedia($ESCINFO[Container(9300).ListItem.FileNameAndPath],resume)</onclick>
+					<onclick condition="$EXP[LibraryShow] + !Integer.IsGreater(Container(9300).NumItems,0) + Integer.IsGreater(Container(9301).NumItems,0)">PlayMedia($ESCINFO[Container(9301).ListItem.FileNameAndPath])</onclick>
+					<onclick condition="$EXP[LibraryShow] + !Integer.IsGreater(Container(9300).NumItems,0) + !Integer.IsGreater(Container(9301).NumItems,0)">SetFocus($VAR[ShowView])</onclick>
+				</control>
+			</control>
+
+			<!-- one-season shows list their episodes directly: the season is just a label -->
+			<control type="group">
+				<visible>Container.Content(episodes) + !String.IsEmpty(Container.ListItemAbsolute(1).Season)</visible>
+				<include content="Box">
+					<param name="left" value="96" />
+					<param name="top" value="606" />
+					<param name="width" value="3" />
+					<param name="height" value="28" />
+					<param name="color" value="wood" />
+				</include>
+				<control type="label">
+					<left>116</left>
+					<top>590</top>
+					<width>220</width>
+					<height>60</height>
+					<aligny>center</aligny>
+					<font>rail</font>
+					<textcolor>white</textcolor>
+					<label>$INFO[Container.ListItemAbsolute(1).Season,Season ]</label>
+				</control>
+			</control>
+
+			<!-- 51: seasons (the library view) -->
+			<control type="list" id="51">
+				<left>96</left>
+				<top>590</top>
+				<width>240</width>
+				<height>392</height>
+				<orientation>vertical</orientation>
+				<ondown>noop</ondown>
+				<viewtype label="Seasons">list</viewtype>
+				<visible>Container.Content(seasons)</visible>
+				<onright>9200</onright>
+				<onup>9010</onup>
+				<onleft>noop</onleft>
+				<itemlayout width="240" height="60">
+					<control type="label">
+						<left>20</left>
+						<width>210</width>
+						<height>60</height>
+						<aligny>center</aligny>
+						<font>rail</font>
+						<textcolor>gray400</textcolor>
+						<label>$VAR[ListRowTitle]</label>
+					</control>
+				</itemlayout>
+				<focusedlayout width="240" height="60">
+					<include content="Box">
+						<param name="width" value="240" />
+						<param name="height" value="60" />
+						<param name="color" value="wood" />
+						<param name="visible" value="Control.HasFocus(51)" />
+					</include>
+					<include content="Box">
+						<param name="top" value="16" />
+						<param name="width" value="3" />
+						<param name="height" value="28" />
+						<param name="color" value="wood" />
+						<param name="visible" value="!Control.HasFocus(51)" />
+					</include>
+					<control type="label">
+						<left>20</left>
+						<width>210</width>
+						<height>60</height>
+						<aligny>center</aligny>
+						<font>rail</font>
+						<textcolor>white</textcolor>
+						<label>$VAR[ListRowTitle]</label>
+						<visible>!Control.HasFocus(51)</visible>
+					</control>
+					<control type="label">
+						<left>20</left>
+						<width>210</width>
+						<height>60</height>
+						<aligny>center</aligny>
+						<font>rail</font>
+						<textcolor>onwood</textcolor>
+						<label>$VAR[ListRowTitle]</label>
+						<visible>Control.HasFocus(51)</visible>
+					</control>
+				</focusedlayout>
+			</control>
+
+			<!-- 9200: episodes of the season under the cursor -->
+			<control type="list" id="9200">
+				<left>396</left>
+				<top>580</top>
+				<width>1316</width>
+				<height>452</height>
+				<orientation>vertical</orientation>
+				<visible>Container.Content(seasons)</visible>
+				<scrolltime tween="cubic" easing="out">300</scrolltime>
+				<onleft>51</onleft>
+				<onup>9010</onup>
+				<ondown>noop</ondown>
+				<itemlayout width="1316" height="164">
+					<include>EpisodeRow</include>
+				</itemlayout>
+				<focusedlayout width="1316" height="164">
+					<include content="EpisodeFocus"><param name="id" value="9200" /></include>
+					<include>EpisodeRow</include>
+				</focusedlayout>
+				<content target="videos">$VAR[SeasonPath]</content>
+			</control>
+
+			<!-- 52: episodes as the library view (one-season shows, episode listings) -->
+			<control type="list" id="52">
+				<left>396</left>
+				<top>580</top>
+				<width>1316</width>
+				<height>452</height>
+				<orientation>vertical</orientation>
+				<ondown>noop</ondown>
+				<viewtype label="Episodes">list</viewtype>
+				<visible>Container.Content(episodes)</visible>
+				<scrolltime tween="cubic" easing="out">300</scrolltime>
+				<onleft>noop</onleft>
+				<onup>9010</onup>
+				<itemlayout width="1316" height="164">
+					<include>EpisodeRow</include>
+				</itemlayout>
+				<focusedlayout width="1316" height="164">
+					<include content="EpisodeFocus"><param name="id" value="52" /></include>
+					<include>EpisodeRow</include>
+				</focusedlayout>
+			</control>
+
+			<!-- hidden: what the play button resumes (9300) or starts (9301) -->
+			<control type="list" id="9300">
+				<left>-4000</left>
+				<width>10</width>
+				<height>10</height>
+				<itemlayout width="10" height="10" />
+				<focusedlayout width="10" height="10" />
+				<content target="videos">$VAR[ShowResumePath]</content>
+			</control>
+			<control type="list" id="9301">
+				<left>-4000</left>
+				<width>10</width>
+				<height>10</height>
+				<itemlayout width="10" height="10" />
+				<focusedlayout width="10" height="10" />
+				<content target="videos">$VAR[ShowNextPath]</content>
+			</control>
+		</control>
+
+		<!-- ============ empty library ============ -->
+		<!-- Movies / TV Shows list only what has been scanned into Kodi's library.
+		     When nothing is there, say why and offer the way in. 9080 also gets
+		     focus (an empty list can't take it, so the screen would be dead). -->
+		<control type="group">
+			<left>96</left>
+			<top>300</top>
+			<visible>$EXP[EmptyLibrary]</visible>
+			<!-- covers the (empty) view below: hiding the view instead would make
+			     Container.NumItems read 0 and keep this card up for good -->
+			<include content="Box">
+				<param name="left" value="-96" />
+				<param name="top" value="-40" />
+				<param name="width" value="1920" />
+				<param name="height" value="820" />
+				<param name="color" value="navy900" />
+			</include>
+			<control type="label">
+				<width>1300</width>
+				<height>48</height>
+				<font>head</font>
+				<textcolor>white</textcolor>
+				<label>$VAR[EmptyTitle]</label>
+			</control>
+			<control type="textbox">
+				<top>60</top>
+				<width>1300</width>
+				<height>150</height>
+				<font>body</font>
+				<textcolor>gray200</textcolor>
+				<label>$VAR[EmptyText]</label>
+			</control>
+			<control type="grouplist" id="9080">
+				<onleft>noop</onleft>
+				<onright>noop</onright>
+				<top>230</top>
+				<width>1300</width>
+				<height>64</height>
+				<orientation>horizontal</orientation>
+				<itemgap>14</itemgap>
+				<onup>9040</onup>
+				<control type="button" id="9081">
+					<include>ButtonStyle</include>
+					<label>Show all</label>
+					<onclick>SendClick(10)</onclick>
+					<visible>$EXP[WatchedFilterOn]</visible>
+				</control>
+				<control type="button" id="9082">
+					<include>ButtonStyle</include>
+					<label>Open video files</label>
+					<onclick>Container.Update(sources://video/)</onclick>
+				</control>
+				<control type="button" id="9083">
+					<include>ButtonStyle</include>
+					<label>Update library</label>
+					<onclick>UpdateLibrary(video)</onclick>
+				</control>
+				<control type="button" id="9084">
+					<include>ButtonStyle</include>
+					<label>Media settings</label>
+					<onclick>ActivateWindow(MediaSettings)</onclick>
+				</control>
+			</control>
+		</control>
+
+		<include>FolderLoadersMovies</include>
+		<include>NowPlayingMini</include>
+		<include content="Rail">
+			<param name="onright" value="SetFocus($VAR[LibraryView])" />
+		</include>
+		<include content="OptionsPanel">
+			<param name="return" value="$VAR[LibraryView]" />
+			<param name="extras" value="OptionsVideo" />
+		</include>
+	</controls>
+</window>

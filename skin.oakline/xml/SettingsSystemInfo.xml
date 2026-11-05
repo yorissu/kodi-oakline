@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	System information. Kodi fills labels 2-13 with the page picked by
+	buttons 94-101 (summary, storage, network, video, hardware, PVR, privacy...).
+-->
+<window>
+	<defaultcontrol always="true">95</defaultcontrol>
+	<backgroundcolor>navy900</backgroundcolor>
+	<include>ScreenEase</include>
+	<controls>
+		<include content="Box">
+			<param name="width" value="1920" />
+			<param name="height" value="1080" />
+		</include>
+		<control type="label">
+			<left>96</left>
+			<top>124</top>
+			<width>1688</width>
+			<height>84</height>
+			<aligny>center</aligny>
+			<font>title</font>
+			<textcolor>white</textcolor>
+			<label>System info</label>
+		</control>
+
+		<control type="grouplist" id="9030">
+			<ondown>noop</ondown>
+			<onup>SetFocus(9000,$VAR[TabIndex],absolute)</onup>
+			<left>96</left>
+			<top>270</top>
+			<width>400</width>
+			<height>720</height>
+			<orientation>vertical</orientation>
+			<itemgap>4</itemgap>
+			<onleft>noop</onleft>
+			<include content="CategoryButton"><param name="id" value="95" /><param name="width" value="400" /><param name="label" value="Summary" /></include>
+			<include content="CategoryButton"><param name="id" value="94" /><param name="width" value="400" /><param name="label" value="Storage" /></include>
+			<include content="CategoryButton"><param name="id" value="96" /><param name="width" value="400" /><param name="label" value="Network" /></include>
+			<include content="CategoryButton"><param name="id" value="97" /><param name="width" value="400" /><param name="label" value="Video" /></include>
+			<include content="CategoryButton"><param name="id" value="98" /><param name="width" value="400" /><param name="label" value="Hardware" /></include>
+			<include content="CategoryButton"><param name="id" value="99" /><param name="width" value="400" /><param name="label" value="Live TV" /></include>
+			<include content="CategoryButton"><param name="id" value="100" /><param name="width" value="400" /><param name="label" value="Privacy policy" /></include>
+		</control>
+		<include content="Box">
+			<param name="left" value="624" />
+			<param name="top" value="270" />
+			<param name="width" value="1" />
+			<param name="height" value="720" />
+			<param name="color" value="navy700" />
+		</include>
+
+		<control type="grouplist">
+			<onup>noop</onup>
+			<ondown>noop</ondown>
+			<left>664</left>
+			<top>270</top>
+			<width>1160</width>
+			<height>720</height>
+			<orientation>vertical</orientation>
+			<itemgap>6</itemgap>
+			<visible>!Control.HasFocus(100)</visible>
+			<include content="InfoLine"><param name="id" value="2" /></include>
+			<include content="InfoLine"><param name="id" value="3" /></include>
+			<include content="InfoLine"><param name="id" value="4" /></include>
+			<include content="InfoLine"><param name="id" value="5" /></include>
+			<include content="InfoLine"><param name="id" value="6" /></include>
+			<include content="InfoLine"><param name="id" value="7" /></include>
+			<include content="InfoLine"><param name="id" value="8" /></include>
+			<include content="InfoLine"><param name="id" value="9" /></include>
+			<include content="InfoLine"><param name="id" value="10" /></include>
+			<include content="InfoLine"><param name="id" value="11" /></include>
+			<include content="InfoLine"><param name="id" value="12" /></include>
+			<include content="InfoLine"><param name="id" value="13" /></include>
+		</control>
+		<control type="textbox" id="30">
+			<left>664</left>
+			<top>270</top>
+			<width>1160</width>
+			<height>720</height>
+			<font>small</font>
+			<textcolor>gray200</textcolor>
+			<visible>Control.HasFocus(100)</visible>
+		</control>
+
+		<!-- always: memory, CPU, version -->
+		<control type="label">
+			<left>96</left>
+			<top>1010</top>
+			<width>1728</width>
+			<height>30</height>
+			<font>small</font>
+			<textcolor>gray400</textcolor>
+			<label>Memory $INFO[System.Memory(used.percent)]  ·  CPU $INFO[System.CPUUsage]  ·  Kodi $INFO[System.BuildVersion]  ·  $INFO[System.BuildDate]</label>
+		</control>
+
+		<include content="Rail">
+			<param name="onright" value="SetFocus(9030)" />
+		</include>
+	</controls>
+</window>

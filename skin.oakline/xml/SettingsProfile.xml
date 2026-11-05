@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Profiles: list 2 (Kodi adds "Add profile..."), 4 login screen on/off, 5 auto login. -->
+<window>
+	<defaultcontrol always="true">2</defaultcontrol>
+	<backgroundcolor>navy900</backgroundcolor>
+	<include>ScreenEase</include>
+	<controls>
+		<include content="Box">
+			<param name="width" value="1920" />
+			<param name="height" value="1080" />
+		</include>
+		<control type="label">
+			<left>96</left>
+			<top>124</top>
+			<width>1000</width>
+			<height>84</height>
+			<aligny>center</aligny>
+			<font>title</font>
+			<textcolor>white</textcolor>
+			<label>Profiles</label>
+		</control>
+		<control type="list" id="2">
+			<ondown>noop</ondown>
+			<left>96</left>
+			<top>296</top>
+			<width>1100</width>
+			<height>700</height>
+			<orientation>vertical</orientation>
+			<onleft>noop</onleft>
+			<onup>SetFocus(9000,$VAR[TabIndex],absolute)</onup>
+			<onright>9001</onright>
+			<itemlayout width="1100" height="104"><include>ListRow</include></itemlayout>
+			<focusedlayout width="1100" height="104">
+				<include content="Box">
+					<param name="top" value="2" />
+					<param name="width" value="1100" />
+					<param name="height" value="100" />
+					<param name="color" value="navy800" />
+					<param name="visible" value="Control.HasFocus(2)" />
+				</include>
+				<include content="FocusRing">
+					<param name="top" value="2" />
+					<param name="width" value="1100" />
+					<param name="height" value="100" />
+					<param name="visible" value="Control.HasFocus(2)" />
+				</include>
+				<include>ListRow</include>
+			</focusedlayout>
+		</control>
+		<control type="grouplist" id="9001">
+			<ondown>noop</ondown>
+			<onup>SetFocus(9000,$VAR[TabIndex],absolute)</onup>
+			<left>1344</left>
+			<top>296</top>
+			<width>480</width>
+			<height>300</height>
+			<orientation>vertical</orientation>
+			<itemgap>4</itemgap>
+			<onleft>2</onleft>
+			<control type="radiobutton" id="4">
+				<width>480</width>
+				<include>SettingRowStyle</include>
+				<label>Show login screen</label>
+				<radioposx>428</radioposx>
+				<radioposy>22</radioposy>
+				<radiowidth>24</radiowidth>
+				<radioheight>24</radioheight>
+				<textureradioonfocus colordiffuse="onwood">white.png</textureradioonfocus>
+				<textureradioonnofocus colordiffuse="wood">white.png</textureradioonnofocus>
+				<textureradioofffocus colordiffuse="onwood" border="2">frame.png</textureradioofffocus>
+				<textureradiooffnofocus colordiffuse="gray600" border="2">frame.png</textureradiooffnofocus>
+			</control>
+			<control type="button" id="5">
+				<width>480</width>
+				<include>SettingRowStyle</include>
+				<label>Auto login</label>
+			</control>
+		</control>
+		<include content="Rail">
+			<param name="onright" value="SetFocus($VAR[ProfilesDown])" />
+		</include>
+	</controls>
+</window>

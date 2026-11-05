@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	Kodi's video info dialog (movies, and the Info key on anything), laid out
+	like the show page: fanart band, info box, facts and cast underneath.
+
+	ids Kodi drives: 8 play/resume · 11 trailer · 50 cast · 7 rating · 14 versions ·
+	15 extras · 13 director · 10 art · 6 refresh
+-->
+<window>
+	<defaultcontrol always="true">8</defaultcontrol>
+	<animation effect="fade" start="0" end="100" time="200">WindowOpen</animation>
+	<animation effect="fade" start="100" end="0" time="150">WindowClose</animation>
+	<controls>
+		<include content="DetailsBand">
+			<param name="fanart" value="$INFO[ListItem.Art(fanart)]" />
+			<param name="kind" value="$VAR[InfoKind]$INFO[ListItem.Genre,  ·  ]" />
+			<param name="title" value="$VAR[InfoTitle]" />
+			<param name="meta" value="$VAR[InfoMeta]" />
+			<param name="plot" value="$INFO[ListItem.Plot]" />
+		</include>
+
+		<control type="grouplist" id="9000">
+			<onleft>noop</onleft>
+			<onright>noop</onright>
+			<onup>9099</onup>
+			<left>140</left>
+			<top>418</top>
+			<width>692</width>
+			<height>60</height>
+			<orientation>horizontal</orientation>
+			<itemgap>14</itemgap>
+			<ondown condition="Integer.IsGreater(Container(50).NumItems,0)">50</ondown>
+			<ondown condition="!Integer.IsGreater(Container(50).NumItems,0)">9001</ondown>
+			<control type="button" id="8">
+				<include>ButtonStyle</include>
+				<label>$VAR[InfoPlayLabel]</label>
+			</control>
+			<control type="button" id="11">
+				<include>ButtonStyle</include>
+				<label>Trailer</label>
+				<visible>!String.IsEmpty(ListItem.Trailer)</visible>
+			</control>
+		</control>
+
+		<!-- facts -->
+		<control type="grouplist">
+			<onleft>noop</onleft>
+			<onright>noop</onright>
+			<left>96</left>
+			<top>580</top>
+			<width>1728</width>
+			<height>40</height>
+			<orientation>horizontal</orientation>
+			<itemgap>48</itemgap>
+			<control type="label">
+				<width>auto</width>
+				<height>40</height>
+				<font>small</font>
+				<textcolor>gray400</textcolor>
+				<label>Director  [COLOR white]$INFO[ListItem.Director][/COLOR]</label>
+				<visible>!String.IsEmpty(ListItem.Director)</visible>
+			</control>
+			<control type="label">
+				<width>auto</width>
+				<height>40</height>
+				<font>small</font>
+				<textcolor>gray400</textcolor>
+				<label>Studio  [COLOR white]$INFO[ListItem.Studio][/COLOR]</label>
+				<visible>!String.IsEmpty(ListItem.Studio)</visible>
+			</control>
+			<control type="label">
+				<width>auto</width>
+				<height>40</height>
+				<font>small</font>
+				<textcolor>gray400</textcolor>
+				<label>File  [COLOR white]$INFO[ListItem.VideoResolution,,p]$INFO[ListItem.VideoCodec,  ·  ]$INFO[ListItem.AudioCodec,  ·  ]$INFO[ListItem.AudioChannels,  ·  , ch][/COLOR]</label>
+				<visible>!String.IsEmpty(ListItem.VideoResolution)</visible>
+			</control>
+		</control>
+		<include content="Box">
+			<param name="left" value="96" />
+			<param name="top" value="632" />
+			<param name="width" value="1728" />
+			<param name="height" value="1" />
+			<param name="color" value="navy700" />
+		</include>
+
+		<!-- cast -->
+		<control type="label">
+			<left>96</left>
+			<top>664</top>
+			<width>600</width>
+			<height>40</height>
+			<font>head</font>
+			<textcolor>white</textcolor>
+			<label>Cast</label>
+			<visible>Integer.IsGreater(Container(50).NumItems,0)</visible>
+		</control>
+		<control type="fixedlist" id="50">
+			<onleft>noop</onleft>
+			<onright>noop</onright>
+			<left>89</left>
+			<top>713</top>
+			<width>1735</width>
+			<height>140</height>
+			<orientation>horizontal</orientation>
+			<focusposition>0</focusposition>
+			<movement>0</movement>
+			<scrolltime tween="cubic" easing="out">300</scrolltime>
+			<onup>9000</onup>
+			<ondown>9001</ondown>
+			<itemlayout width="334" height="140">
+				<include>CastCard</include>
+			</itemlayout>
+			<focusedlayout width="334" height="140">
+				<include content="FocusRing">
+					<param name="width" value="334" />
+					<param name="height" value="140" />
+					<param name="visible" value="Control.HasFocus(50)" />
+				</include>
+				<include>CastCard</include>
+			</focusedlayout>
+		</control>
+
+		<!-- more actions: Kodi handles each id -->
+		<control type="grouplist" id="9001">
+			<onleft>noop</onleft>
+			<onright>noop</onright>
+			<left>96</left>
+			<top>900</top>
+			<width>1728</width>
+			<height>60</height>
+			<orientation>horizontal</orientation>
+			<itemgap>4</itemgap>
+			<onup condition="Integer.IsGreater(Container(50).NumItems,0)">50</onup>
+			<onup condition="!Integer.IsGreater(Container(50).NumItems,0)">9000</onup>
+			<control type="button" id="7">
+				<include>LinkStyle</include>
+				<label>Your rating$INFO[ListItem.UserRating,  ·  ]</label>
+				<visible>Control.IsEnabled(7)</visible>
+			</control>
+			<control type="button" id="14">
+				<include>LinkStyle</include>
+				<label>Versions</label>
+				<visible>String.IsEqual(ListItem.DBType,movie) + Control.IsEnabled(14)</visible>
+			</control>
+			<control type="button" id="15">
+				<include>LinkStyle</include>
+				<label>Extras</label>
+				<visible>String.IsEqual(ListItem.DBType,movie) + Control.IsEnabled(15)</visible>
+			</control>
+			<control type="button" id="13">
+				<include>LinkStyle</include>
+				<label>More by the director</label>
+				<visible>!String.IsEmpty(ListItem.Director) + Control.IsEnabled(13)</visible>
+			</control>
+			<control type="button" id="443">
+				<include>LinkStyle</include>
+				<label>Collection$INFO[ListItem.Set,  ·  ]</label>
+				<onclick>Dialog.Close(all,true)</onclick>
+				<onclick>SetProperty(oak_section,files,home)</onclick>
+				<onclick>ActivateWindow(Videos,videodb://movies/sets/$INFO[ListItem.SetId]/?setid=$INFO[ListItem.SetId],return)</onclick>
+				<visible>!String.IsEmpty(ListItem.SetID)</visible>
+			</control>
+			<control type="button" id="10">
+				<include>LinkStyle</include>
+				<label>Choose art</label>
+				<visible>Control.IsEnabled(10)</visible>
+			</control>
+			<control type="button" id="6">
+				<include>LinkStyle</include>
+				<label>Refresh</label>
+				<visible>Control.IsEnabled(6)</visible>
+			</control>
+		</control>
+		<include content="CloseButton"><param name="label" value="Close" /><param name="ondown" value="9000" /></include>
+	</controls>
+</window>

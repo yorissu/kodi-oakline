@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Download subtitles: services on the left (150), results on the right (120).
+     Kodi fills 140 with the search status and 110 with the service logo. -->
+<window>
+	<defaultcontrol always="true">120</defaultcontrol>
+	<controls>
+		<include>DialogScrim</include>
+		<control type="group">
+			<left>160</left>
+			<top>110</top>
+			<include>DialogEase</include>
+			<include content="DialogPanel">
+				<param name="width" value="1600" />
+				<param name="height" value="860" />
+				<param name="heading_id" value="9002" />
+			</include>
+			<control type="label">
+				<left>40</left>
+				<top>32</top>
+				<width>1520</width>
+				<height>44</height>
+				<font>head</font>
+				<textcolor>white</textcolor>
+				<label>Download subtitles</label>
+			</control>
+			<control type="label">
+				<left>40</left>
+				<top>78</top>
+				<width>1520</width>
+				<height>30</height>
+				<font>small</font>
+				<textcolor>gray400</textcolor>
+				<label>$INFO[Player.Filename]</label>
+			</control>
+			<control type="image" id="110">
+				<left>40</left>
+				<top>140</top>
+				<width>380</width>
+				<height>90</height>
+				<aspectratio aligny="center">keep</aspectratio>
+			</control>
+			<control type="list" id="150">
+				<onup>noop</onup>
+				<ondown>noop</ondown>
+				<left>24</left>
+				<top>250</top>
+				<width>412</width>
+				<height>576</height>
+				<orientation>vertical</orientation>
+				<onright>120</onright>
+				<itemlayout width="412" height="64">
+					<include content="PlainRow"><param name="width" value="412" /><param name="color" value="gray400" /></include>
+				</itemlayout>
+				<focusedlayout width="412" height="64">
+					<include content="PlainRowFocus"><param name="id" value="150" /><param name="width" value="412" /></include>
+				</focusedlayout>
+			</control>
+			<include content="Box">
+				<param name="left" value="460" />
+				<param name="top" value="140" />
+				<param name="width" value="1" />
+				<param name="height" value="686" />
+				<param name="color" value="navy700" />
+			</include>
+			<control type="label" id="140">
+				<left>500</left>
+				<top>140</top>
+				<width>1060</width>
+				<height>40</height>
+				<font>small</font>
+				<textcolor>gray400</textcolor>
+			</control>
+			<control type="list" id="120">
+				<onup>noop</onup>
+				<ondown>noop</ondown>
+				<left>484</left>
+				<top>190</top>
+				<width>1092</width>
+				<height>640</height>
+				<orientation>vertical</orientation>
+				<onleft>150</onleft>
+				<scrolltime tween="cubic" easing="out">250</scrolltime>
+				<itemlayout width="1092" height="80">
+					<include content="SubtitleRow"><param name="text" value="white" /><param name="sub" value="gray400" /></include>
+				</itemlayout>
+				<focusedlayout width="1092" height="80">
+					<include content="Box">
+						<param name="width" value="1092" />
+						<param name="height" value="80" />
+						<param name="color" value="wood" />
+						<param name="visible" value="Control.HasFocus(120)" />
+					</include>
+					<control type="group">
+						<visible>Control.HasFocus(120)</visible>
+						<include content="SubtitleRow"><param name="text" value="onwood" /><param name="sub" value="onwood2" /></include>
+					</control>
+					<control type="group">
+						<visible>!Control.HasFocus(120)</visible>
+						<include content="SubtitleRow"><param name="text" value="white" /><param name="sub" value="gray400" /></include>
+					</control>
+				</focusedlayout>
+			</control>
+		</control>
+	</controls>
+</window>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Live TV channel manager: channels left (20), the focused channel's settings right. 30 groups, 31 new channel, 34 TV/radio, 35 refresh logos. -->
+<window>
+	<defaultcontrol always="true">20</defaultcontrol>
+	<controls>
+		<include>DialogScrim</include>
+		<control type="group">
+			<left>160</left>
+			<top>90</top>
+			<include>DialogEase</include>
+			<include content="DialogPanel">
+				<param name="width" value="1600" />
+				<param name="height" value="900" />
+				<param name="heading_id" value="9002" />
+			</include>
+			<control type="label">
+				<left>40</left>
+				<top>32</top>
+				<width>1520</width>
+				<height>44</height>
+				<font>head</font>
+				<textcolor>white</textcolor>
+				<label>Channel manager</label>
+			</control>
+			<include content="PlainList"><param name="id" value="20" /><param name="left" value="24" /><param name="top" value="100" /><param name="width" value="640" /><param name="height" value="700" /><param name="label" value="$INFO[ListItem.Property(Number),,.  ]$INFO[ListItem.Label]" /><param name="onright" value="9001" /></include>
+			<control type="grouplist" id="9001">
+				<onup>noop</onup>
+				<left>720</left>
+				<top>100</top>
+				<width>840</width>
+				<height>560</height>
+				<orientation>vertical</orientation>
+				<itemgap>2</itemgap>
+				<onleft>20</onleft>
+				<ondown>9000</ondown>
+				<include content="FormRadio"><param name="id" value="7" /><param name="label" value="Active" /><param name="width" value="840" /><param name="radiox" value="788" /></include>
+				<include content="FormEdit"><param name="id" value="8" /><param name="label" value="Name" /><param name="width" value="840" /></include>
+				<include content="FormButton"><param name="id" value="9" /><param name="label" value="Logo" /><param name="width" value="840" /></include>
+				<include content="FormRadio"><param name="id" value="12" /><param name="label" value="Guide data" /><param name="width" value="840" /><param name="radiox" value="788" /></include>
+				<include content="FormSpin"><param name="id" value="13" /><param name="label" value="Guide source" /><param name="width" value="840" /></include>
+				<include content="FormRadio"><param name="id" value="14" /><param name="label" value="Parental lock" /><param name="width" value="840" /><param name="radiox" value="788" /></include>
+			</control>
+			<control type="grouplist" id="9000">
+				<onright>noop</onright>
+				<left>720</left>
+				<top>800</top>
+				<width>840</width>
+				<height>60</height>
+				<orientation>horizontal</orientation>
+				<itemgap>14</itemgap>
+				<onup>9001</onup>
+				<onleft>20</onleft>
+				<control type="button" id="31">
+					<include>ButtonStyle</include>
+					<label>New channel</label>
+					<visible>Control.IsEnabled(31)</visible>
+					<control type="togglebutton" id="34"><include>ButtonStyle</include><label>Radio channels</label><altlabel>TV channels</altlabel><alttexturefocus colordiffuse="wood">white.png</alttexturefocus><alttexturenofocus colordiffuse="navy800">white.png</alttexturenofocus></control>
+			</control>
+				<control type="button" id="30">
+					<include>ButtonStyle</include>
+					<label>Groups</label>
+					<control type="togglebutton" id="34"><include>ButtonStyle</include><label>Radio channels</label><altlabel>TV channels</altlabel><alttexturefocus colordiffuse="wood">white.png</alttexturefocus><alttexturenofocus colordiffuse="navy800">white.png</alttexturenofocus></control>
+			</control>
+				<control type="button" id="35">
+					<include>ButtonStyle</include>
+					<label>Refresh logos</label>
+					<visible>Control.IsEnabled(35)</visible>
+					<control type="togglebutton" id="34"><include>ButtonStyle</include><label>Radio channels</label><altlabel>TV channels</altlabel><alttexturefocus colordiffuse="wood">white.png</alttexturefocus><alttexturenofocus colordiffuse="navy800">white.png</alttexturenofocus></control>
+			</control>
+				<control type="togglebutton" id="34"><include>ButtonStyle</include><label>Radio channels</label><altlabel>TV channels</altlabel><alttexturefocus colordiffuse="wood">white.png</alttexturefocus><alttexturenofocus colordiffuse="navy800">white.png</alttexturenofocus></control>
+			</control>
+		</control>
+	</controls>
+</window>

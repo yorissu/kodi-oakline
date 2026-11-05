@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="skin.oakline" version="0.0.0" name="Oakline" provider-name="yorissu">
+	<requires>
+		<import addon="xbmc.gui" version="5.17.0"/>
+	</requires>
+	<extension point="xbmc.gui.skin" debugging="false">
+		<res width="1920" height="1080" aspect="16:9" default="true" folder="xml" />
+	</extension>
+	<extension point="xbmc.addon.metadata">
+		<platform>all</platform>
+		<summary lang="en_GB">Flat navy, gray, warm white and oak. No gradients, no rounded corners.</summary>
+		<description lang="en_GB">A calm Kodi skin for the living-room TV: top tabs, a Movies page that browses your videos folder (folders are shows), Music, Add-ons, light and dark themes that can follow the time of day, and every Kodi setting kept.</description>
+		<license>MIT</license>
+		<website>https://github.com/yorissu/kodi-oakline</website>
+		<source>https://github.com/yorissu/kodi-oakline</source>
+		<assets>
+			<icon>icon.png</icon>
+		</assets>
+	</extension>
+</addon>

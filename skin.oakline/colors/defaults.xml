@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Oak · Dark (default). The names are roles, not literal colours:
+     navy* = surfaces (950 deepest .. 700 dividers), gray* = secondary text,
+     white = primary text and icons, wood = focus and progress,
+     onwood/onwood2 = text and icons on a wood fill, scrim = dialog dim.
+     colors/light.xml maps the same roles for the light theme. -->
+<colors>
+	<color name="navy950">FF08111D</color>
+	<color name="navy900">FF0C1726</color>
+	<color name="navy800">FF13223A</color>
+	<color name="navy700">FF1D3150</color>
+	<color name="gray600">FF4A5566</color>
+	<color name="gray400">FF8A93A0</color>
+	<color name="gray200">FFD3D7DD</color>
+	<color name="white">FFF4F2ED</color>
+	<color name="wood">FFC99A52</color>
+	<color name="onwood">FF08111D</color>
+	<color name="onwood2">FF13223A</color>
+	<color name="scrim">B008111D</color>
+</colors>

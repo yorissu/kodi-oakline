@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Info key during playback: the player bar without buttons, plus the plot. -->
+<window>
+	<defaultcontrol>999</defaultcontrol>
+	<animation type="WindowOpen" reversible="false">
+		<effect type="fade" start="0" end="100" time="180" />
+		<effect type="slide" start="0,60" end="0,0" time="260" tween="cubic" easing="out" />
+	</animation>
+	<animation type="WindowClose" reversible="false">
+		<effect type="fade" start="100" end="0" time="160" />
+	</animation>
+	<controls>
+		<control type="button" id="999">
+			<left>-3000</left>
+			<width>1</width>
+			<height>1</height>
+			<texturefocus />
+			<texturenofocus />
+			<label></label>
+			<onclick>Dialog.Close(fullscreeninfo)</onclick>
+		</control>
+		<include content="PlayerBar">
+			<param name="top" value="680" />
+		</include>
+		<control type="textbox">
+			<left>96</left>
+			<top>850</top>
+			<width>1728</width>
+			<height>180</height>
+			<font>body</font>
+			<textcolor>gray200</textcolor>
+			<label>$INFO[VideoPlayer.Plot]</label>
+		</control>
+	</controls>
+</window>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Radio RDS info (radio station text while listening): station, programme,
+     now playing and the station's radio text. -->
+<window>
+	<defaultcontrol always="true">9000</defaultcontrol>
+	<controls>
+		<include>DialogScrim</include>
+		<control type="group">
+			<left>360</left>
+			<top>200</top>
+			<include>DialogEase</include>
+			<include content="DialogPanel">
+				<param name="width" value="1200" />
+				<param name="height" value="680" />
+				<param name="heading_id" value="9002" />
+			</include>
+			<control type="label">
+				<left>40</left>
+				<top>32</top>
+				<width>1120</width>
+				<height>44</height>
+				<font>head</font>
+				<textcolor>white</textcolor>
+				<label>$INFO[RDS.ChannelCountry]$INFO[VideoPlayer.ChannelName]</label>
+			</control>
+			<control type="grouplist" id="9000">
+				<onup>noop</onup>
+				<ondown>noop</ondown>
+				<left>40</left>
+				<top>100</top>
+				<width>1120</width>
+				<height>540</height>
+				<orientation>vertical</orientation>
+				<include content="ProcessLine"><param name="label" value="Programme" /><param name="value" value="$INFO[RDS.ProgStation]$INFO[RDS.ProgStyle,  ·  ]" /></include>
+				<include content="ProcessLine"><param name="label" value="Now" /><param name="value" value="$INFO[RDS.Artist]$INFO[RDS.Title,  ·  ]" /></include>
+				<include content="ProcessLine"><param name="label" value="Host" /><param name="value" value="$INFO[RDS.ProgHost]" /></include>
+				<include content="ProcessLine"><param name="label" value="Studio" /><param name="value" value="$INFO[RDS.PhoneStudio]$INFO[RDS.EmailStudio,  ·  ]" /></include>
+				<include content="ProcessLine"><param name="label" value="Text" /><param name="value" value="$INFO[RDS.InfoNews]$INFO[RDS.InfoSport,  ·  ]$INFO[RDS.InfoWeather,  ·  ]" /></include>
+			</control>
+		</control>
+	</controls>
+</window>

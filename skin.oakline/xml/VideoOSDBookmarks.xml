@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Bookmarks and chapters during playback. Kodi fills panel 11 (thumbnail,
+     time); buttons 2 add bookmark, 3 clear all, 4 chapter bookmark. -->
+<window>
+	<defaultcontrol always="true">9001</defaultcontrol>
+	<controls>
+		<include>DialogScrim</include>
+		<control type="group">
+			<left>200</left>
+			<top>220</top>
+			<include>DialogEase</include>
+			<include content="DialogPanel">
+				<param name="width" value="1520" />
+				<param name="height" value="640" />
+				<param name="heading_id" value="9002" />
+			</include>
+			<control type="label">
+				<left>40</left>
+				<top>32</top>
+				<width>1440</width>
+				<height>44</height>
+				<font>head</font>
+				<textcolor>white</textcolor>
+				<label>Bookmarks and chapters</label>
+			</control>
+			<control type="label">
+				<left>40</left>
+				<top>180</top>
+				<width>1440</width>
+				<height>260</height>
+				<align>center</align>
+				<aligny>center</aligny>
+				<font>body</font>
+				<textcolor>gray400</textcolor>
+				<label>No bookmarks yet. Add one to jump back to this moment later.</label>
+				<visible>Integer.IsEqual(Container(11).NumItems,0)</visible>
+			</control>
+			<control type="panel" id="11">
+				<onleft>noop</onleft>
+				<onright>noop</onright>
+				<left>33</left>
+				<top>100</top>
+				<width>1454</width>
+				<height>380</height>
+				<orientation>horizontal</orientation>
+				<scrolltime tween="cubic" easing="out">300</scrolltime>
+				<ondown>9001</ondown>
+				<onup>9001</onup>
+				<itemlayout width="363" height="260">
+					<include content="BookmarkItem"><param name="id" value="11" /></include>
+				</itemlayout>
+				<focusedlayout width="363" height="260">
+					<include content="BookmarkItem"><param name="id" value="11" /><param name="focused" value="true" /></include>
+				</focusedlayout>
+			</control>
+			<control type="grouplist" id="9001">
+				<onleft>noop</onleft>
+				<onright>noop</onright>
+				<left>40</left>
+				<top>540</top>
+				<width>1440</width>
+				<height>60</height>
+				<orientation>horizontal</orientation>
+				<itemgap>16</itemgap>
+				<onup>11</onup>
+				<ondown>11</ondown>
+				<control type="button" id="2">
+					<include>ButtonStyle</include>
+					<label>Add bookmark</label>
+				</control>
+				<control type="button" id="3">
+					<include>ButtonStyle</include>
+					<label>Clear all</label>
+				</control>
+				<control type="button" id="4">
+					<include>ButtonStyle</include>
+					<label>Add chapter bookmark</label>
+					<visible>Control.IsEnabled(4)</visible>
+				</control>
+			</control>
+		</control>
+	</controls>
+</window>

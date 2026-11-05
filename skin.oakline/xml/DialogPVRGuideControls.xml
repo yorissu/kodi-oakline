@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Guide navigation (from the guide's context): jump to first, -12h, now, +12h, last, a date. -->
+<window>
+	<defaultcontrol always="true">602</defaultcontrol>
+	<controls>
+		<include>DialogScrim</include>
+		<control type="group">
+			<left>460</left>
+			<top>330</top>
+			<include>DialogEase</include>
+			<include content="DialogPanel">
+				<param name="width" value="1000" />
+				<param name="height" value="420" />
+				<param name="heading_id" value="9002" />
+			</include>
+			<control type="label">
+				<left>40</left>
+				<top>32</top>
+				<width>920</width>
+				<height>44</height>
+				<font>head</font>
+				<textcolor>white</textcolor>
+				<label>Go to</label>
+			</control>
+			<control type="grouplist" id="201">
+				<onup>noop</onup>
+				<ondown>noop</ondown>
+				<left>40</left>
+				<top>120</top>
+				<width>920</width>
+				<height>220</height>
+				<orientation>vertical</orientation>
+				<itemgap>16</itemgap>
+				<control type="grouplist" id="202">
+					<onleft>noop</onleft>
+					<onright>noop</onright>
+					<width>920</width>
+					<height>60</height>
+					<orientation>horizontal</orientation>
+					<itemgap>14</itemgap>
+					<control type="button" id="600"><include>ButtonStyle</include><label>First</label><onclick>PVR.EpgGridControl(FirstProgramme)</onclick></control>
+					<control type="button" id="601"><include>ButtonStyle</include><label>12 h back</label><onclick>PVR.EpgGridControl(-12)</onclick></control>
+					<control type="button" id="602"><include>ButtonStyle</include><label>Now</label><onclick>PVR.EpgGridControl(CurrentProgramme)</onclick></control>
+					<control type="button" id="603"><include>ButtonStyle</include><label>12 h ahead</label><onclick>PVR.EpgGridControl(+12)</onclick></control>
+					<control type="button" id="604"><include>ButtonStyle</include><label>Last</label><onclick>PVR.EpgGridControl(LastProgramme)</onclick></control>
+				</control>
+				<control type="grouplist" id="203">
+					<onleft>noop</onleft>
+					<onright>noop</onright>
+					<width>920</width>
+					<height>60</height>
+					<orientation>horizontal</orientation>
+					<itemgap>14</itemgap>
+					<control type="button" id="605"><include>ButtonStyle</include><label>Pick a date</label><onclick>PVR.EpgGridControl(SelectDate)</onclick></control>
+				</control>
+			</control>
+		</control>
+	</controls>
+</window>

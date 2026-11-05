@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	Add-on details: icon, name, author and version, summary, description,
+	then Kodi's buttons. Kodi labels and hides them as they apply:
+	12 open · 9 settings · 6 install/uninstall · 7 enable/disable ·
+	14 / 8 / 10 versions, update, dependencies.
+-->
+<window>
+	<defaultcontrol always="true">9000</defaultcontrol>
+	<controls>
+		<include>DialogScrim</include>
+		<control type="group">
+			<left>160</left>
+			<top>140</top>
+			<include>DialogEase</include>
+			<include content="DialogPanel">
+				<param name="width" value="1600" />
+				<param name="height" value="800" />
+				<param name="heading_id" value="5099" />
+			</include>
+
+			<include content="Box">
+				<param name="left" value="48" />
+				<param name="top" value="56" />
+				<param name="width" value="260" />
+				<param name="height" value="260" />
+				<param name="color" value="navy800" />
+			</include>
+			<control type="image">
+				<left>78</left>
+				<top>86</top>
+				<width>200</width>
+				<height>200</height>
+				<aspectratio>keep</aspectratio>
+				<texture background="true">$INFO[ListItem.Icon]</texture>
+			</control>
+
+			<control type="label">
+				<left>360</left>
+				<top>56</top>
+				<width>1180</width>
+				<height>24</height>
+				<font>label</font>
+				<textcolor>gray400</textcolor>
+				<label>Add-on$INFO[ListItem.Property(Addon.Status),  ·  ]</label>
+			</control>
+			<control type="label">
+				<left>360</left>
+				<top>86</top>
+				<width>1180</width>
+				<height>80</height>
+				<aligny>center</aligny>
+				<font>title</font>
+				<textcolor>white</textcolor>
+				<scroll>false</scroll>
+				<label>$INFO[ListItem.AddonName]</label>
+			</control>
+			<control type="label">
+				<left>360</left>
+				<top>172</top>
+				<width>1180</width>
+				<height>30</height>
+				<font>small</font>
+				<textcolor>gray400</textcolor>
+				<label>$INFO[ListItem.AddonCreator]$INFO[ListItem.AddonVersion,  ·  v]$INFO[ListItem.AddonSize,  ·  ]</label>
+			</control>
+			<control type="label">
+				<left>360</left>
+				<top>220</top>
+				<width>1180</width>
+				<height>36</height>
+				<font>body</font>
+				<textcolor>white</textcolor>
+				<scroll>false</scroll>
+				<label>$INFO[ListItem.AddonSummary]</label>
+			</control>
+			<control type="textbox">
+				<left>360</left>
+				<top>270</top>
+				<width>1180</width>
+				<height>360</height>
+				<font>body</font>
+				<textcolor>gray200</textcolor>
+				<autoscroll time="3000" delay="6000" repeat="6000">true</autoscroll>
+				<label>$INFO[ListItem.AddonDescription]</label>
+			</control>
+
+			<control type="grouplist" id="9000">
+				<onleft>noop</onleft>
+				<onright>noop</onright>
+				<left>48</left>
+				<top>692</top>
+				<width>1504</width>
+				<height>60</height>
+				<orientation>horizontal</orientation>
+				<itemgap>14</itemgap>
+				<include content="AddonButton"><param name="id" value="12" /><param name="label" value="$LOCALIZE[518]" /></include>
+				<include content="AddonButton"><param name="id" value="9" /><param name="label" value="Settings" /></include>
+				<include content="AddonButton"><param name="id" value="6" /><param name="label" value="" /></include>
+				<include content="AddonButton"><param name="id" value="7" /><param name="label" value="" /></include>
+				<include content="AddonButton"><param name="id" value="14" /><param name="label" value="$LOCALIZE[24069]" /></include>
+				<include content="AddonButton"><param name="id" value="8" /><param name="label" value="$LOCALIZE[24138]" /></include>
+				<include content="AddonButton"><param name="id" value="10" /><param name="label" value="Dependencies" /></include>
+			</control>
+		</control>
+		<include content="CloseButton"><param name="label" value="Close" /><param name="ondown" value="9000" /></include>
+	</controls>
+</window>

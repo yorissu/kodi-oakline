@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	File manager: two panes (20 left, 21 right), their paths in 101 / 102.
+	Copy, move, delete and rename are in the context menu (menu key).
+-->
+<window>
+	<defaultcontrol always="true">20</defaultcontrol>
+	<backgroundcolor>navy900</backgroundcolor>
+	<include>ScreenEase</include>
+	<controls>
+		<include content="Box">
+			<param name="width" value="1920" />
+			<param name="height" value="1080" />
+		</include>
+		<control type="label">
+			<left>96</left>
+			<top>124</top>
+			<width>1000</width>
+			<height>84</height>
+			<aligny>center</aligny>
+			<font>title</font>
+			<textcolor>white</textcolor>
+			<label>File manager</label>
+		</control>
+		<control type="label">
+			<left>96</left>
+			<top>220</top>
+			<width>1728</width>
+			<height>30</height>
+			<font>small</font>
+			<textcolor>gray400</textcolor>
+			<label>Menu key on a file for copy, move, rename and delete</label>
+		</control>
+
+		<control type="label" id="101">
+			<left>96</left>
+			<top>276</top>
+			<width>800</width>
+			<height>30</height>
+			<font>label</font>
+			<textcolor>gray400</textcolor>
+			<scroll>false</scroll>
+		</control>
+		<control type="label" id="102">
+			<left>1024</left>
+			<top>276</top>
+			<width>800</width>
+			<height>30</height>
+			<font>label</font>
+			<textcolor>gray400</textcolor>
+			<scroll>false</scroll>
+		</control>
+		<include content="Box">
+			<param name="left" value="1004" />
+			<param name="top" value="276" />
+			<param name="width" value="1" />
+			<param name="height" value="804" />
+			<param name="color" value="navy700" />
+		</include>
+		<control type="list" id="20">
+			<ondown>noop</ondown>
+			<left>96</left>
+			<top>320</top>
+			<width>800</width>
+			<height>760</height>
+			<orientation>vertical</orientation>
+			<onleft>noop</onleft>
+			<onup>SetFocus(9000,$VAR[TabIndex],absolute)</onup>
+			<onright>21</onright>
+			<itemlayout width="800" height="64"><include>SelectRow</include></itemlayout>
+			<focusedlayout width="800" height="64"><include content="PaneFocus"><param name="id" value="20" /></include></focusedlayout>
+		</control>
+		<control type="list" id="21">
+			<ondown>noop</ondown>
+			<left>1024</left>
+			<top>320</top>
+			<width>800</width>
+			<height>760</height>
+			<orientation>vertical</orientation>
+			<onleft>20</onleft>
+			<onup>SetFocus(9000,$VAR[TabIndex],absolute)</onup>
+			<onright>noop</onright>
+			<itemlayout width="800" height="64"><include>SelectRow</include></itemlayout>
+			<focusedlayout width="800" height="64"><include content="PaneFocus"><param name="id" value="21" /></include></focusedlayout>
+		</control>
+
+		<include content="Rail">
+			<param name="onright" value="SetFocus(20)" />
+		</include>
+	</controls>
+</window>

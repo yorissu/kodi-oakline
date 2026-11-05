@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Player info (Playback > Player info, or the "o" key): what the player
+     is actually doing. Read-only; Back closes it. -->
+<window>
+	<animation type="WindowOpen" reversible="false">
+		<effect type="fade" start="0" end="100" time="180" />
+	</animation>
+	<animation type="WindowClose" reversible="false">
+		<effect type="fade" start="100" end="0" time="150" />
+	</animation>
+	<controls>
+		<control type="group">
+			<left>96</left>
+			<top>96</top>
+			<include content="Box">
+				<param name="width" value="900" />
+				<param name="height" value="600" />
+				<param name="color" value="navy950" />
+			</include>
+			<include content="Box">
+				<param name="width" value="900" />
+				<param name="height" value="4" />
+				<param name="color" value="wood" />
+			</include>
+			<control type="label">
+				<left>40</left>
+				<top>30</top>
+				<width>820</width>
+				<height>44</height>
+				<font>head</font>
+				<textcolor>white</textcolor>
+				<label>Player info</label>
+			</control>
+			<control type="grouplist">
+				<onup>noop</onup>
+				<ondown>noop</ondown>
+				<left>40</left>
+				<top>100</top>
+				<width>820</width>
+				<height>480</height>
+				<orientation>vertical</orientation>
+				<include content="ProcessLine"><param name="label" value="Video" /><param name="value" value="$INFO[VideoPlayer.VideoCodec]$INFO[Player.Process(videodecoder),  ·  ]$INFO[Player.Process(videohwdecoder),  ·  hardware ]" /><param name="visible" value="Player.HasVideo" /></include>
+				<include content="ProcessLine"><param name="label" value="Picture" /><param name="value" value="$INFO[Player.Process(videowidth)]$INFO[Player.Process(videoheight), x ,]$INFO[Player.Process(videofps),  ·  , fps]$INFO[Player.Process(videoscantype),  ·  ]" /><param name="visible" value="Player.HasVideo" /></include>
+				<include content="ProcessLine"><param name="label" value="Output" /><param name="value" value="$INFO[Player.Process(pixformat)]$INFO[Player.Process(deintmethod),  ·  ]$INFO[System.ScreenResolution,  ·  ]" /><param name="visible" value="Player.HasVideo" /></include>
+				<include content="ProcessLine"><param name="label" value="Audio" /><param name="value" value="$INFO[Player.Process(audiodecoder)]$INFO[Player.Process(audiochannels),  ·  ]$INFO[Player.Process(audiosamplerate),  ·  , Hz]$INFO[Player.Process(audiobitspersample),  ·  , bit]" /></include>
+				<include content="ProcessLine"><param name="label" value="Speed" /><param name="value" value="$INFO[Player.PlaySpeed,,x]$INFO[Player.Process(videodar),  ·  aspect ]" /></include>
+				<include content="ProcessLine"><param name="label" value="Buffer" /><param name="value" value="$INFO[Player.CacheLevel,,%]$INFO[Player.ProgressCache,  ·  , % cached]" /></include>
+				<include content="ProcessLine"><param name="label" value="System" /><param name="value" value="$INFO[System.CpuUsage,CPU ]$INFO[System.Memory(used.percent),  ·  memory ]$INFO[System.CPUTemperature,  ·  ]" /></include>
+			</control>
+		</control>
+	</controls>
+</window>

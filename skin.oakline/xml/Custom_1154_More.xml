@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	More (rail > More): every other part of Kodi - full library nodes,
+	files, pictures, playlists, Live TV, programs, games, weather.
+	Same tiles as the settings hub.
+-->
+<window type="window" id="1154">
+	<defaultcontrol always="true">9100</defaultcontrol>
+	<backgroundcolor>navy900</backgroundcolor>
+	<include>ScreenEase</include>
+	<controls>
+		<include content="Box">
+			<param name="width" value="1920" />
+			<param name="height" value="1080" />
+		</include>
+		<control type="label">
+			<left>96</left>
+			<top>124</top>
+			<width>900</width>
+			<height>84</height>
+			<aligny>center</aligny>
+			<font>title</font>
+			<textcolor>white</textcolor>
+			<label>More</label>
+		</control>
+
+		<control type="panel" id="9100">
+			<onright>noop</onright>
+			<ondown>noop</ondown>
+			<left>89</left>
+			<top>260</top>
+			<width>1748</width>
+			<height>820</height>
+			<orientation>vertical</orientation>
+			<onleft>noop</onleft>
+			<onup>SetFocus(9000,$VAR[TabIndex],absolute)</onup>
+			<itemlayout width="582" height="132">
+					<include content="Box">
+						<param name="left" value="7" />
+						<param name="top" value="7" />
+						<param name="width" value="568" />
+						<param name="height" value="112" />
+						<param name="color" value="navy800" />
+					</include>
+				<include>ActionTile</include>
+			</itemlayout>
+			<focusedlayout width="582" height="132">
+					<include content="Box">
+						<param name="left" value="7" />
+						<param name="top" value="7" />
+						<param name="width" value="568" />
+						<param name="height" value="112" />
+						<param name="color" value="navy800" />
+						<param name="visible" value="!Control.HasFocus(9100)" />
+					</include>
+					<include content="Box">
+						<param name="left" value="7" />
+						<param name="top" value="7" />
+						<param name="width" value="568" />
+						<param name="height" value="112" />
+						<param name="color" value="wood" />
+						<param name="visible" value="Control.HasFocus(9100)" />
+					</include>
+				<control type="group">
+					<visible>!Control.HasFocus(9100)</visible>
+					<include>ActionTile</include>
+				</control>
+				<control type="group">
+					<visible>Control.HasFocus(9100)</visible>
+					<include>ActionTileFocus</include>
+				</control>
+			</focusedlayout>
+			<content>
+				<item>
+					<label>Video library</label>
+					<icon>icons/film.png</icon>
+					<label2>Genres, years, actors, studios, sets, tags</label2>
+					<onclick>SetProperty(oak_section,files,home)</onclick>
+					<onclick>ActivateWindow(Videos,videodb://,return)</onclick>
+				</item>
+				<item>
+					<label>Music library</label>
+					<icon>icons/music.png</icon>
+					<label2>Artists, genres, years, compilations, roles</label2>
+					<onclick>SetProperty(oak_section,files,home)</onclick>
+					<onclick>ActivateWindow(Music,musicdb://,return)</onclick>
+				</item>
+				<item>
+					<label>Music videos</label>
+					<icon>icons/play.png</icon>
+					<label2>Your music video library</label2>
+					<onclick>SetProperty(oak_section,files,home)</onclick>
+					<onclick>ActivateWindow(Videos,videodb://musicvideos/titles/,return)</onclick>
+				</item>
+				<item>
+					<label>Video files</label>
+					<icon>icons/folder.png</icon>
+					<label2>Browse sources folder by folder</label2>
+					<onclick>SetProperty(oak_section,files,home)</onclick>
+					<onclick>ActivateWindow(Videos,sources://video/,return)</onclick>
+				</item>
+				<item>
+					<label>Music files</label>
+					<icon>icons/folder.png</icon>
+					<label2>Browse music sources by folder</label2>
+					<onclick>SetProperty(oak_section,files,home)</onclick>
+					<onclick>ActivateWindow(Music,sources://music/,return)</onclick>
+				</item>
+				<item>
+					<label>Pictures</label>
+					<icon>icons/picture.png</icon>
+					<label2>Photos and slideshows</label2>
+					<onclick>ActivateWindow(Pictures)</onclick>
+				</item>
+				<item>
+					<label>Video playlists</label>
+					<icon>icons/list.png</icon>
+					<label2>Saved and smart playlists</label2>
+					<onclick>SetProperty(oak_section,files,home)</onclick>
+					<onclick>ActivateWindow(Videos,special://videoplaylists/,return)</onclick>
+				</item>
+				<item>
+					<label>Music playlists</label>
+					<icon>icons/list.png</icon>
+					<label2>Saved and smart playlists</label2>
+					<onclick>SetProperty(oak_section,files,home)</onclick>
+					<onclick>ActivateWindow(Music,special://musicplaylists/,return)</onclick>
+				</item>
+				<item>
+					<label>Now playing queue</label>
+					<icon>icons/list.png</icon>
+					<label2>What plays next</label2>
+					<onclick>ActivateWindow(VideoPlaylist)</onclick>
+				</item>
+				<item>
+					<label>Live TV</label>
+					<icon>icons/live.png</icon>
+					<label2>Channels, guide, recordings, timers</label2>
+					<onclick>ActivateWindow(TVChannels)</onclick>
+					<visible>System.HasPVRAddon</visible>
+				</item>
+				<item>
+					<label>Radio</label>
+					<icon>icons/radio.png</icon>
+					<label2>Radio channels and guide</label2>
+					<onclick>ActivateWindow(RadioChannels)</onclick>
+					<visible>System.HasPVRAddon</visible>
+				</item>
+				<item>
+					<label>Programs</label>
+					<icon>icons/program.png</icon>
+					<label2>Program add-ons</label2>
+					<onclick>ActivateWindow(Programs,addons://sources/executable/,return)</onclick>
+				</item>
+				<item>
+					<label>Games</label>
+					<icon>icons/game.png</icon>
+					<label2>Game add-ons and ROMs</label2>
+					<onclick>ActivateWindow(Games)</onclick>
+				</item>
+				<item>
+					<label>Weather</label>
+					<icon>icons/weather.png</icon>
+					<label2>Forecast for your locations</label2>
+					<onclick>ActivateWindow(Weather)</onclick>
+				</item>
+				<item>
+					<label>Favourites</label>
+					<icon>icons/star.png</icon>
+					<label2>Shortcuts you saved</label2>
+					<onclick>ActivateWindow(FavouritesBrowser)</onclick>
+				</item>
+			</content>
+		</control>
+
+		<include>NowPlayingMini</include>
+		<include content="Rail">
+			<param name="onright" value="SetFocus(9100)" />
+		</include>
+	</controls>
+</window>

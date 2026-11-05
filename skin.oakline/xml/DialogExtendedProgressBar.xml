@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Background job progress (add-on installs, scans), top right.
+     Kodi fills 30 (heading), 31 (what's happening), 32 (progress). -->
+<window>
+	<zorder>2</zorder>
+	<animation effect="fade" start="0" end="100" time="150">WindowOpen</animation>
+	<animation effect="fade" start="100" end="0" time="150">WindowClose</animation>
+	<controls>
+		<control type="group">
+			<left>1300</left>
+			<top>48</top>
+			<include content="Box">
+				<param name="width" value="560" />
+				<param name="height" value="118" />
+				<param name="color" value="navy950" />
+			</include>
+			<control type="label" id="30">
+				<left>28</left>
+				<top>18</top>
+				<width>504</width>
+				<height>30</height>
+				<font>card</font>
+				<textcolor>white</textcolor>
+				<scroll>false</scroll>
+			</control>
+			<control type="label" id="31">
+				<left>28</left>
+				<top>52</top>
+				<width>504</width>
+				<height>30</height>
+				<font>small</font>
+				<textcolor>gray400</textcolor>
+				<scroll>false</scroll>
+			</control>
+			<control type="progress" id="32">
+				<left>28</left>
+				<top>94</top>
+				<width>504</width>
+				<height>5</height>
+				<texturebg colordiffuse="gray600">white.png</texturebg>
+				<midtexture colordiffuse="wood">white.png</midtexture>
+			</control>
+		</control>
+	</controls>
+</window>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Single slider (audio delay, subtitle delay, zoom...). 10 heading, 11 slider, 12 value. -->
+<window>
+	<defaultcontrol always="true">11</defaultcontrol>
+	<controls>
+		<control type="group">
+			<left>560</left>
+			<top>780</top>
+			<include>DialogEase</include>
+			<include content="Box">
+				<param name="width" value="800" />
+				<param name="height" value="200" />
+				<param name="color" value="navy950" />
+			</include>
+			<include content="Box">
+				<param name="width" value="800" />
+				<param name="height" value="4" />
+				<param name="color" value="wood" />
+			</include>
+			<control type="label" id="10">
+				<left>40</left>
+				<top>32</top>
+				<width>560</width>
+				<height>36</height>
+				<font>head</font>
+				<textcolor>white</textcolor>
+			</control>
+			<control type="label" id="12">
+				<left>560</left>
+				<top>32</top>
+				<width>200</width>
+				<height>36</height>
+				<align>right</align>
+				<font>body</font>
+				<textcolor>gray200</textcolor>
+			</control>
+			<control type="slider" id="11">
+				<left>40</left>
+				<top>124</top>
+				<width>720</width>
+				<height>12</height>
+				<texturesliderbar colordiffuse="gray600" border="0">white.png</texturesliderbar>
+				<textureslidernib colordiffuse="white">white.png</textureslidernib>
+				<textureslidernibfocus colordiffuse="wood">white.png</textureslidernibfocus>
+				<controloffsetx>0</controloffsetx>
+			</control>
+			<control type="button" id="13"><visible>false</visible></control>
+			<control type="button" id="14"><visible>false</visible></control>
+		</control>
+	</controls>
+</window>

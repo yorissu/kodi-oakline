@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Pictures: folders and photos as a grid (500) or list (50). Options: slideshow, subfolders, shuffle. -->
+<window>
+	<defaultcontrol always="true">500</defaultcontrol>
+	<backgroundcolor>navy900</backgroundcolor>
+	<views>500,50</views>
+	<include>ScreenEase</include>
+	<controls>
+		<include content="PageHeader">
+			<param name="title" value="Pictures" />
+			<param name="sub" value="$INFO[Container.FolderName,,  ·  ]$INFO[Container.NumItems,, items]" />
+			<param name="right" value="$VAR[InfoTitle]" />
+			<param name="right2" value="$INFO[ListItem.Label2]" />
+		</include>
+		<include content="BrowseGrid" ><param name="label" value="Grid" /></include>
+		<include content="BrowseList" />
+		<include content="EmptyNote">
+			<param name="text" value="No pictures here. Add a folder under Settings, Pictures sources." />
+			<param name="visible" value="Integer.IsEqual(Container.NumItems,0)" />
+		</include>
+		<include>NowPlayingMini</include>
+		<include content="Rail">
+			<param name="onright" value="SetFocus($VAR[BrowseView])" />
+		</include>
+		<include content="OptionsPanel">
+			<param name="return" value="$VAR[BrowseView]" />
+			<param name="extras" value="OptionsPictures" />
+		</include>
+	</controls>
+</window>

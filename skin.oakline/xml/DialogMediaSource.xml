@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	Add / edit a media source (Videos > Files > Add videos..., Music > Add music...).
+	Kodi fills list 10 with the source's paths and edit 12 with its name.
+	ids: 11 browse · 13 add path · 14 remove path · 18 OK · 19 cancel · 2 heading
+-->
+<window>
+	<defaultcontrol always="true">11</defaultcontrol>
+	<controls>
+		<include>DialogScrim</include>
+		<control type="group">
+			<left>410</left>
+			<top>150</top>
+			<include>DialogEase</include>
+			<include content="DialogPanel">
+				<param name="width" value="1100" />
+				<param name="height" value="780" />
+				<param name="heading_id" value="2" />
+			</include>
+
+			<control type="label">
+				<left>40</left>
+				<top>100</top>
+				<width>1020</width>
+				<height>30</height>
+				<font>label</font>
+				<textcolor>gray400</textcolor>
+				<label>Folders in this source</label>
+			</control>
+			<include content="Box">
+				<param name="left" value="40" />
+				<param name="top" value="140" />
+				<param name="width" value="1020" />
+				<param name="height" value="200" />
+				<param name="color" value="navy800" />
+			</include>
+			<control type="list" id="10">
+				<left>40</left>
+				<top>140</top>
+				<width>1020</width>
+				<height>200</height>
+				<orientation>vertical</orientation>
+				<ondown>9000</ondown>
+				<onup>9001</onup>
+				<itemlayout width="1020" height="64">
+					<include>SelectRow</include>
+				</itemlayout>
+				<focusedlayout width="1020" height="64">
+					<include content="Box">
+						<param name="width" value="1020" />
+						<param name="height" value="64" />
+						<param name="color" value="wood" />
+						<param name="visible" value="Control.HasFocus(10)" />
+					</include>
+					<control type="group">
+						<visible>Control.HasFocus(10)</visible>
+						<include>SelectRowFocus</include>
+					</control>
+					<control type="group">
+						<visible>!Control.HasFocus(10)</visible>
+						<include>SelectRow</include>
+					</control>
+				</focusedlayout>
+			</control>
+			<control type="grouplist" id="9000">
+				<onleft>noop</onleft>
+				<onright>noop</onright>
+				<left>40</left>
+				<top>364</top>
+				<width>1020</width>
+				<height>60</height>
+				<orientation>horizontal</orientation>
+				<itemgap>16</itemgap>
+				<onup>10</onup>
+				<ondown>12</ondown>
+				<control type="button" id="11"><include>ButtonStyle</include><label>Browse</label></control>
+				<control type="button" id="13"><include>ButtonStyle</include><label>Add another folder</label></control>
+				<control type="button" id="14"><include>ButtonStyle</include><label>Remove folder</label></control>
+			</control>
+
+			<control type="label">
+				<left>40</left>
+				<top>470</top>
+				<width>1020</width>
+				<height>30</height>
+				<font>label</font>
+				<textcolor>gray400</textcolor>
+				<label>Name</label>
+			</control>
+			<include content="Box">
+				<param name="left" value="40" />
+				<param name="top" value="510" />
+				<param name="width" value="1020" />
+				<param name="height" value="72" />
+				<param name="color" value="navy800" />
+			</include>
+			<include content="FocusRing">
+				<param name="left" value="33" />
+				<param name="top" value="503" />
+				<param name="width" value="1034" />
+				<param name="height" value="86" />
+				<param name="visible" value="Control.HasFocus(12)" />
+			</include>
+			<control type="edit" id="12">
+				<left>64</left>
+				<top>510</top>
+				<width>980</width>
+				<height>72</height>
+				<font>rail</font>
+				<textcolor>white</textcolor>
+				<focusedcolor>white</focusedcolor>
+				<aligny>center</aligny>
+				<texturefocus />
+				<texturenofocus />
+				<onup>9000</onup>
+				<ondown>9001</ondown>
+			</control>
+
+			<control type="grouplist" id="9001">
+				<onleft>noop</onleft>
+				<onright>noop</onright>
+				<left>40</left>
+				<top>680</top>
+				<width>1020</width>
+				<height>60</height>
+				<orientation>horizontal</orientation>
+				<itemgap>16</itemgap>
+				<onup>12</onup>
+				<ondown>10</ondown>
+				<control type="button" id="18"><include>ButtonStyle</include><label>OK</label></control>
+				<control type="button" id="19"><include>ButtonStyle</include><label>Cancel</label></control>
+			</control>
+		</control>
+	</controls>
+</window>

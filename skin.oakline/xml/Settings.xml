@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	Settings hub: rail, heading, tiles for each settings section.
+	Sections Kodi draws with SettingsCategory.xml; LibreELEC (on the Pi)
+	is its own add-on.
+-->
+<window>
+	<defaultcontrol always="true">9100</defaultcontrol>
+	<backgroundcolor>navy900</backgroundcolor>
+	<include>ScreenEase</include>
+	<controls>
+		<include content="Box">
+			<param name="width" value="1920" />
+			<param name="height" value="1080" />
+		</include>
+		<control type="label">
+			<left>96</left>
+			<top>124</top>
+			<width>900</width>
+			<height>84</height>
+			<aligny>center</aligny>
+			<font>title</font>
+			<textcolor>white</textcolor>
+			<label>Settings</label>
+		</control>
+
+		<control type="panel" id="9100">
+			<onright>noop</onright>
+			<ondown>noop</ondown>
+			<left>89</left>
+			<top>260</top>
+			<width>1748</width>
+			<height>820</height>
+			<orientation>vertical</orientation>
+			<onleft>noop</onleft>
+			<onup>SetFocus(9000,$VAR[TabIndex],absolute)</onup>
+			<itemlayout width="582" height="132">
+					<include content="Box">
+						<param name="left" value="7" />
+						<param name="top" value="7" />
+						<param name="width" value="568" />
+						<param name="height" value="112" />
+						<param name="color" value="navy800" />
+					</include>
+				<include>ActionTile</include>
+			</itemlayout>
+			<focusedlayout width="582" height="132">
+					<include content="Box">
+						<param name="left" value="7" />
+						<param name="top" value="7" />
+						<param name="width" value="568" />
+						<param name="height" value="112" />
+						<param name="color" value="navy800" />
+						<param name="visible" value="!Control.HasFocus(9100)" />
+					</include>
+					<include content="Box">
+						<param name="left" value="7" />
+						<param name="top" value="7" />
+						<param name="width" value="568" />
+						<param name="height" value="112" />
+						<param name="color" value="wood" />
+						<param name="visible" value="Control.HasFocus(9100)" />
+					</include>
+				<control type="group">
+					<visible>!Control.HasFocus(9100)</visible>
+					<include>ActionTile</include>
+				</control>
+				<control type="group">
+					<visible>Control.HasFocus(9100)</visible>
+					<include>ActionTileFocus</include>
+				</control>
+			</focusedlayout>
+			<content>
+				<item>
+					<label>Player</label>
+					<icon>icons/play.png</icon>
+					<label2>Video, audio, subtitles, discs</label2>
+					<onclick>ActivateWindow(PlayerSettings)</onclick>
+				</item>
+				<item>
+					<label>Media</label>
+					<icon>icons/film.png</icon>
+					<label2>Library, scanning, artwork</label2>
+					<onclick>ActivateWindow(MediaSettings)</onclick>
+				</item>
+				<item>
+					<label>Interface</label>
+					<icon>icons/more.png</icon>
+					<label2>Skin, language, region, screensaver</label2>
+					<onclick>ActivateWindow(InterfaceSettings)</onclick>
+				</item>
+				<item>
+					<label>Services</label>
+					<icon>icons/update.png</icon>
+					<label2>Remote control, web server, AirPlay, UPnP</label2>
+					<onclick>ActivateWindow(ServiceSettings)</onclick>
+				</item>
+				<item>
+					<label>System</label>
+					<icon>icons/settings.png</icon>
+					<label2>Display, audio output, input, power</label2>
+					<onclick>ActivateWindow(SystemSettings)</onclick>
+				</item>
+				<item>
+					<label>Appearance</label>
+					<icon>icons/picture.png</icon>
+					<label2>$VAR[AppearanceSub]</label2>
+					<onclick>ActivateWindow(SkinSettings)</onclick>
+				</item>
+				<item>
+					<label>Games</label>
+					<icon>icons/game.png</icon>
+					<label2>Controllers, emulators, game options</label2>
+					<onclick>ActivateWindow(GameSettings)</onclick>
+				</item>
+				<item>
+					<label>Videos folder</label>
+					<icon>icons/folder.png</icon>
+					<label2>$VAR[VideosFolderLabel]</label2>
+					<onclick>Skin.SetPath(oak_videos)</onclick>
+				</item>
+				<item>
+					<label>Video sources</label>
+					<icon>icons/folder.png</icon>
+					<label2>Add the NAS or other folders with movies and shows</label2>
+					<onclick>SetProperty(oak_section,files,home)</onclick>
+					<onclick>ActivateWindow(Videos,sources://video/,return)</onclick>
+				</item>
+				<item>
+					<label>Music sources</label>
+					<icon>icons/music.png</icon>
+					<label2>Add folders with music</label2>
+					<onclick>SetProperty(oak_section,files,home)</onclick>
+					<onclick>ActivateWindow(Music,sources://music/,return)</onclick>
+				</item>
+				<item>
+					<label>File manager</label>
+					<icon>icons/folder.png</icon>
+					<label2>Browse, copy and delete files</label2>
+					<onclick>ActivateWindow(FileManager)</onclick>
+				</item>
+				<item>
+					<label>Live TV</label>
+					<icon>icons/live.png</icon>
+					<label2>TV tuner and recordings (PVR)</label2>
+					<onclick>ActivateWindow(PVRSettings)</onclick>
+				</item>
+				<item>
+					<label>Profiles</label>
+					<icon>icons/home.png</icon>
+					<label2>Separate libraries and settings per person</label2>
+					<onclick>ActivateWindow(Profiles)</onclick>
+				</item>
+				<item>
+					<label>System info</label>
+					<icon>icons/info.png</icon>
+					<label2>Storage, network, hardware, version</label2>
+					<onclick>ActivateWindow(SystemInfo)</onclick>
+				</item>
+				<item>
+					<label>Event log</label>
+					<icon>icons/list.png</icon>
+					<label2>What Kodi did and what went wrong</label2>
+					<onclick>ActivateWindow(EventLog,events://,return)</onclick>
+				</item>
+				<item>
+					<label>Power</label>
+					<icon>icons/stop.png</icon>
+					<label2>Power off, reboot, sleep timer</label2>
+					<onclick>ActivateWindow(ShutdownMenu)</onclick>
+				</item>
+				<item>
+					<label>LibreELEC</label>
+					<icon>icons/settings.png</icon>
+					<label2>Network, Wi-Fi, Bluetooth, updates</label2>
+					<onclick>RunAddon(service.libreelec.settings)</onclick>
+					<visible>System.AddonIsEnabled(service.libreelec.settings)</visible>
+				</item>
+			</content>
+		</control>
+
+		<include>NowPlayingMini</include>
+		<include content="Rail">
+			<param name="onright" value="SetFocus(9100)" />
+		</include>
+	</controls>
+</window>

@@ -1,0 +1,1352 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Building blocks for the less used screens: Live TV, pictures, programs,
+     games, favourites, playlists, weather, and the player dialogs.
+     Loaded from Includes.xml. Same rules: flat surfaces, wood for focus. -->
+<includes>
+	<!-- ============ page frame ============ -->
+
+	<!-- Full-screen page: background, title and a gray line under it -->
+	<include name="PageHeader">
+		<param name="title" />
+		<param name="sub" default="" />
+		<param name="right" default="" />
+		<param name="right2" default="" />
+		<definition>
+			<include content="Box">
+				<param name="width" value="1920" />
+				<param name="height" value="1080" />
+			</include>
+			<control type="label">
+				<left>96</left>
+				<top>124</top>
+				<width>1100</width>
+				<height>84</height>
+				<aligny>center</aligny>
+				<font>title</font>
+				<textcolor>white</textcolor>
+				<scroll>false</scroll>
+				<label>$PARAM[title]</label>
+			</control>
+			<control type="label">
+				<left>96</left>
+				<top>218</top>
+				<width>1100</width>
+				<height>32</height>
+				<font>small</font>
+				<textcolor>gray400</textcolor>
+				<label>$PARAM[sub]</label>
+			</control>
+		</definition>
+	</include>
+
+	<!-- Message shown in the middle of an empty view -->
+	<include name="EmptyNote">
+		<param name="text" />
+		<param name="visible" />
+		<definition>
+			<control type="label">
+				<left>96</left>
+				<top>460</top>
+				<width>1728</width>
+				<height>120</height>
+				<align>center</align>
+				<aligny>center</aligny>
+				<font>body</font>
+				<textcolor>gray400</textcolor>
+				<wrapmultiline>true</wrapmultiline>
+				<label>$PARAM[text]</label>
+				<visible>$PARAM[visible]</visible>
+			</control>
+		</definition>
+	</include>
+
+	<!-- ============ views for any media window ============ -->
+
+	<!-- 50: list of rows (thumb, title, second line) -->
+	<include name="BrowseList">
+		<param name="id" default="50" />
+		<param name="top" default="268" />
+		<param name="height" default="812" />
+		<param name="label" default="List" />
+		<param name="onup" default="9040" />
+		<param name="visible" default="true" />
+		<definition>
+			<control type="list" id="$PARAM[id]">
+				<ondown>noop</ondown>
+				<left>96</left>
+				<top>$PARAM[top]</top>
+				<width>1728</width>
+				<height>$PARAM[height]</height>
+				<orientation>vertical</orientation>
+				<scrolltime tween="cubic" easing="out">300</scrolltime>
+				<onleft>noop</onleft>
+				<onup>$PARAM[onup]</onup>
+				<viewtype label="$PARAM[label]">list</viewtype>
+				<visible>$PARAM[visible]</visible>
+				<itemlayout width="1728" height="104">
+					<include>ListRow</include>
+				</itemlayout>
+				<focusedlayout width="1728" height="104">
+					<include content="Box">
+						<param name="top" value="2" />
+						<param name="width" value="1728" />
+						<param name="height" value="100" />
+						<param name="color" value="navy800" />
+						<param name="visible" value="Control.HasFocus($PARAM[id])" />
+					</include>
+					<include content="FocusRing">
+						<param name="top" value="2" />
+						<param name="width" value="1728" />
+						<param name="height" value="100" />
+						<param name="visible" value="Control.HasFocus($PARAM[id])" />
+					</include>
+					<include>ListRow</include>
+				</focusedlayout>
+			</control>
+		</definition>
+	</include>
+
+	<!-- 500: grid of square tiles (pictures, programs, games, favourites) -->
+	<include name="BrowseGrid">
+		<param name="id" default="500" />
+		<param name="label" default="Grid" />
+		<param name="onup" default="9040" />
+		<param name="visible" default="true" />
+		<definition>
+			<control type="panel" id="$PARAM[id]">
+				<onright>noop</onright>
+				<ondown>noop</ondown>
+				<left>89</left>
+				<top>268</top>
+				<width>1740</width>
+				<height>812</height>
+				<orientation>vertical</orientation>
+				<scrolltime tween="cubic" easing="out">350</scrolltime>
+				<onleft>noop</onleft>
+				<onup>$PARAM[onup]</onup>
+				<viewtype label="$PARAM[label]">bigicon</viewtype>
+				<visible>$PARAM[visible]</visible>
+				<itemlayout width="236" height="306">
+					<include content="IconTile"><param name="id" value="$PARAM[id]" /></include>
+				</itemlayout>
+				<focusedlayout width="236" height="306">
+					<include content="IconTile"><param name="id" value="$PARAM[id]" /><param name="focused" value="true" /></include>
+				</focusedlayout>
+			</control>
+		</definition>
+	</include>
+
+	<!-- Square tile: the item's art filling the square, or its icon centred
+	     on navy when there is no art (folders, programs) -->
+	<include name="IconTile">
+		<param name="focused" default="false" />
+		<param name="id" />
+		<definition>
+			<control type="group">
+				<animation effect="zoom" start="100" end="104" time="180" tween="cubic" easing="out" center="auto" condition="$PARAM[focused] + Control.HasFocus($PARAM[id])">Conditional</animation>
+				<include content="FocusRing">
+					<param name="width" value="234" />
+					<param name="height" value="234" />
+					<param name="visible" value="$PARAM[focused] + Control.HasFocus($PARAM[id])" />
+				</include>
+				<include content="Box">
+					<param name="left" value="7" />
+					<param name="top" value="7" />
+					<param name="width" value="220" />
+					<param name="height" value="220" />
+					<param name="color" value="navy800" />
+				</include>
+				<control type="image">
+					<left>7</left>
+					<top>7</top>
+					<width>220</width>
+					<height>220</height>
+					<aspectratio>scale</aspectratio>
+					<texture background="true">$INFO[ListItem.Art(thumb)]</texture>
+					<visible>!String.IsEmpty(ListItem.Art(thumb)) + !ListItem.IsFolder | String.IsEqual(ListItem.DBType,album)</visible>
+				</control>
+				<control type="image">
+					<left>57</left>
+					<top>57</top>
+					<width>120</width>
+					<height>120</height>
+					<aspectratio>keep</aspectratio>
+					<texture background="true" colordiffuse="gray400">$VAR[TileIcon]</texture>
+					<visible>String.IsEmpty(ListItem.Art(thumb)) | [ListItem.IsFolder + !String.IsEqual(ListItem.DBType,album)]</visible>
+				</control>
+				<control type="label">
+					<left>7</left>
+					<top>240</top>
+					<width>220</width>
+					<height>28</height>
+					<font>card</font>
+					<textcolor>white</textcolor>
+					<selectedcolor>white</selectedcolor>
+					<scroll>false</scroll>
+					<label>$VAR[ListRowTitle]</label>
+				</control>
+				<control type="label">
+					<left>7</left>
+					<top>274</top>
+					<width>220</width>
+					<height>26</height>
+					<font>small</font>
+					<textcolor>gray400</textcolor>
+					<selectedcolor>gray400</selectedcolor>
+					<scroll>false</scroll>
+					<label>$INFO[ListItem.Label2]</label>
+				</control>
+			</control>
+		</definition>
+	</include>
+
+	<!-- One-colour row for simple lists (services, groups, menus) -->
+	<include name="PlainRow">
+		<param name="width" />
+		<param name="color" default="gray200" />
+		<param name="label" default="$INFO[ListItem.Label]" />
+		<definition>
+			<control type="label">
+				<left>24</left>
+				<width>$PARAM[width]</width>
+				<height>64</height>
+				<aligny>center</aligny>
+				<font>rail</font>
+				<textcolor>$PARAM[color]</textcolor>
+				<selectedcolor>white</selectedcolor>
+				<scroll>false</scroll>
+				<label>$PARAM[label]</label>
+			</control>
+		</definition>
+	</include>
+	<include name="PlainRowFocus">
+		<param name="id" />
+		<param name="width" />
+		<param name="label" default="$INFO[ListItem.Label]" />
+		<definition>
+			<include content="Box">
+				<param name="width" value="$PARAM[width]" />
+				<param name="height" value="64" />
+				<param name="color" value="wood" />
+				<param name="visible" value="Control.HasFocus($PARAM[id])" />
+			</include>
+			<control type="label">
+				<left>24</left>
+				<width>$PARAM[width]</width>
+				<height>64</height>
+				<aligny>center</aligny>
+				<font>rail</font>
+				<textcolor>onwood</textcolor>
+				<selectedcolor>onwood</selectedcolor>
+				<scroll>true</scroll>
+				<label>$PARAM[label]</label>
+				<visible>Control.HasFocus($PARAM[id])</visible>
+			</control>
+			<control type="label">
+				<left>24</left>
+				<width>$PARAM[width]</width>
+				<height>64</height>
+				<aligny>center</aligny>
+				<font>rail</font>
+				<textcolor>white</textcolor>
+				<selectedcolor>white</selectedcolor>
+				<scroll>false</scroll>
+				<label>$PARAM[label]</label>
+				<visible>!Control.HasFocus($PARAM[id])</visible>
+			</control>
+		</definition>
+	</include>
+
+	<!-- Horizontal tab strip under the page title (Live TV sections, weather days) -->
+	<include name="TabButton">
+		<param name="id" />
+		<param name="label" />
+		<param name="onclick" />
+		<param name="active" />
+		<param name="visible" default="true" />
+		<definition>
+			<!-- togglebutton: the alt textures mark the section on screen -->
+			<control type="togglebutton" id="$PARAM[id]">
+				<width>auto</width>
+				<height>56</height>
+				<font>rail</font>
+				<textoffsetx>24</textoffsetx>
+				<aligny>center</aligny>
+				<textcolor>gray200</textcolor>
+				<focusedcolor>onwood</focusedcolor>
+				<texturefocus colordiffuse="wood">white.png</texturefocus>
+				<texturenofocus />
+				<alttexturefocus colordiffuse="wood">white.png</alttexturefocus>
+				<alttexturenofocus colordiffuse="navy800">white.png</alttexturenofocus>
+				<usealttexture>$PARAM[active]</usealttexture>
+				<label>$PARAM[label]</label>
+				<altlabel>$PARAM[label]</altlabel>
+				<onclick>$PARAM[onclick]</onclick>
+				<visible>$PARAM[visible]</visible>
+			</control>
+		</definition>
+	</include>
+
+	<!-- ============ player dialogs ============ -->
+
+	<!-- Bookmark: thumbnail at the bookmark, time under it -->
+	<include name="BookmarkItem">
+		<param name="focused" default="false" />
+		<param name="id" />
+		<definition>
+			<control type="group">
+				<animation effect="zoom" start="100" end="104" time="180" tween="cubic" easing="out" center="auto" condition="$PARAM[focused] + Control.HasFocus($PARAM[id])">Conditional</animation>
+				<include content="FocusRing">
+					<param name="width" value="349" />
+					<param name="height" value="200" />
+					<param name="visible" value="$PARAM[focused] + Control.HasFocus($PARAM[id])" />
+				</include>
+				<include content="Box">
+					<param name="left" value="7" />
+					<param name="top" value="7" />
+					<param name="width" value="335" />
+					<param name="height" value="186" />
+					<param name="color" value="navy800" />
+				</include>
+				<control type="image">
+					<left>7</left>
+					<top>7</top>
+					<width>335</width>
+					<height>186</height>
+					<aspectratio>scale</aspectratio>
+					<texture background="true">$INFO[ListItem.Art(thumb)]</texture>
+				</control>
+				<control type="label">
+					<left>7</left>
+					<top>206</top>
+					<width>335</width>
+					<height>28</height>
+					<font>card</font>
+					<textcolor>white</textcolor>
+					<selectedcolor>white</selectedcolor>
+					<label>$INFO[ListItem.Label]</label>
+				</control>
+				<control type="label">
+					<left>7</left>
+					<top>238</top>
+					<width>335</width>
+					<height>26</height>
+					<font>small</font>
+					<textcolor>gray400</textcolor>
+					<selectedcolor>gray400</selectedcolor>
+					<label>$INFO[ListItem.Label2]</label>
+				</control>
+			</control>
+		</definition>
+	</include>
+
+	<!-- Player info line: gray name, white value -->
+	<include name="ProcessLine">
+		<param name="label" />
+		<param name="value" />
+		<param name="visible" default="true" />
+		<definition>
+			<control type="group">
+				<width>820</width>
+				<height>64</height>
+				<visible>$PARAM[visible]</visible>
+				<control type="label">
+					<width>180</width>
+					<height>64</height>
+					<aligny>center</aligny>
+					<font>small</font>
+					<textcolor>gray400</textcolor>
+					<label>$PARAM[label]</label>
+				</control>
+				<control type="label">
+					<left>180</left>
+					<width>640</width>
+					<height>64</height>
+					<aligny>center</aligny>
+					<font>body</font>
+					<textcolor>white</textcolor>
+					<label>$PARAM[value]</label>
+				</control>
+			</control>
+		</definition>
+	</include>
+
+	<!-- Subtitle search result: language, file name, sync / hearing-impaired marks -->
+	<include name="SubtitleRow">
+		<param name="text" />
+		<param name="sub" />
+		<definition>
+			<control type="label">
+				<left>24</left>
+				<top>8</top>
+				<width>1040</width>
+				<height>36</height>
+				<font>rail</font>
+				<textcolor>$PARAM[text]</textcolor>
+				<selectedcolor>$PARAM[text]</selectedcolor>
+				<scroll>false</scroll>
+				<label>$INFO[ListItem.Label2]</label>
+			</control>
+			<control type="label">
+				<left>24</left>
+				<top>44</top>
+				<width>1040</width>
+				<height>28</height>
+				<font>small</font>
+				<textcolor>$PARAM[sub]</textcolor>
+				<selectedcolor>$PARAM[sub]</selectedcolor>
+				<label>$INFO[ListItem.Label]$VAR[SubtitleFlags]</label>
+			</control>
+		</definition>
+	</include>
+
+	<!-- ============ Live TV ============ -->
+
+	<!-- Channel row: number, logo, channel, what is on now with progress -->
+	<include name="ChannelRow">
+		<param name="text" default="white" />
+		<param name="sub" default="gray400" />
+		<definition>
+			<control type="label">
+				<left>0</left>
+				<width>90</width>
+				<height>104</height>
+				<align>center</align>
+				<aligny>center</aligny>
+				<font>head</font>
+				<textcolor>$PARAM[sub]</textcolor>
+				<selectedcolor>$PARAM[sub]</selectedcolor>
+				<label>$INFO[ListItem.ChannelNumberLabel]</label>
+			</control>
+			<control type="image">
+				<left>100</left>
+				<top>17</top>
+				<width>120</width>
+				<height>70</height>
+				<aspectratio>keep</aspectratio>
+				<texture background="true">$INFO[ListItem.Icon]</texture>
+			</control>
+			<control type="label">
+				<left>250</left>
+				<top>18</top>
+				<width>420</width>
+				<height>36</height>
+				<font>head</font>
+				<textcolor>$PARAM[text]</textcolor>
+				<selectedcolor>$PARAM[text]</selectedcolor>
+				<scroll>false</scroll>
+				<label>$INFO[ListItem.ChannelName]</label>
+			</control>
+			<control type="label">
+				<left>250</left>
+				<top>58</top>
+				<width>420</width>
+				<height>30</height>
+				<font>small</font>
+				<textcolor>$PARAM[sub]</textcolor>
+				<selectedcolor>$PARAM[sub]</selectedcolor>
+				<label>$VAR[ChannelFlags]</label>
+			</control>
+			<control type="label">
+				<left>700</left>
+				<top>18</top>
+				<width>900</width>
+				<height>36</height>
+				<font>rail</font>
+				<textcolor>$PARAM[text]</textcolor>
+				<selectedcolor>$PARAM[text]</selectedcolor>
+				<scroll>false</scroll>
+				<label>$VAR[ChannelNow]</label>
+			</control>
+			<control type="label">
+				<left>700</left>
+				<top>58</top>
+				<width>900</width>
+				<height>30</height>
+				<font>small</font>
+				<textcolor>$PARAM[sub]</textcolor>
+				<selectedcolor>$PARAM[sub]</selectedcolor>
+				<label>$INFO[ListItem.StartTime]$INFO[ListItem.EndTime, – ]$INFO[ListItem.NextTitle,  ·  next: ]</label>
+			</control>
+			<control type="progress">
+				<left>700</left>
+				<top>94</top>
+				<width>900</width>
+				<height>4</height>
+				<texturebg colordiffuse="gray600">white.png</texturebg>
+				<midtexture colordiffuse="wood">white.png</midtexture>
+				<info>ListItem.Progress</info>
+				<visible>ListItem.HasEpg</visible>
+			</control>
+		</definition>
+	</include>
+
+	<!-- Live TV section tabs: channels, guide, recordings, timers, rules, search,
+	     then a TV / Radio switch. Kodi tells TV and radio apart by window name. -->
+	<include name="PVRTabs">
+		<param name="ondown" />
+		<definition>
+			<control type="grouplist" id="9070">
+				<onright>noop</onright>
+				<left>96</left>
+				<top>256</top>
+				<width>1728</width>
+				<height>56</height>
+				<orientation>horizontal</orientation>
+				<itemgap>8</itemgap>
+				<onleft>noop</onleft>
+				<ondown>$PARAM[ondown]</ondown>
+				<onup>9040</onup>
+				<include content="TabButton"><param name="id" value="9071" /><param name="label" value="Channels" /><param name="active" value="[Window.IsActive(TVChannels) | Window.IsActive(RadioChannels)]" />
+					<param name="onclick" value="ActivateWindow($VAR[PVRKind]Channels)" /></include>
+				<include content="TabButton"><param name="id" value="9072" /><param name="label" value="Guide" /><param name="active" value="[Window.IsActive(TVGuide) | Window.IsActive(RadioGuide)]" />
+					<param name="onclick" value="ActivateWindow($VAR[PVRKind]Guide)" /></include>
+				<include content="TabButton"><param name="id" value="9073" /><param name="label" value="Recordings" /><param name="active" value="[Window.IsActive(TVRecordings) | Window.IsActive(RadioRecordings)]" />
+					<param name="onclick" value="ActivateWindow($VAR[PVRKind]Recordings)" /><param name="visible" value="PVR.HasTVChannels | PVR.HasRadioChannels" /></include>
+				<include content="TabButton"><param name="id" value="9074" /><param name="label" value="Timers" /><param name="active" value="[Window.IsActive(TVTimers) | Window.IsActive(RadioTimers)]" />
+					<param name="onclick" value="ActivateWindow($VAR[PVRKind]Timers)" /></include>
+				<include content="TabButton"><param name="id" value="9075" /><param name="label" value="Timer rules" /><param name="active" value="[Window.IsActive(TVTimerRules) | Window.IsActive(RadioTimerRules)]" />
+					<param name="onclick" value="ActivateWindow($VAR[PVRKind]TimerRules)" /></include>
+				<include content="TabButton"><param name="id" value="9076" /><param name="label" value="Search" /><param name="active" value="[Window.IsActive(TVSearch) | Window.IsActive(RadioSearch)]" />
+					<param name="onclick" value="ActivateWindow($VAR[PVRKind]Search)" /></include>
+				<include content="TabButton"><param name="id" value="9077" /><param name="label" value="$VAR[PVROtherKindLabel]" /><param name="active" value="false" />
+					<param name="onclick" value="ActivateWindow($VAR[PVROtherKind]Channels)" /></include>
+			</control>
+		</definition>
+	</include>
+
+	<!-- PVR window header: section title and the group/filter Kodi reports (29, 30) -->
+	<include name="PVRHeader">
+		<param name="section" />
+		<definition>
+			<include content="PageHeader">
+				<param name="title" value="$VAR[PVRTitle]" />
+				<param name="sub" value="$PARAM[section]$INFO[Control.GetLabel(29),  ·  ]$INFO[Container.NumItems,  ·  , items]" />
+				<param name="right" value="$INFO[ListItem.Label]" />
+				<param name="right2" value="$INFO[ListItem.StartTime]$INFO[ListItem.EndTime, – ]$INFO[ListItem.ChannelName,  ·  ]" />
+			</include>
+			<control type="label" id="29"><visible>false</visible></control>
+			<control type="label" id="30"><visible>false</visible></control>
+			<!-- the group list on the PVR windows is driven by Kodi; kept off screen -->
+			<control type="button" id="28">
+				<left>-3000</left><top>-3000</top><width>1</width><height>1</height>
+				<texturefocus /><texturenofocus /><label></label><font></font>
+			</control>
+		</definition>
+	</include>
+
+	<!-- Options rows per PVR window. 28 opens the channel group picker. -->
+	<include name="OptionsPVRChannels">
+		<include content="OptionHeading"><param name="label" value="Channels" /><param name="id" value="9883" /></include>
+		<include content="OptionButton"><param name="id" value="9081" /><param name="label" value="Channel group" /><param name="label2" value="$INFO[Control.GetLabel(29)]" /><param name="onclick" value="SendClick(28)" /></include>
+		<include content="OptionToggle"><param name="id" value="6" /><param name="label" value="Show hidden channels" /></include>
+		<include content="OptionToggle"><param name="id" value="31" /><param name="label" value="Filter by name" /></include>
+		<include content="OptionButton"><param name="id" value="9082" /><param name="label" value="Channel manager" /><param name="onclick" value="ActivateWindow(PVRChannelManager)" /></include>
+		<include content="OptionButton"><param name="id" value="9083" /><param name="label" value="Live TV settings" /><param name="onclick" value="ActivateWindow(PVRSettings)" /></include>
+	</include>
+	<include name="OptionsPVRGuide">
+		<include content="OptionHeading"><param name="label" value="Guide" /><param name="id" value="9884" /></include>
+		<include content="OptionButton"><param name="id" value="9081" /><param name="label" value="Channel group" /><param name="label2" value="$INFO[Control.GetLabel(29)]" /><param name="onclick" value="SendClick(28)" /></include>
+		<include content="OptionButton"><param name="id" value="9084" /><param name="label" value="Jump to now" /><param name="onclick" value="PVR.EpgGridControl(CurrentProgramme)" /></include>
+		<include content="OptionButton"><param name="id" value="9085" /><param name="label" value="Jump to a date" /><param name="onclick" value="PVR.EpgGridControl(SelectDate)" /></include>
+		<include content="OptionButton"><param name="id" value="9086" /><param name="label" value="12 hours back" /><param name="onclick" value="PVR.EpgGridControl(-12)" /></include>
+		<include content="OptionButton"><param name="id" value="9087" /><param name="label" value="12 hours ahead" /><param name="onclick" value="PVR.EpgGridControl(+12)" /></include>
+		<include content="OptionButton"><param name="id" value="9083" /><param name="label" value="Live TV settings" /><param name="onclick" value="ActivateWindow(PVRSettings)" /></include>
+	</include>
+	<include name="OptionsPVRRecordings">
+		<include content="OptionHeading"><param name="label" value="Recordings" /><param name="id" value="9885" /></include>
+		<include content="OptionToggle"><param name="id" value="5" /><param name="label" value="Group items" /></include>
+		<include content="OptionToggle"><param name="id" value="7" /><param name="label" value="Show deleted" /></include>
+		<include content="OptionButton"><param name="id" value="9083" /><param name="label" value="Live TV settings" /><param name="onclick" value="ActivateWindow(PVRSettings)" /></include>
+	</include>
+	<include name="OptionsPVRTimers">
+		<include content="OptionHeading"><param name="label" value="Timers" /><param name="id" value="9886" /></include>
+		<include content="OptionToggle"><param name="id" value="8" /><param name="label" value="Hide disabled" /></include>
+		<include content="OptionButton"><param name="id" value="9083" /><param name="label" value="Live TV settings" /><param name="onclick" value="ActivateWindow(PVRSettings)" /></include>
+	</include>
+	<include name="OptionsPictures">
+		<include content="OptionHeading"><param name="label" value="Slideshow" /><param name="id" value="9887" /></include>
+		<include content="OptionButton"><param name="id" value="6" /><param name="label" value="Start slideshow" /></include>
+		<include content="OptionButton"><param name="id" value="7" /><param name="label" value="Include subfolders" /></include>
+		<include content="OptionToggle"><param name="id" value="9" /><param name="label" value="Shuffle" /></include>
+	</include>
+
+	<!-- ============ guide grid ============ -->
+	<include name="GuideCellText">
+		<param name="color" />
+		<definition>
+			<control type="label" id="1">
+				<left>14</left>
+				<width>300</width>
+				<height>68</height>
+				<aligny>center</aligny>
+				<font>small</font>
+				<textcolor>$PARAM[color]</textcolor>
+				<label>$INFO[ListItem.Label]</label>
+			</control>
+		</definition>
+	</include>
+	<include name="GuideGrid">
+		<control type="epggrid" id="50">
+			<left>96</left>
+			<top>336</top>
+			<width>1728</width>
+			<height>540</height>
+			<orientation>vertical</orientation>
+			<scrolltime tween="cubic" easing="out">300</scrolltime>
+			<timeblocks>30</timeblocks>
+			<rulerunit>6</rulerunit>
+			<onleft>noop</onleft>
+			<onup>9070</onup>
+			<viewtype label="Timeline">list</viewtype>
+			<progresstexture colordiffuse="wood" border="0,0,0,0">white.png</progresstexture>
+			<rulerlayout height="52" width="268">
+				<control type="label">
+					<left>10</left>
+					<width>258</width>
+					<height>52</height>
+					<aligny>center</aligny>
+					<font>small</font>
+					<textcolor>gray400</textcolor>
+					<label>$INFO[ListItem.Label]</label>
+				</control>
+			</rulerlayout>
+			<rulerdatelayout width="300" height="52">
+				<control type="label">
+					<width>290</width>
+					<height>52</height>
+					<aligny>center</aligny>
+					<font>card</font>
+					<textcolor>white</textcolor>
+					<label>$INFO[ListItem.Label]</label>
+				</control>
+			</rulerdatelayout>
+			<channellayout width="300" height="72">
+				<control type="label">
+					<width>60</width>
+					<height>68</height>
+					<align>center</align>
+					<aligny>center</aligny>
+					<font>small</font>
+					<textcolor>gray400</textcolor>
+					<label>$INFO[ListItem.ChannelNumberLabel]</label>
+				</control>
+				<control type="label" id="1">
+					<left>64</left>
+					<width>226</width>
+					<height>68</height>
+					<aligny>center</aligny>
+					<font>rail</font>
+					<textcolor>gray200</textcolor>
+					<label>$INFO[ListItem.ChannelName]</label>
+				</control>
+			</channellayout>
+			<focusedchannellayout width="300" height="72">
+				<control type="label">
+					<width>60</width>
+					<height>68</height>
+					<align>center</align>
+					<aligny>center</aligny>
+					<font>small</font>
+					<textcolor>wood</textcolor>
+					<label>$INFO[ListItem.ChannelNumberLabel]</label>
+				</control>
+				<control type="label" id="1">
+					<left>64</left>
+					<width>226</width>
+					<height>68</height>
+					<aligny>center</aligny>
+					<font>rail</font>
+					<textcolor>white</textcolor>
+					<label>$INFO[ListItem.ChannelName]</label>
+				</control>
+			</focusedchannellayout>
+			<itemlayout width="40" height="72">
+				<control type="image" id="2">
+					<width>40</width>
+					<height>72</height>
+					<texture colordiffuse="navy800" border="0,0,3,3">cell.png</texture>
+				</control>
+				<include content="GuideCellText"><param name="color" value="gray200" /></include>
+			</itemlayout>
+			<focusedlayout width="40" height="72">
+				<control type="image" id="2">
+					<width>40</width>
+					<height>72</height>
+					<texture colordiffuse="wood" border="0,0,3,3">cell.png</texture>
+					<visible>Control.HasFocus(50)</visible>
+				</control>
+				<control type="image" id="2">
+					<width>40</width>
+					<height>72</height>
+					<texture colordiffuse="navy700" border="0,0,3,3">cell.png</texture>
+					<visible>!Control.HasFocus(50)</visible>
+				</control>
+				<control type="label" id="1">
+					<left>14</left>
+					<width>300</width>
+					<height>68</height>
+					<aligny>center</aligny>
+					<font>small</font>
+					<textcolor>onwood</textcolor>
+					<label>$INFO[ListItem.Label]</label>
+					<visible>Control.HasFocus(50)</visible>
+				</control>
+				<control type="label" id="1">
+					<left>14</left>
+					<width>300</width>
+					<height>68</height>
+					<aligny>center</aligny>
+					<font>small</font>
+					<textcolor>white</textcolor>
+					<label>$INFO[ListItem.Label]</label>
+					<visible>!Control.HasFocus(50)</visible>
+				</control>
+			</focusedlayout>
+		</control>
+		<!-- the focused programme -->
+		<control type="group">
+			<left>96</left>
+			<top>892</top>
+			<visible>Control.HasFocus(50)</visible>
+			<control type="label">
+				<width>1640</width>
+				<height>40</height>
+				<font>head</font>
+				<textcolor>white</textcolor>
+				<label>$INFO[ListItem.EpgEventTitle]$INFO[ListItem.EpisodeName,  ·  ]</label>
+			</control>
+			<control type="label">
+				<top>42</top>
+				<width>1640</width>
+				<height>30</height>
+				<font>small</font>
+				<textcolor>gray400</textcolor>
+				<label>$INFO[ListItem.StartTime]$INFO[ListItem.EndTime, – ]$INFO[ListItem.ChannelName,  ·  ]$INFO[ListItem.Genre,  ·  ]$VAR[ChannelFlags,  ·  ]</label>
+			</control>
+			<control type="textbox">
+				<top>80</top>
+				<width>1640</width>
+				<height>100</height>
+				<font>body</font>
+				<textcolor>gray200</textcolor>
+				<label>$INFO[ListItem.Plot]</label>
+			</control>
+		</control>
+	</include>
+
+	<include name="OptionsGames">
+		<include content="OptionHeading"><param name="label" value="Games" /><param name="id" value="9888" /></include>
+		<include content="OptionButton"><param name="id" value="9091" /><param name="label" value="Controllers" /><param name="onclick" value="ActivateWindow(GameControllers)" /></include>
+		<include content="OptionButton"><param name="id" value="9092" /><param name="label" value="Game settings" /><param name="onclick" value="ActivateWindow(GameSettings)" /></include>
+	</include>
+	<include name="OptionsPlaylist">
+		<include content="OptionHeading"><param name="label" value="Playlist" /><param name="id" value="9889" /></include>
+		<include content="OptionToggle"><param name="id" value="20" /><param name="label" value="Shuffle" /></include>
+		<include content="OptionButton"><param name="id" value="26" /><param name="label" value="Repeat" /></include>
+		<include content="OptionButton"><param name="id" value="21" /><param name="label" value="Save playlist" /></include>
+		<include content="OptionButton"><param name="id" value="22" /><param name="label" value="Clear playlist" /></include>
+	</include>
+
+	<variable name="BrowseView">
+		<value condition="Control.IsVisible(500)">500</value>
+		<value>50</value>
+	</variable>
+	<variable name="PlaylistTitle">
+		<value condition="Window.IsActive(musicplaylist)">Music queue</value>
+		<value>Video queue</value>
+	</variable>
+	<variable name="TimersSection">
+		<value condition="Window.IsActive(TVTimerRules) | Window.IsActive(RadioTimerRules)">Timer rules</value>
+		<value>Timers</value>
+	</variable>
+
+	<!-- ============ info dialogs ============ -->
+	<!-- Two-column row: label left, label2 right (EXIF fields, tracks, discography) -->
+	<include name="InfoListRow">
+		<param name="text" />
+		<param name="sub" />
+		<param name="height" default="52" />
+		<definition>
+			<control type="label">
+				<left>24</left>
+				<width>760</width>
+				<height>$PARAM[height]</height>
+				<aligny>center</aligny>
+				<font>rail</font>
+				<textcolor>$PARAM[text]</textcolor>
+				<selectedcolor>$PARAM[text]</selectedcolor>
+				<scroll>false</scroll>
+				<label>$INFO[ListItem.TrackNumber,,.  ]$INFO[ListItem.Label]</label>
+			</control>
+			<control type="label">
+				<right>24</right>
+				<width>620</width>
+				<height>$PARAM[height]</height>
+				<align>right</align>
+				<aligny>center</aligny>
+				<font>small</font>
+				<textcolor>$PARAM[sub]</textcolor>
+				<selectedcolor>$PARAM[sub]</selectedcolor>
+				<label>$VAR[InfoListValue]</label>
+			</control>
+		</definition>
+	</include>
+	<variable name="InfoListValue">
+		<value condition="!String.IsEmpty(ListItem.Label2)">$INFO[ListItem.Label2]</value>
+		<value condition="!String.IsEmpty(ListItem.Duration)">$INFO[ListItem.Duration]</value>
+		<value>$INFO[ListItem.Year]</value>
+	</variable>
+
+	<!-- Channel row in the over-video channel list -->
+	<include name="OSDChannelRow">
+		<param name="text" />
+		<param name="sub" />
+		<definition>
+			<control type="label">
+				<width>80</width>
+				<height>104</height>
+				<align>center</align>
+				<aligny>center</aligny>
+				<font>card</font>
+				<textcolor>$PARAM[sub]</textcolor>
+				<selectedcolor>$PARAM[sub]</selectedcolor>
+				<label>$INFO[ListItem.ChannelNumberLabel]</label>
+			</control>
+			<control type="image">
+				<left>88</left>
+				<top>22</top>
+				<width>104</width>
+				<height>60</height>
+				<aspectratio>keep</aspectratio>
+				<texture background="true">$INFO[ListItem.Icon]</texture>
+			</control>
+			<control type="label">
+				<left>216</left>
+				<top>16</top>
+				<width>712</width>
+				<height>36</height>
+				<font>rail</font>
+				<textcolor>$PARAM[text]</textcolor>
+				<selectedcolor>$PARAM[text]</selectedcolor>
+				<scroll>false</scroll>
+				<label>$INFO[ListItem.ChannelName]</label>
+			</control>
+			<control type="label">
+				<left>216</left>
+				<top>54</top>
+				<width>712</width>
+				<height>30</height>
+				<font>small</font>
+				<textcolor>$PARAM[sub]</textcolor>
+				<selectedcolor>$PARAM[sub]</selectedcolor>
+				<scroll>false</scroll>
+				<label>$VAR[ChannelNow]$INFO[ListItem.EndTime,  ·  until ]</label>
+			</control>
+			<control type="progress">
+				<left>216</left>
+				<top>92</top>
+				<width>712</width>
+				<height>4</height>
+				<texturebg colordiffuse="gray600">white.png</texturebg>
+				<midtexture colordiffuse="wood">white.png</midtexture>
+				<info>ListItem.Progress</info>
+				<visible>ListItem.HasEpg</visible>
+			</control>
+		</definition>
+	</include>
+
+	<!-- One day of the forecast -->
+	<include name="WeatherDay">
+		<param name="n" />
+		<definition>
+			<control type="group">
+				<width>260</width>
+				<height>220</height>
+				<visible>!String.IsEmpty(Window(weather).Property(Day$PARAM[n].Title))</visible>
+				<include content="Box">
+					<param name="width" value="260" />
+					<param name="height" value="220" />
+					<param name="color" value="navy800" />
+				</include>
+				<control type="label">
+					<left>24</left>
+					<top>24</top>
+					<width>212</width>
+					<height>36</height>
+					<font>card</font>
+					<textcolor>white</textcolor>
+					<label>$INFO[Window(weather).Property(Day$PARAM[n].Title)]</label>
+				</control>
+				<control type="label">
+					<left>24</left>
+					<top>70</top>
+					<width>212</width>
+					<height>60</height>
+					<font>head</font>
+					<textcolor>white</textcolor>
+					<label>$INFO[Window(weather).Property(Day$PARAM[n].HighTemp)]$INFO[System.TemperatureUnits]</label>
+				</control>
+				<control type="label">
+					<left>24</left>
+					<top>126</top>
+					<width>212</width>
+					<height>30</height>
+					<font>small</font>
+					<textcolor>gray400</textcolor>
+					<label>low $INFO[Window(weather).Property(Day$PARAM[n].LowTemp)]$INFO[System.TemperatureUnits]</label>
+				</control>
+				<control type="label">
+					<left>24</left>
+					<top>160</top>
+					<width>212</width>
+					<height>40</height>
+					<font>small</font>
+					<textcolor>gray200</textcolor>
+					<label>$INFO[Window(weather).Property(Day$PARAM[n].Outlook)]</label>
+				</control>
+			</control>
+		</definition>
+	</include>
+
+	<variable name="MusicInfoKind">
+		<value condition="String.IsEqual(ListItem.DBType,artist)">Artist</value>
+		<value condition="String.IsEqual(ListItem.DBType,song)">Song</value>
+		<value>Album</value>
+	</variable>
+	<variable name="MusicInfoMeta">
+		<value condition="String.IsEqual(ListItem.DBType,artist)">$INFO[ListItem.Property(Artist_Born)]$INFO[ListItem.Property(Artist_Formed)]$INFO[ListItem.Property(Artist_Genre),  ·  ]</value>
+		<value>$INFO[ListItem.Artist]$INFO[ListItem.Year,  ·  ]$INFO[ListItem.Property(Album_Label),  ·  ]$INFO[ListItem.Rating,  ·  rated ]</value>
+	</variable>
+	<variable name="MusicInfoText">
+		<value condition="String.IsEqual(ListItem.DBType,artist)">$INFO[ListItem.Property(Artist_Description)]</value>
+		<value condition="!String.IsEmpty(ListItem.Property(Album_Description))">$INFO[ListItem.Property(Album_Description)]</value>
+		<value>$INFO[ListItem.Comment]</value>
+	</variable>
+	<variable name="MusicInfoOther">
+		<value condition="String.IsEqual(ListItem.DBType,artist)">Albums</value>
+		<value>Artist info</value>
+	</variable>
+	<variable name="MusicInfoListTitle">
+		<value condition="String.IsEqual(ListItem.DBType,artist)">Discography</value>
+		<value>Tracks</value>
+	</variable>
+	<variable name="PVRRecordLabel">
+		<value condition="ListItem.IsRecording | ListItem.HasTimer">Stop recording</value>
+		<value>Record</value>
+	</variable>
+	<variable name="SlideState">
+		<value condition="Slideshow.IsPaused">Paused</value>
+		<value>Slideshow</value>
+	</variable>
+
+	<!-- ============ form rows (dialogs with fixed Kodi ids) ============ -->
+	<include name="FormButton">
+		<param name="id" />
+		<param name="label" />
+		<param name="width" default="960" />
+		<param name="visible" default="true" />
+		<definition>
+			<control type="button" id="$PARAM[id]">
+				<width>$PARAM[width]</width>
+				<include>SettingRowStyle</include>
+				<label>$PARAM[label]</label>
+				<visible>$PARAM[visible]</visible>
+			</control>
+		</definition>
+	</include>
+	<include name="FormEdit">
+		<param name="id" />
+		<param name="label" />
+		<param name="width" default="960" />
+		<definition>
+			<control type="edit" id="$PARAM[id]">
+				<width>$PARAM[width]</width>
+				<include>SettingRowStyle</include>
+				<label>$PARAM[label]</label>
+				<textoffsetx>28</textoffsetx>
+			</control>
+		</definition>
+	</include>
+	<include name="FormRadio">
+		<param name="id" />
+		<param name="label" />
+		<param name="width" default="960" />
+		<param name="radiox" default="908" />
+		<definition>
+			<control type="radiobutton" id="$PARAM[id]">
+				<width>$PARAM[width]</width>
+				<include>SettingRowStyle</include>
+				<label>$PARAM[label]</label>
+				<radioposx>$PARAM[radiox]</radioposx>
+				<radioposy>22</radioposy>
+				<radiowidth>24</radiowidth>
+				<radioheight>24</radioheight>
+				<textureradioonfocus colordiffuse="onwood">white.png</textureradioonfocus>
+				<textureradioonnofocus colordiffuse="wood">white.png</textureradioonnofocus>
+				<textureradioofffocus colordiffuse="onwood" border="2">frame.png</textureradioofffocus>
+				<textureradiooffnofocus colordiffuse="gray600" border="2">frame.png</textureradiooffnofocus>
+			</control>
+		</definition>
+	</include>
+	<include name="FormSpin">
+		<param name="id" />
+		<param name="label" />
+		<param name="width" default="960" />
+		<definition>
+			<control type="spincontrolex" id="$PARAM[id]">
+				<width>$PARAM[width]</width>
+				<include>SettingRowStyle</include>
+				<label>$PARAM[label]</label>
+				<textureup />
+				<texturedown />
+				<textureupfocus />
+				<texturedownfocus />
+				<textureupdisabled />
+				<texturedowndisabled />
+				<spinwidth>1</spinwidth>
+				<spinheight>1</spinheight>
+			</control>
+		</definition>
+	</include>
+	<!-- a dialog's list of plain rows (groups, channels, ports) -->
+	<include name="PlainList">
+		<param name="id" />
+		<param name="left" default="24" />
+		<param name="top" default="100" />
+		<param name="width" />
+		<param name="height" />
+		<param name="label" default="$INFO[ListItem.Label]" />
+		<param name="onleft" default="noop" />
+		<param name="onright" default="noop" />
+		<definition>
+			<control type="list" id="$PARAM[id]">
+				<onup>noop</onup>
+				<ondown>noop</ondown>
+				<left>$PARAM[left]</left>
+				<top>$PARAM[top]</top>
+				<width>$PARAM[width]</width>
+				<height>$PARAM[height]</height>
+				<orientation>vertical</orientation>
+				<scrolltime tween="cubic" easing="out">250</scrolltime>
+				<onleft>$PARAM[onleft]</onleft>
+				<onright>$PARAM[onright]</onright>
+				<itemlayout width="$PARAM[width]" height="64">
+					<include content="Box">
+						<param name="top" value="18" />
+						<param name="width" value="3" />
+						<param name="height" value="28" />
+						<param name="color" value="wood" />
+						<param name="visible" value="ListItem.IsSelected" />
+					</include>
+					<include content="PlainRow"><param name="width" value="$PARAM[width]" /><param name="label" value="$PARAM[label]" /></include>
+				</itemlayout>
+				<focusedlayout width="$PARAM[width]" height="64">
+					<include content="PlainRowFocus"><param name="id" value="$PARAM[id]" /><param name="width" value="$PARAM[width]" /><param name="label" value="$PARAM[label]" /></include>
+				</focusedlayout>
+			</control>
+		</definition>
+	</include>
+
+	<!-- ============ profiles and games ============ -->
+	<include name="ProfileTile">
+		<param name="focused" default="false" />
+		<param name="id" />
+		<definition>
+			<control type="group">
+				<animation effect="zoom" start="100" end="104" time="180" tween="cubic" easing="out" center="auto" condition="$PARAM[focused] + Control.HasFocus($PARAM[id])">Conditional</animation>
+				<include content="FocusRing">
+					<param name="width" value="274" />
+					<param name="height" value="274" />
+					<param name="visible" value="$PARAM[focused] + Control.HasFocus($PARAM[id])" />
+				</include>
+				<include content="Box">
+					<param name="left" value="7" />
+					<param name="top" value="7" />
+					<param name="width" value="260" />
+					<param name="height" value="260" />
+					<param name="color" value="navy800" />
+				</include>
+				<control type="image">
+					<left>7</left>
+					<top>7</top>
+					<width>260</width>
+					<height>260</height>
+					<aspectratio>scale</aspectratio>
+					<texture background="true">$INFO[ListItem.Icon]</texture>
+				</control>
+				<control type="label">
+					<left>7</left>
+					<top>282</top>
+					<width>260</width>
+					<height>36</height>
+					<font>card</font>
+					<textcolor>white</textcolor>
+					<selectedcolor>white</selectedcolor>
+					<label>$INFO[ListItem.Label]</label>
+				</control>
+			</control>
+		</definition>
+	</include>
+
+	<include name="GameControllersBody">
+		<control type="group">
+			<left>60</left>
+			<top>100</top>
+			<include>DialogEase</include>
+			<include content="DialogPanel">
+				<param name="width" value="1800" />
+				<param name="height" value="880" />
+				<param name="heading_id" value="2" />
+			</include>
+			<control type="label">
+				<left>40</left>
+				<top>96</top>
+				<width>420</width>
+				<height>36</height>
+				<font>label</font>
+				<textcolor>gray400</textcolor>
+				<label>Controller profiles</label>
+			</control>
+			<control type="grouplist" id="3">
+				<onup>noop</onup>
+				<left>24</left>
+				<top>140</top>
+				<width>440</width>
+				<height>600</height>
+				<orientation>vertical</orientation>
+				<onleft>9001</onleft>
+				<onright>5</onright>
+				<ondown>9001</ondown>
+			</control>
+			<include content="CategoryButton">
+				<param name="id" value="10" />
+				<param name="width" value="440" />
+			</include>
+			<control type="gamecontroller" id="31">
+				<left>500</left>
+				<top>140</top>
+				<width>760</width>
+				<height>520</height>
+			</control>
+			<control type="textbox" id="32">
+				<left>500</left>
+				<top>680</top>
+				<width>760</width>
+				<height>80</height>
+				<font>small</font>
+				<textcolor>gray400</textcolor>
+			</control>
+			<control type="label">
+				<left>1296</left>
+				<top>96</top>
+				<width>460</width>
+				<height>36</height>
+				<font>label</font>
+				<textcolor>gray400</textcolor>
+				<label>Buttons</label>
+			</control>
+			<control type="grouplist" id="5">
+				<onup>noop</onup>
+				<left>1296</left>
+				<top>140</top>
+				<width>480</width>
+				<height>620</height>
+				<orientation>vertical</orientation>
+				<onleft>3</onleft>
+				<onright>9001</onright>
+				<ondown>9001</ondown>
+			</control>
+			<control type="button" id="7">
+				<width>480</width>
+				<include>SettingRowStyle</include>
+			</control>
+			<control type="label" id="8">
+				<width>480</width>
+				<height>48</height>
+				<aligny>bottom</aligny>
+				<textoffsetx>28</textoffsetx>
+				<font>label</font>
+				<textcolor>gray400</textcolor>
+			</control>
+			<control type="image" id="9">
+				<width>480</width>
+				<height>1</height>
+				<texture colordiffuse="navy700">white.png</texture>
+			</control>
+			<control type="grouplist" id="9001">
+				<onleft>noop</onleft>
+				<onright>noop</onright>
+				<left>40</left>
+				<top>790</top>
+				<width>1720</width>
+				<height>60</height>
+				<orientation>horizontal</orientation>
+				<itemgap>14</itemgap>
+				<onup>3</onup>
+				<control type="button" id="18"><width>260</width><include>ButtonStyle</include><align>center</align><label>OK</label></control>
+				<control type="button" id="19"><width>260</width><include>ButtonStyle</include><align>center</align><label>Reset</label></control>
+				<control type="button" id="20"><width>260</width><include>ButtonStyle</include><align>center</align><label>Get more</label></control>
+				<control type="button" id="22"><width>260</width><include>ButtonStyle</include><align>center</align><label>Get all</label></control>
+				<control type="button" id="17"><width>260</width><include>ButtonStyle</include><align>center</align><label>Help</label></control>
+				<control type="button" id="21"><width>260</width><include>ButtonStyle</include><align>center</align><label>Ignore input</label></control>
+			</control>
+		</control>
+	</include>
+
+	<include name="GamePortsBody">
+		<control type="group">
+			<left>460</left>
+			<top>160</top>
+			<include>DialogEase</include>
+			<include content="DialogPanel">
+				<param name="width" value="1000" />
+				<param name="height" value="760" />
+				<param name="heading_id" value="2" />
+			</include>
+			<include content="PlainList"><param name="id" value="3" /><param name="top" value="100" /><param name="width" value="952" /><param name="height" value="540" /></include>
+			<control type="grouplist" id="9001">
+				<onleft>noop</onleft>
+				<onright>noop</onright>
+				<left>40</left>
+				<top>670</top>
+				<width>920</width>
+				<height>60</height>
+				<orientation>horizontal</orientation>
+				<itemgap>14</itemgap>
+				<onup>3</onup>
+				<control type="button" id="18"><width>260</width><include>ButtonStyle</include><align>center</align><label>OK</label></control>
+				<control type="button" id="19"><width>260</width><include>ButtonStyle</include><align>center</align><label>Reset</label></control>
+			</control>
+		</control>
+	</include>
+
+	<include name="GameAgentsBody">
+		<control type="group">
+			<left>460</left>
+			<top>160</top>
+			<include>DialogEase</include>
+			<include content="DialogPanel">
+				<param name="width" value="1000" />
+				<param name="height" value="760" />
+				<param name="heading_id" value="9002" />
+			</include>
+			<control type="label">
+				<left>40</left>
+				<top>32</top>
+				<width>920</width>
+				<height>44</height>
+				<font>head</font>
+				<textcolor>white</textcolor>
+				<label>Players</label>
+			</control>
+			<control type="button" id="3">
+				<left>40</left>
+				<top>100</top>
+				<include>ButtonStyle</include>
+				<label>Ports</label>
+				<ondown>7</ondown>
+			</control>
+			<include content="PlainList"><param name="id" value="7" /><param name="top" value="180" /><param name="width" value="952" /><param name="height" value="460" /></include>
+			<control type="grouplist" id="10">
+				<onleft>noop</onleft>
+				<onright>noop</onright>
+				<left>40</left>
+				<top>670</top>
+				<width>920</width>
+				<height>60</height>
+				<orientation>horizontal</orientation>
+				<onup>7</onup>
+				<control type="button" id="18"><width>260</width><include>ButtonStyle</include><align>center</align><label>OK</label></control>
+			</control>
+		</control>
+	</include>
+
+	<!-- Close / Done for screens that have no rail (mouse users have no Back key).
+	     Top right, above everything; down returns to the screen's own controls. -->
+	<include name="CloseButton">
+		<param name="label" default="Close" />
+		<param name="ondown" default="noop" />
+		<param name="left" default="1684" />
+		<param name="top" default="40" />
+		<definition>
+			<control type="button" id="9099">
+				<left>$PARAM[left]</left>
+				<top>$PARAM[top]</top>
+				<width>140</width>
+				<height>56</height>
+				<label>$PARAM[label]</label>
+				<font>button</font>
+				<align>center</align>
+				<aligny>center</aligny>
+				<textcolor>white</textcolor>
+				<focusedcolor>onwood</focusedcolor>
+				<texturefocus colordiffuse="wood">white.png</texturefocus>
+				<texturenofocus colordiffuse="navy800">white.png</texturenofocus>
+				<onclick>Back</onclick>
+				<ondown>$PARAM[ondown]</ondown>
+				<onleft>$PARAM[ondown]</onleft>
+			</control>
+		</definition>
+	</include>
+	<!-- ============ variables ============ -->
+	<variable name="ThemeName">
+		<value condition="String.IsEqual(Skin.CurrentColourTheme,light)">Light</value>
+		<value>Dark</value>
+	</variable>
+	<!-- day / night start for the auto theme (scripts/theme.py keeps the defaults in step) -->
+	<variable name="DayBegins">
+		<value condition="!String.IsEmpty(Skin.String(oak_day_begins))">$INFO[Skin.String(oak_day_begins)]</value>
+		<value>07:00</value>
+	</variable>
+	<variable name="NightBegins">
+		<value condition="!String.IsEmpty(Skin.String(oak_night_begins))">$INFO[Skin.String(oak_night_begins)]</value>
+		<value>21:00</value>
+	</variable>
+	<variable name="AppearanceSub">
+		<value condition="String.IsEqual(Skin.String(oak_theme_mode),auto)">Auto theme  ·  light $VAR[DayBegins], dark $VAR[NightBegins]</value>
+		<value>$VAR[ThemeName] theme  ·  light, dark or by time</value>
+	</variable>
+	<variable name="TileIcon">
+		<value condition="!String.IsEmpty(ListItem.Icon) + !String.StartsWith(ListItem.Icon,Default)">$INFO[ListItem.Icon]</value>
+		<value condition="ListItem.IsParentFolder">icons/back.png</value>
+		<value condition="ListItem.IsFolder">icons/folder.png</value>
+		<value condition="Window.IsActive(pictures)">icons/picture.png</value>
+		<value condition="Window.IsActive(games)">icons/game.png</value>
+		<value condition="Window.IsActive(programs)">icons/program.png</value>
+		<value condition="Window.IsActive(favouritesbrowser)">icons/star.png</value>
+		<value>$INFO[ListItem.Icon]</value>
+	</variable>
+	<variable name="SubtitleFlags">
+		<value condition="ListItem.Property(sync) + ListItem.Property(hearing_imp)">  ·  synced  ·  hearing impaired</value>
+		<value condition="ListItem.Property(sync)">  ·  synced</value>
+		<value condition="ListItem.Property(hearing_imp)">  ·  hearing impaired</value>
+		<value></value>
+	</variable>
+	<variable name="ChannelNow">
+		<value condition="ListItem.HasEpg">$INFO[ListItem.Title]</value>
+		<value>No guide information</value>
+	</variable>
+	<variable name="ChannelFlags">
+		<value condition="ListItem.IsRecording">[COLOR wood]●[/COLOR] Recording</value>
+		<value condition="ListItem.HasTimer">Timer set</value>
+		<value condition="ListItem.IsPlaying">Playing</value>
+		<value></value>
+	</variable>
+	<variable name="PVRKind">
+		<value condition="String.StartsWith(Window.Property(xmlfile),MyPVR) + [Window.IsActive(RadioChannels) | Window.IsActive(RadioGuide) | Window.IsActive(RadioRecordings) | Window.IsActive(RadioTimers) | Window.IsActive(RadioTimerRules) | Window.IsActive(RadioSearch)]">Radio</value>
+		<value>TV</value>
+	</variable>
+	<variable name="PVROtherKind">
+		<value condition="Window.IsActive(RadioChannels) | Window.IsActive(RadioGuide) | Window.IsActive(RadioRecordings) | Window.IsActive(RadioTimers) | Window.IsActive(RadioTimerRules) | Window.IsActive(RadioSearch)">TV</value>
+		<value>Radio</value>
+	</variable>
+	<variable name="PVROtherKindLabel">
+		<value condition="Window.IsActive(RadioChannels) | Window.IsActive(RadioGuide) | Window.IsActive(RadioRecordings) | Window.IsActive(RadioTimers) | Window.IsActive(RadioTimerRules) | Window.IsActive(RadioSearch)">Switch to TV</value>
+		<value>Switch to radio</value>
+	</variable>
+	<variable name="PVRTitle">
+		<value condition="Window.IsActive(RadioChannels) | Window.IsActive(RadioGuide) | Window.IsActive(RadioRecordings) | Window.IsActive(RadioTimers) | Window.IsActive(RadioTimerRules) | Window.IsActive(RadioSearch)">Radio</value>
+		<value>Live TV</value>
+	</variable>
+</includes>

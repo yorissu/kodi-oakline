@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- The player bar on its own: while seeking, paused, or after Info.
+     Kodi keeps this dialog open during playback; visibility is ours.
+     Hidden while VideoOSD is up, which draws the same bar with buttons. -->
+<window>
+	<visible>Window.IsActive(fullscreenvideo)</visible>
+	<visible>!Window.IsActive(videoosd) + !Window.IsActive(sliderdialog)</visible>
+	<visible>Player.Seeking | Player.HasPerformedSeek(3) | [Player.Paused + !Player.Caching] | Player.Forwarding | Player.Rewinding | Player.ShowInfo | Player.ShowTime | !String.IsEmpty(Player.SeekNumeric)</visible>
+	<zorder>0</zorder>
+	<controls>
+		<control type="group">
+			<animation effect="slide" start="0,190" end="0,0" time="250" tween="cubic" easing="out">VisibleChange</animation>
+			<include content="PlayerBar">
+				<param name="top" value="890" />
+			</include>
+		</control>
+	</controls>
+</window>

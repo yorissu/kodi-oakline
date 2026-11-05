@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	Game dialogs. Kodi uses this one file for three windows:
+	gamecontrollers (map buttons: profiles 3 from template 10, features 5
+	from template 7, picture 31, actions 17-22), gameports (list 3) and
+	gameagents (players: list 7 with each one's controllers in 4).
+-->
+<window>
+	<defaultcontrol always="true">3</defaultcontrol>
+	<controls>
+		<include>DialogScrim</include>
+		<include condition="Window.IsDialogTopMost(gamecontrollers)">GameControllersBody</include>
+		<include condition="Window.IsDialogTopMost(gameports)">GamePortsBody</include>
+		<include condition="Window.IsDialogTopMost(gameagents)">GameAgentsBody</include>
+	</controls>
+</window>

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Live TV guide search: what to look for and where. Kodi ids 9-31; 26 search, 29 save, 28 reset, 25 cancel. -->
+<window>
+	<defaultcontrol always="true">9</defaultcontrol>
+	<controls>
+		<include>DialogScrim</include>
+		<control type="group">
+			<left>260</left>
+			<top>60</top>
+			<include>DialogEase</include>
+			<include content="DialogPanel">
+				<param name="width" value="1400" />
+				<param name="height" value="960" />
+				<param name="heading_id" value="9002" />
+			</include>
+			<control type="label">
+				<left>40</left>
+				<top>32</top>
+				<width>1320</width>
+				<height>44</height>
+				<font>head</font>
+				<textcolor>white</textcolor>
+				<label>Search the guide</label>
+			</control>
+			<control type="grouplist" id="5000">
+				<onup>noop</onup>
+				<left>40</left>
+				<top>100</top>
+				<width>640</width>
+				<height>700</height>
+				<orientation>vertical</orientation>
+				<itemgap>2</itemgap>
+				<onright>6000</onright>
+				<ondown>9000</ondown>
+				<include content="FormEdit"><param name="id" value="9" /><param name="label" value="Search for" /><param name="width" value="640" /></include>
+				<include content="FormRadio"><param name="id" value="10" /><param name="label" value="Include description" /><param name="width" value="640" /><param name="radiox" value="588" /></include>
+				<include content="FormRadio"><param name="id" value="11" /><param name="label" value="Case sensitive" /><param name="width" value="640" /><param name="radiox" value="588" /></include>
+				<include content="FormSpin"><param name="id" value="18" /><param name="label" value="Genre" /><param name="width" value="640" /></include>
+				<include content="FormRadio"><param name="id" value="20" /><param name="label" value="Include unknown genres" /><param name="width" value="640" /><param name="radiox" value="588" /></include>
+				<include content="FormSpin"><param name="id" value="21" /><param name="label" value="Channel group" /><param name="width" value="640" /></include>
+				<include content="FormSpin"><param name="id" value="23" /><param name="label" value="Channel" /><param name="width" value="640" /></include>
+				<include content="FormRadio"><param name="id" value="22" /><param name="label" value="Free-to-air only" /><param name="width" value="640" /><param name="radiox" value="588" /></include>
+				<include content="FormRadio"><param name="id" value="19" /><param name="label" value="Avoid repeats" /><param name="width" value="640" /><param name="radiox" value="588" /></include>
+			</control>
+			<control type="grouplist" id="6000">
+				<onup>noop</onup>
+				<left>720</left>
+				<top>100</top>
+				<width>640</width>
+				<height>700</height>
+				<orientation>vertical</orientation>
+				<itemgap>2</itemgap>
+				<onleft>5000</onleft>
+				<ondown>9000</ondown>
+				<include content="FormEdit"><param name="id" value="14" /><param name="label" value="Start date" /><param name="width" value="640" /></include>
+				<include content="FormEdit"><param name="id" value="16" /><param name="label" value="Start time" /><param name="width" value="640" /></include>
+				<include content="FormEdit"><param name="id" value="15" /><param name="label" value="End date" /><param name="width" value="640" /></include>
+				<include content="FormEdit"><param name="id" value="17" /><param name="label" value="End time" /><param name="width" value="640" /></include>
+				<include content="FormSpin"><param name="id" value="12" /><param name="label" value="Minimum duration" /><param name="width" value="640" /></include>
+				<include content="FormSpin"><param name="id" value="13" /><param name="label" value="Maximum duration" /><param name="width" value="640" /></include>
+				<include content="FormRadio"><param name="id" value="24" /><param name="label" value="Ignore existing timers" /><param name="width" value="640" /><param name="radiox" value="588" /></include>
+				<include content="FormRadio"><param name="id" value="27" /><param name="label" value="Ignore existing recordings" /><param name="width" value="640" /><param name="radiox" value="588" /></include>
+				<include content="FormRadio"><param name="id" value="30" /><param name="label" value="Ignore finished" /><param name="width" value="640" /><param name="radiox" value="588" /></include>
+				<include content="FormRadio"><param name="id" value="31" /><param name="label" value="Ignore future" /><param name="width" value="640" /><param name="radiox" value="588" /></include>
+			</control>
+			<control type="grouplist" id="9000">
+				<onleft>noop</onleft>
+				<onright>noop</onright>
+				<left>40</left>
+				<top>860</top>
+				<width>1320</width>
+				<height>60</height>
+				<orientation>horizontal</orientation>
+				<itemgap>14</itemgap>
+				<onup>5000</onup>
+				<control type="button" id="26">
+					<include>ButtonStyle</include>
+					<label>Search</label>
+				</control>
+				<control type="button" id="29">
+					<include>ButtonStyle</include>
+					<label>Save</label>
+				</control>
+				<control type="button" id="28">
+					<include>ButtonStyle</include>
+					<label>Reset</label>
+				</control>
+				<control type="button" id="25">
+					<include>ButtonStyle</include>
+					<label>Cancel</label>
+				</control>
+			</control>
+		</control>
+	</controls>
+</window>

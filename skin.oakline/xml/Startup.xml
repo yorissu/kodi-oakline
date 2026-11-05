@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<window>
+	<!-- first start: Oakline shows a 24-hour clock (scripts/clock.py, once) -->
+	<onload>RunScript(special://skin/scripts/clock.py)</onload>
+	<onload>RunScript(special://skin/scripts/theme.py,startup)</onload>
+	<onload>ReplaceWindow($INFO[System.StartupWindow])</onload>
+	<controls />
+</window>

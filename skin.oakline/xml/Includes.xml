@@ -1,0 +1,2614 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes>
+	<include file="Includes_More.xml" />
+	<include file="Includes_Folders.xml" />
+	<!-- inside one album: the music window shows the album page -->
+	<!-- a show page whose episodes come from the Kodi library (not an add-on) -->
+	<expression name="LibraryShow">String.StartsWith(Container.FolderPath,videodb://)</expression>
+	<expression name="AlbumPage">Container.Content(songs) + String.Contains(Container.FolderPath,musicdb://albums/)</expression>
+	<!-- Movies / TV Shows came back empty (not while still loading) -->
+	<expression name="EmptyLibrary">Window.IsActive(videos) + Integer.IsEqual(Container.NumItems,0) + !Container.IsUpdating + [String.StartsWith(Container.FolderPath,videodb://movies/titles) | String.StartsWith(Container.FolderPath,videodb://tvshows/titles)]</expression>
+	<!-- Kodi's watched filter (control 10) is set to anything but "All" -->
+	<expression name="WatchedFilterOn">!String.IsEmpty(Control.GetLabel(10)) + !String.IsEqual(Control.GetLabel(10),$LOCALIZE[16100])</expression>
+	<!-- ============ primitives ============ -->
+
+	<!-- Flat colour rectangle -->
+	<include name="Box">
+		<param name="left" default="0" />
+		<param name="top" default="0" />
+		<param name="width" default="100" />
+		<param name="height" default="100" />
+		<param name="color" default="navy900" />
+		<param name="visible" default="true" />
+		<definition>
+			<control type="image">
+				<left>$PARAM[left]</left>
+				<top>$PARAM[top]</top>
+				<width>$PARAM[width]</width>
+				<height>$PARAM[height]</height>
+				<texture colordiffuse="$PARAM[color]">white.png</texture>
+				<visible>$PARAM[visible]</visible>
+			</control>
+		</definition>
+	</include>
+
+	<!-- Wood focus ring: four 3px bars, so it stays sharp at any size
+	     (a stretched outline texture smears at the ends). -->
+	<include name="FocusRing">
+		<param name="left" default="0" />
+		<param name="top" default="0" />
+		<param name="width" default="330" />
+		<param name="height" default="186" />
+		<param name="visible" default="true" />
+		<definition>
+			<control type="group">
+				<left>$PARAM[left]</left>
+				<top>$PARAM[top]</top>
+				<width>$PARAM[width]</width>
+				<height>$PARAM[height]</height>
+				<visible>$PARAM[visible]</visible>
+				<control type="image">
+					<width>$PARAM[width]</width>
+					<height>3</height>
+					<texture colordiffuse="wood">white.png</texture>
+				</control>
+				<control type="image">
+					<bottom>0</bottom>
+					<height>3</height>
+					<width>$PARAM[width]</width>
+					<texture colordiffuse="wood">white.png</texture>
+				</control>
+				<control type="image">
+					<width>3</width>
+					<height>$PARAM[height]</height>
+					<texture colordiffuse="wood">white.png</texture>
+				</control>
+				<control type="image">
+					<right>0</right>
+					<width>3</width>
+					<height>$PARAM[height]</height>
+					<texture colordiffuse="wood">white.png</texture>
+				</control>
+			</control>
+		</definition>
+	</include>
+
+	<!-- Outlined button that fills with wood on focus. Width follows the label. -->
+	<include name="ButtonStyle">
+		<height>64</height>
+		<width>auto</width>
+		<font>button</font>
+		<textcolor>white</textcolor>
+		<focusedcolor>onwood</focusedcolor>
+		<textoffsetx>34</textoffsetx>
+		<aligny>center</aligny>
+		<texturefocus colordiffuse="wood">white.png</texturefocus>
+		<texturenofocus colordiffuse="navy800">white.png</texturenofocus>
+		<!-- buttons that don't apply (e.g. Settings on an add-on without any) -->
+		<disabledcolor>gray600</disabledcolor>
+		<texturedisabled colordiffuse="navy800">white.png</texturedisabled>
+	</include>
+
+	<!-- Text action: no box until focused (secondary actions on info pages) -->
+	<include name="LinkStyle">
+		<height>56</height>
+		<width>auto</width>
+		<font>rail</font>
+		<textcolor>gray400</textcolor>
+		<focusedcolor>onwood</focusedcolor>
+		<textoffsetx>22</textoffsetx>
+		<aligny>center</aligny>
+		<texturefocus colordiffuse="wood">white.png</texturefocus>
+		<texturenofocus />
+		<disabledcolor>gray600</disabledcolor>
+	</include>
+
+	<!-- Keyboard key: navy tile, wood on focus. Toggles (shift, caps, symbols)
+	     show a short wood bar along the bottom while on. -->
+	<include name="KeyStyle">
+		<height>72</height>
+		<font>rail</font>
+		<align>center</align>
+		<aligny>center</aligny>
+		<textcolor>white</textcolor>
+		<focusedcolor>onwood</focusedcolor>
+		<texturefocus colordiffuse="wood">white.png</texturefocus>
+		<texturenofocus colordiffuse="navy800">white.png</texturenofocus>
+		<textureradioonfocus colordiffuse="onwood">white.png</textureradioonfocus>
+		<textureradioonnofocus colordiffuse="wood">white.png</textureradioonnofocus>
+		<textureradioofffocus />
+		<textureradiooffnofocus />
+		<radiowidth>40</radiowidth>
+		<radioheight>4</radioheight>
+		<radioposx>55</radioposx>
+		<radioposy>60</radioposy>
+	</include>
+
+	<!-- ============ settings ============ -->
+
+	<!-- Row in a settings list: gray text, wood bar on focus, value on the right -->
+	<include name="SettingRowStyle">
+		<height>68</height>
+		<font>rail</font>
+		<textoffsetx>28</textoffsetx>
+		<aligny>center</aligny>
+		<textcolor>gray200</textcolor>
+		<focusedcolor>onwood</focusedcolor>
+		<disabledcolor>gray600</disabledcolor>
+		<invalidcolor>gray600</invalidcolor>
+		<texturefocus colordiffuse="wood">white.png</texturefocus>
+		<texturenofocus />
+	</include>
+
+	<!-- The templates Kodi clones for every setting (fixed ids). On/off is a
+	     small square: wood when on, outlined when off. -->
+	<include name="SettingTemplates">
+		<param name="width" />
+		<param name="radiox" />
+		<definition>
+			<control type="button" id="7">
+				<width>$PARAM[width]</width>
+				<include>SettingRowStyle</include>
+			</control>
+			<control type="radiobutton" id="8">
+				<width>$PARAM[width]</width>
+				<include>SettingRowStyle</include>
+				<radioposx>$PARAM[radiox]</radioposx>
+				<radioposy>22</radioposy>
+				<radiowidth>24</radiowidth>
+				<radioheight>24</radioheight>
+				<textureradioonfocus colordiffuse="onwood">white.png</textureradioonfocus>
+				<textureradioonnofocus colordiffuse="wood">white.png</textureradioonnofocus>
+				<textureradioofffocus colordiffuse="onwood" border="2">frame.png</textureradioofffocus>
+				<textureradiooffnofocus colordiffuse="gray600" border="2">frame.png</textureradiooffnofocus>
+			</control>
+			<control type="spincontrolex" id="9">
+				<width>$PARAM[width]</width>
+				<include>SettingRowStyle</include>
+				<textureup />
+				<texturedown />
+				<textureupfocus />
+				<texturedownfocus />
+				<textureupdisabled />
+				<texturedowndisabled />
+				<spinwidth>1</spinwidth>
+				<spinheight>1</spinheight>
+			</control>
+			<control type="image" id="11">
+				<width>$PARAM[width]</width>
+				<height>1</height>
+				<texture colordiffuse="navy700">white.png</texture>
+			</control>
+			<control type="edit" id="12">
+				<width>$PARAM[width]</width>
+				<include>SettingRowStyle</include>
+			</control>
+			<control type="sliderex" id="13">
+				<width>$PARAM[width]</width>
+				<include>SettingRowStyle</include>
+				<sliderwidth>240</sliderwidth>
+				<sliderheight>6</sliderheight>
+				<texturesliderbar colordiffuse="gray600">white.png</texturesliderbar>
+				<textureslidernib colordiffuse="wood">white.png</textureslidernib>
+				<textureslidernibfocus colordiffuse="onwood">white.png</textureslidernibfocus>
+			</control>
+			<control type="label" id="14">
+				<width>$PARAM[width]</width>
+				<height>66</height>
+				<font>label</font>
+				<textoffsetx>28</textoffsetx>
+				<textoffsety>32</textoffsety>
+				<textcolor>gray400</textcolor>
+			</control>
+			<control type="colorbutton" id="15">
+				<width>$PARAM[width]</width>
+				<include>SettingRowStyle</include>
+				<colorwidth>40</colorwidth>
+				<colorheight>24</colorheight>
+				<texturecolormask>white.png</texturecolormask>
+				<texturecolordisabledmask>white.png</texturecolordisabledmask>
+			</control>
+		</definition>
+	</include>
+
+	<!-- Row in a select dialog: label, value on the right; current choice gets a wood bar -->
+	<!-- Select dialog rows; the Focus versions sit on the wood fill -->
+	<include name="SelectRow">
+		<include content="Box">
+			<param name="top" value="18" />
+			<param name="width" value="3" />
+			<param name="height" value="28" />
+			<param name="color" value="wood" />
+			<param name="visible" value="ListItem.IsSelected" />
+		</include>
+		<control type="label">
+			<left>28</left>
+			<width>600</width>
+			<height>64</height>
+			<aligny>center</aligny>
+			<font>rail</font>
+			<textcolor>gray200</textcolor>
+			<selectedcolor>white</selectedcolor>
+			<scroll>false</scroll>
+			<label>$INFO[ListItem.Label]</label>
+		</control>
+		<control type="label">
+			<left>640</left>
+			<width>284</width>
+			<height>64</height>
+			<align>right</align>
+			<aligny>center</aligny>
+			<font>small</font>
+			<textcolor>gray400</textcolor>
+			<label>$INFO[ListItem.Label2]</label>
+		</control>
+	</include>
+	<include name="SelectRowFocus">
+		<include content="Box">
+			<param name="top" value="18" />
+			<param name="width" value="3" />
+			<param name="height" value="28" />
+			<param name="color" value="wood" />
+			<param name="visible" value="ListItem.IsSelected" />
+		</include>
+		<control type="label">
+			<left>28</left>
+			<width>600</width>
+			<height>64</height>
+			<aligny>center</aligny>
+			<font>rail</font>
+			<textcolor>onwood</textcolor>
+			<selectedcolor>onwood</selectedcolor>
+			<scroll>false</scroll>
+			<label>$INFO[ListItem.Label]</label>
+		</control>
+		<control type="label">
+			<left>640</left>
+			<width>284</width>
+			<height>64</height>
+			<align>right</align>
+			<aligny>center</aligny>
+			<font>small</font>
+			<textcolor>onwood2</textcolor>
+			<label>$INFO[ListItem.Label2]</label>
+		</control>
+	</include>
+	<include name="SelectRowThumb">
+		<control type="image">
+			<left>16</left>
+			<top>12</top>
+			<width>72</width>
+			<height>72</height>
+			<aspectratio>keep</aspectratio>
+			<texture background="true">$INFO[ListItem.Icon]</texture>
+		</control>
+		<control type="label">
+			<left>108</left>
+			<top>12</top>
+			<width>820</width>
+			<height>40</height>
+			<font>rail</font>
+			<textcolor>gray200</textcolor>
+			<selectedcolor>white</selectedcolor>
+			<scroll>false</scroll>
+			<label>$INFO[ListItem.Label]</label>
+		</control>
+		<control type="label">
+			<left>108</left>
+			<top>50</top>
+			<width>820</width>
+			<height>32</height>
+			<font>small</font>
+			<textcolor>gray400</textcolor>
+			<label>$INFO[ListItem.Label2]</label>
+		</control>
+	</include>
+	<include name="SelectRowThumbFocus">
+		<control type="image">
+			<left>16</left>
+			<top>12</top>
+			<width>72</width>
+			<height>72</height>
+			<aspectratio>keep</aspectratio>
+			<texture background="true">$INFO[ListItem.Icon]</texture>
+		</control>
+		<control type="label">
+			<left>108</left>
+			<top>12</top>
+			<width>820</width>
+			<height>40</height>
+			<font>rail</font>
+			<textcolor>onwood</textcolor>
+			<selectedcolor>onwood</selectedcolor>
+			<scroll>false</scroll>
+			<label>$INFO[ListItem.Label]</label>
+		</control>
+		<control type="label">
+			<left>108</left>
+			<top>50</top>
+			<width>820</width>
+			<height>32</height>
+			<font>small</font>
+			<textcolor>onwood2</textcolor>
+			<label>$INFO[ListItem.Label2]</label>
+		</control>
+	</include>
+
+	<!-- Focused row in a picker list (file browser, file manager): wood fill, navy text -->
+	<include name="BrowserFocus">
+		<param name="id" />
+		<definition>
+			<include content="Box">
+				<param name="width" value="1320" />
+				<param name="height" value="64" />
+				<param name="color" value="wood" />
+				<param name="visible" value="Control.HasFocus($PARAM[id])" />
+			</include>
+			<control type="group">
+				<visible>Control.HasFocus($PARAM[id])</visible>
+				<include>SelectRowFocus</include>
+			</control>
+			<control type="group">
+				<visible>!Control.HasFocus($PARAM[id])</visible>
+				<include>SelectRow</include>
+			</control>
+		</definition>
+	</include>
+
+	<!-- Focused row in a file manager pane (800 wide) -->
+	<include name="PaneFocus">
+		<param name="id" />
+		<definition>
+			<include content="Box">
+				<param name="width" value="800" />
+				<param name="height" value="64" />
+				<param name="color" value="wood" />
+				<param name="visible" value="Control.HasFocus($PARAM[id])" />
+			</include>
+			<control type="group">
+				<visible>Control.HasFocus($PARAM[id])</visible>
+				<include>SelectRowFocus</include>
+			</control>
+			<control type="group">
+				<visible>!Control.HasFocus($PARAM[id])</visible>
+				<include>SelectRow</include>
+			</control>
+		</definition>
+	</include>
+
+	<!-- Category button template (id 10 in settings windows, cloned by Kodi) -->
+	<include name="CategoryButton">
+		<param name="id" />
+		<param name="width" />
+		<param name="label" default="" />
+		<definition>
+			<control type="button" id="$PARAM[id]">
+				<width>$PARAM[width]</width>
+				<height>60</height>
+				<font>rail</font>
+				<textoffsetx>24</textoffsetx>
+				<aligny>center</aligny>
+				<textcolor>gray400</textcolor>
+				<focusedcolor>onwood</focusedcolor>
+				<selectedcolor>white</selectedcolor>
+				<texturefocus colordiffuse="wood">white.png</texturefocus>
+				<texturenofocus />
+				<label>$PARAM[label]</label>
+			</control>
+		</definition>
+	</include>
+
+	<!-- One line of system info text (Kodi fills it by id) -->
+	<include name="InfoLine">
+		<param name="id" />
+		<definition>
+			<control type="label" id="$PARAM[id]">
+				<width>1160</width>
+				<height>44</height>
+				<aligny>center</aligny>
+				<font>body</font>
+				<textcolor>gray200</textcolor>
+				<scroll>false</scroll>
+			</control>
+		</definition>
+	</include>
+
+	<!-- Screens fade and rise in a little when they open -->
+	<include name="ScreenEase">
+		<animation type="WindowOpen" reversible="false">
+			<effect type="fade" start="0" end="100" time="260" />
+			<effect type="slide" start="0,24" end="0,0" time="320" tween="cubic" easing="out" />
+		</animation>
+		<animation type="WindowClose" reversible="false">
+			<effect type="fade" start="100" end="0" time="160" />
+		</animation>
+	</include>
+
+	<!-- Full-screen dim behind a dialog; goes first in the window, outside the dialog's group -->
+	<include name="DialogScrim">
+		<control type="image">
+			<width>1920</width>
+			<height>1080</height>
+			<texture colordiffuse="scrim">white.png</texture>
+			<animation effect="fade" start="0" end="100" time="200">WindowOpen</animation>
+			<animation effect="fade" start="100" end="0" time="150">WindowClose</animation>
+		</control>
+	</include>
+
+	<!-- Dialog body easing in: a slight zoom from 96% with the fade -->
+	<include name="DialogEase">
+		<animation type="WindowOpen" reversible="false">
+			<effect type="fade" start="0" end="100" time="200" />
+			<effect type="zoom" start="96" end="100" time="240" center="auto" tween="cubic" easing="out" />
+		</animation>
+		<animation type="WindowClose" reversible="false">
+			<effect type="fade" start="100" end="0" time="150" />
+			<effect type="zoom" start="100" end="97" time="150" center="auto" tween="cubic" easing="in" />
+		</animation>
+	</include>
+
+	<!-- Centered dialog panel: navy, wood top edge, heading -->
+	<include name="DialogPanel">
+		<param name="width" />
+		<param name="height" />
+		<param name="heading_id" default="1" />
+		<definition>
+			<include content="Box">
+				<param name="width" value="$PARAM[width]" />
+				<param name="height" value="$PARAM[height]" />
+				<param name="color" value="navy950" />
+			</include>
+			<include content="Box">
+				<param name="width" value="$PARAM[width]" />
+				<param name="height" value="4" />
+				<param name="color" value="wood" />
+			</include>
+			<control type="label" id="$PARAM[heading_id]">
+				<left>40</left>
+				<top>26</top>
+				<width>$PARAM[width]</width>
+				<height>44</height>
+				<font>head</font>
+				<textcolor>white</textcolor>
+				<scroll>false</scroll>
+			</control>
+		</definition>
+	</include>
+
+	<!-- Text button in dialogs: outlined, wood on focus -->
+	<include name="DialogButton">
+		<param name="id" />
+		<param name="width" default="220" />
+		<definition>
+			<control type="button" id="$PARAM[id]">
+				<width>$PARAM[width]</width>
+				<height>60</height>
+				<font>button</font>
+				<align>center</align>
+				<aligny>center</aligny>
+				<textcolor>white</textcolor>
+				<focusedcolor>onwood</focusedcolor>
+				<texturefocus colordiffuse="wood">white.png</texturefocus>
+				<texturenofocus colordiffuse="navy800">white.png</texturenofocus>
+			</control>
+		</definition>
+	</include>
+
+	<!-- Add-on info button: label from the skin, or from Kodi when empty -->
+	<include name="AddonButton">
+		<param name="id" />
+		<param name="label" />
+		<definition>
+			<control type="button" id="$PARAM[id]">
+				<include>ButtonStyle</include>
+				<label>$PARAM[label]</label>
+			</control>
+		</definition>
+	</include>
+
+	<!-- Details pages: full-width fanart band with the solid info box over it.
+	     Buttons go in a grouplist at (140,456), inside the box. -->
+	<include name="DetailsBand">
+		<param name="fanart" />
+		<param name="kind" />
+		<param name="title" />
+		<param name="meta" />
+		<param name="plot" />
+		<definition>
+			<include content="Box">
+				<param name="width" value="1920" />
+				<param name="height" value="1080" />
+			</include>
+			<control type="image">
+				<left>0</left>
+				<top>0</top>
+				<width>1920</width>
+				<height>540</height>
+				<aspectratio>scale</aspectratio>
+				<texture background="true">$PARAM[fanart]</texture>
+			</control>
+			<include content="Box">
+				<param name="left" value="96" />
+				<param name="top" value="96" />
+				<param name="width" value="780" />
+				<param name="height" value="424" />
+				<param name="color" value="navy950" />
+			</include>
+			<control type="label">
+				<left>140</left>
+				<top>128</top>
+				<width>692</width>
+				<height>24</height>
+				<font>label</font>
+				<textcolor>gray400</textcolor>
+				<label>$PARAM[kind]</label>
+			</control>
+			<control type="label">
+				<left>140</left>
+				<top>152</top>
+				<width>692</width>
+				<height>96</height>
+				<aligny>center</aligny>
+				<font>display</font>
+				<textcolor>white</textcolor>
+				<scroll>false</scroll>
+				<label>$PARAM[title]</label>
+			</control>
+			<control type="label">
+				<left>140</left>
+				<top>262</top>
+				<width>692</width>
+				<height>30</height>
+				<font>small</font>
+				<textcolor>gray400</textcolor>
+				<label>$PARAM[meta]</label>
+			</control>
+			<control type="textbox">
+				<left>140</left>
+				<top>312</top>
+				<width>692</width>
+				<height>92</height>
+				<font>body</font>
+				<textcolor>gray200</textcolor>
+				<label>$PARAM[plot]</label>
+			</control>
+		</definition>
+	</include>
+
+	<!-- Focus state behind an episode row -->
+	<include name="EpisodeFocus">
+		<param name="id" />
+		<definition>
+			<include content="Box">
+				<param name="top" value="2" />
+				<param name="width" value="1316" />
+				<param name="height" value="160" />
+				<param name="color" value="navy800" />
+				<param name="visible" value="Control.HasFocus($PARAM[id])" />
+			</include>
+			<include content="FocusRing">
+				<param name="top" value="2" />
+				<param name="width" value="1316" />
+				<param name="height" value="160" />
+				<param name="visible" value="Control.HasFocus($PARAM[id])" />
+			</include>
+		</definition>
+	</include>
+
+	<include name="EpisodeRow">
+		<control type="label">
+			<left>0</left>
+			<top>2</top>
+			<width>64</width>
+			<height>160</height>
+			<align>center</align>
+			<aligny>center</aligny>
+			<font>head</font>
+			<textcolor>gray600</textcolor>
+			<selectedcolor>gray600</selectedcolor>
+			<label>$INFO[ListItem.Episode]</label>
+		</control>
+		<control type="image">
+			<left>72</left>
+			<top>14</top>
+			<width>240</width>
+			<height>135</height>
+			<aspectratio>scale</aspectratio>
+			<texture background="true">$INFO[ListItem.Art(thumb)]</texture>
+		</control>
+		<control type="progress">
+			<left>72</left>
+			<top>144</top>
+			<width>240</width>
+			<height>5</height>
+			<texturebg colordiffuse="gray600">white.png</texturebg>
+			<midtexture colordiffuse="wood">white.png</midtexture>
+			<info>ListItem.PercentPlayed</info>
+			<visible>ListItem.IsResumable | Integer.IsGreater(ListItem.PlayCount,0)</visible>
+		</control>
+		<include content="Box">
+			<param name="left" value="72" />
+			<param name="top" value="144" />
+			<param name="width" value="240" />
+			<param name="height" value="5" />
+			<param name="color" value="wood" />
+			<param name="visible" value="Integer.IsGreater(ListItem.PlayCount,0) + !ListItem.IsResumable" />
+		</include>
+		<control type="label">
+			<left>344</left>
+			<top>22</top>
+			<width>940</width>
+			<height>34</height>
+			<font>head</font>
+			<textcolor>white</textcolor>
+			<selectedcolor>white</selectedcolor>
+			<scroll>false</scroll>
+			<label>$VAR[EpisodeTitle]</label>
+		</control>
+		<control type="label">
+			<left>344</left>
+			<top>64</top>
+			<width>940</width>
+			<height>28</height>
+			<font>small</font>
+			<textcolor>gray400</textcolor>
+			<selectedcolor>gray400</selectedcolor>
+			<label>$INFO[ListItem.Duration(mins),, min]$VAR[EpisodeState]</label>
+		</control>
+		<control type="label">
+			<left>344</left>
+			<top>102</top>
+			<width>940</width>
+			<height>30</height>
+			<font>small</font>
+			<textcolor>gray200</textcolor>
+			<selectedcolor>gray200</selectedcolor>
+			<scroll>false</scroll>
+			<label>$INFO[ListItem.Plot]</label>
+		</control>
+	</include>
+
+	<!-- Cast member: photo when there is one, then name and role -->
+	<include name="CastCard">
+		<include content="Box">
+			<param name="left" value="7" />
+			<param name="top" value="7" />
+			<param name="width" value="320" />
+			<param name="height" value="126" />
+			<param name="color" value="navy800" />
+		</include>
+		<control type="image">
+			<left>7</left>
+			<top>7</top>
+			<width>96</width>
+			<height>126</height>
+			<aspectratio>scale</aspectratio>
+			<texture background="true">$INFO[ListItem.Art(thumb)]</texture>
+			<visible>!String.IsEmpty(ListItem.Art(thumb))</visible>
+		</control>
+		<!-- list layouts can't hold grouplists: one label set per photo/no-photo case -->
+		<control type="label">
+			<left>27</left>
+			<top>38</top>
+			<width>290</width>
+			<height>30</height>
+			<font>card</font>
+			<textcolor>white</textcolor>
+			<scroll>false</scroll>
+			<label>$INFO[ListItem.Label]</label>
+			<visible>String.IsEmpty(ListItem.Art(thumb))</visible>
+		</control>
+		<control type="label">
+			<left>27</left>
+			<top>72</top>
+			<width>290</width>
+			<height>28</height>
+			<font>small</font>
+			<textcolor>gray400</textcolor>
+			<scroll>false</scroll>
+			<label>$INFO[ListItem.Label2]</label>
+			<visible>String.IsEmpty(ListItem.Art(thumb))</visible>
+		</control>
+		<control type="label">
+			<left>123</left>
+			<top>38</top>
+			<width>194</width>
+			<height>30</height>
+			<font>card</font>
+			<textcolor>white</textcolor>
+			<scroll>false</scroll>
+			<label>$INFO[ListItem.Label]</label>
+			<visible>!String.IsEmpty(ListItem.Art(thumb))</visible>
+		</control>
+		<control type="label">
+			<left>123</left>
+			<top>72</top>
+			<width>194</width>
+			<height>28</height>
+			<font>small</font>
+			<textcolor>gray400</textcolor>
+			<scroll>false</scroll>
+			<label>$INFO[ListItem.Label2]</label>
+			<visible>!String.IsEmpty(ListItem.Art(thumb))</visible>
+		</control>
+	</include>
+
+	<!-- ============ library ============ -->
+
+	<!-- Poster in the library grid: 220x330 at (7,7), ring on focus, progress under it -->
+	<include name="PosterItem">
+		<param name="focused" default="false" />
+		<param name="id" />
+		<definition>
+			<control type="group">
+				<animation effect="zoom" start="100" end="104" time="180" tween="cubic" easing="out" center="117,172" condition="$PARAM[focused] + Control.HasFocus($PARAM[id])">Conditional</animation>
+				<include content="FocusRing">
+					<param name="width" value="234" />
+					<param name="height" value="344" />
+					<param name="visible" value="$PARAM[focused] + Control.HasFocus($PARAM[id])" />
+				</include>
+				<include content="Box">
+					<param name="left" value="7" />
+					<param name="top" value="7" />
+					<param name="width" value="220" />
+					<param name="height" value="330" />
+					<param name="color" value="navy800" />
+				</include>
+				<control type="image">
+					<left>7</left>
+					<top>7</top>
+					<width>220</width>
+					<height>330</height>
+					<aspectratio>scale</aspectratio>
+					<texture background="true">$VAR[PosterArt]</texture>
+				</control>
+				<control type="label">
+					<left>7</left>
+					<top>7</top>
+					<width>220</width>
+					<height>330</height>
+					<align>center</align>
+					<aligny>center</aligny>
+					<font>head</font>
+					<textcolor>gray400</textcolor>
+					<selectedcolor>gray400</selectedcolor>
+					<label>Back</label>
+					<visible>ListItem.IsParentFolder</visible>
+				</control>
+				<control type="label">
+					<left>21</left>
+					<top>7</top>
+					<width>192</width>
+					<height>330</height>
+					<align>center</align>
+					<aligny>center</aligny>
+					<font>card</font>
+					<textcolor>gray200</textcolor>
+					<selectedcolor>gray200</selectedcolor>
+					<wrapmultiline>true</wrapmultiline>
+					<label>$INFO[ListItem.Label]</label>
+					<visible>String.IsEmpty(ListItem.Art(poster)) + String.IsEmpty(ListItem.Art(tvshow.poster)) + String.IsEmpty(ListItem.Art(thumb)) + !ListItem.IsParentFolder</visible>
+				</control>
+				<control type="image">
+					<left>7</left>
+					<top>7</top>
+					<width>220</width>
+					<height>330</height>
+					<aspectratio>scale</aspectratio>
+					<texture>$VAR[FolderPreviewMovies]</texture>
+					<visible>ListItem.IsFolder + !ListItem.IsParentFolder + String.IsEmpty(ListItem.Art(poster))</visible>
+				</control>
+				<include content="FolderMark">
+					<param name="isfolder" value="ListItem.IsFolder + !ListItem.IsParentFolder + String.IsEmpty(ListItem.DBType)" />
+				</include>
+				<!-- movies: resume progress or fully watched; shows: share of episodes watched -->
+				<control type="progress">
+					<left>7</left>
+					<top>332</top>
+					<width>220</width>
+					<height>5</height>
+					<texturebg colordiffuse="gray600">white.png</texturebg>
+					<midtexture colordiffuse="wood">white.png</midtexture>
+					<info>ListItem.PercentPlayed</info>
+					<visible>ListItem.IsResumable</visible>
+				</control>
+				<control type="progress">
+					<left>7</left>
+					<top>332</top>
+					<width>220</width>
+					<height>5</height>
+					<texturebg colordiffuse="gray600">white.png</texturebg>
+					<midtexture colordiffuse="wood">white.png</midtexture>
+					<info>ListItem.Property(WatchedEpisodePercent)</info>
+					<visible>String.IsEqual(ListItem.DBType,tvshow) + Integer.IsGreater(ListItem.Property(WatchedEpisodes),0)</visible>
+				</control>
+				<include content="Box">
+					<param name="left" value="7" />
+					<param name="top" value="332" />
+					<param name="width" value="220" />
+					<param name="height" value="5" />
+					<param name="color" value="wood" />
+					<param name="visible" value="String.IsEqual(ListItem.DBType,movie) + Integer.IsGreater(ListItem.PlayCount,0) + !ListItem.IsResumable" />
+				</include>
+			</control>
+			<control type="label">
+				<left>7</left>
+				<top>356</top>
+				<width>220</width>
+				<height>30</height>
+				<font>card</font>
+				<textcolor>white</textcolor>
+				<selectedcolor>white</selectedcolor>
+				<scroll>false</scroll>
+				<label>$INFO[ListItem.Label]</label>
+				<visible>!ListItem.IsParentFolder</visible>
+			</control>
+		</definition>
+	</include>
+
+	<!-- Row in the library list: thumb, title, second line -->
+	<include name="ListRow">
+		<include content="Box">
+			<param name="left" value="14" />
+			<param name="top" value="9" />
+			<param name="width" value="153" />
+			<param name="height" value="86" />
+			<param name="color" value="navy800" />
+			<param name="visible" value="!String.IsEmpty(ListItem.Art(thumb)) | [ListItem.IsFolder + !ListItem.IsParentFolder + Window.IsActive(videos)]" />
+		</include>
+		<control type="image">
+			<left>14</left>
+			<top>9</top>
+			<width>153</width>
+			<height>86</height>
+			<aspectratio>scale</aspectratio>
+			<texture background="true">$INFO[ListItem.Art(thumb)]</texture>
+			<visible>!ListItem.IsParentFolder</visible>
+		</control>
+		<!-- folders ("shows") in Movies: their first video's frame (see Includes_Folders.xml) -->
+		<control type="image">
+			<left>14</left>
+			<top>9</top>
+			<width>153</width>
+			<height>86</height>
+			<aspectratio>scale</aspectratio>
+			<texture>$VAR[FolderPreviewMovies]</texture>
+			<visible>ListItem.IsFolder + !ListItem.IsParentFolder + Window.IsActive(videos)</visible>
+		</control>
+		<include content="Box">
+			<param name="left" value="14" />
+			<param name="top" value="4" />
+			<param name="width" value="48" />
+			<param name="height" value="5" />
+			<param name="color" value="wood" />
+			<param name="visible" value="ListItem.IsFolder + !ListItem.IsParentFolder + String.IsEmpty(ListItem.DBType) + Window.IsActive(videos)" />
+		</include>
+		<control type="label">
+			<left>196</left>
+			<animation effect="slide" end="-168,0" time="0" condition="String.IsEmpty(ListItem.Art(thumb)) + ![ListItem.IsFolder + !ListItem.IsParentFolder + Window.IsActive(videos)]">Conditional</animation>
+			<top>14</top>
+			<width>1300</width>
+			<height>36</height>
+			<font>head</font>
+			<textcolor>white</textcolor>
+			<selectedcolor>white</selectedcolor>
+			<scroll>false</scroll>
+			<label>$VAR[ListRowTitle]</label>
+		</control>
+		<control type="label">
+			<left>196</left>
+			<animation effect="slide" end="-168,0" time="0" condition="String.IsEmpty(ListItem.Art(thumb)) + ![ListItem.IsFolder + !ListItem.IsParentFolder + Window.IsActive(videos)]">Conditional</animation>
+			<top>58</top>
+			<width>1300</width>
+			<height>30</height>
+			<font>small</font>
+			<textcolor>gray400</textcolor>
+			<selectedcolor>gray400</selectedcolor>
+			<scroll>false</scroll>
+			<label>$VAR[ListRowSub]</label>
+			<visible>!ListItem.IsParentFolder</visible>
+		</control>
+		<control type="progress">
+			<left>14</left>
+			<top>90</top>
+			<width>153</width>
+			<height>5</height>
+			<texturebg colordiffuse="gray600">white.png</texturebg>
+			<midtexture colordiffuse="wood">white.png</midtexture>
+			<info>ListItem.PercentPlayed</info>
+			<visible>ListItem.IsResumable</visible>
+		</control>
+	</include>
+
+	<!-- ============ music ============ -->
+
+	<!-- Album or artist tile: square cover, ring on focus, name and artist under it -->
+	<include name="CoverItem">
+		<param name="focused" default="false" />
+		<param name="id" />
+		<definition>
+			<control type="group">
+				<animation effect="zoom" start="100" end="104" time="180" tween="cubic" easing="out" center="117,117" condition="$PARAM[focused] + Control.HasFocus($PARAM[id])">Conditional</animation>
+				<include content="FocusRing">
+					<param name="width" value="234" />
+					<param name="height" value="234" />
+					<param name="visible" value="$PARAM[focused] + Control.HasFocus($PARAM[id])" />
+				</include>
+				<include content="Box">
+					<param name="left" value="7" />
+					<param name="top" value="7" />
+					<param name="width" value="220" />
+					<param name="height" value="220" />
+					<param name="color" value="navy800" />
+				</include>
+				<control type="image">
+					<left>7</left>
+					<top>7</top>
+					<width>220</width>
+					<height>220</height>
+					<aspectratio>scale</aspectratio>
+					<texture background="true">$INFO[ListItem.Art(thumb)]</texture>
+				</control>
+			</control>
+			<control type="label">
+				<left>7</left>
+				<top>246</top>
+				<width>220</width>
+				<height>28</height>
+				<font>card</font>
+				<textcolor>white</textcolor>
+				<selectedcolor>white</selectedcolor>
+				<scroll>false</scroll>
+				<label>$VAR[ListRowTitle]</label>
+			</control>
+		</definition>
+	</include>
+
+	<!-- Album track: number, title, artist when it differs, duration; a wood
+	     square marks the track that is playing -->
+	<include name="TrackRow">
+		<include content="Box">
+			<param name="left" value="24" />
+			<param name="top" value="32" />
+			<param name="width" value="12" />
+			<param name="height" value="12" />
+			<param name="color" value="wood" />
+			<param name="visible" value="ListItem.IsPlaying" />
+		</include>
+		<control type="label">
+			<left>0</left>
+			<top>2</top>
+			<width>60</width>
+			<height>72</height>
+			<align>center</align>
+			<aligny>center</aligny>
+			<font>body</font>
+			<textcolor>gray400</textcolor>
+			<selectedcolor>gray400</selectedcolor>
+			<label>$INFO[ListItem.TrackNumber]</label>
+			<visible>!ListItem.IsPlaying</visible>
+		</control>
+		<control type="label">
+			<left>84</left>
+			<top>2</top>
+			<width>820</width>
+			<height>72</height>
+			<aligny>center</aligny>
+			<font>rail</font>
+			<textcolor>white</textcolor>
+			<selectedcolor>white</selectedcolor>
+			<scroll>false</scroll>
+			<label>$INFO[ListItem.Title]</label>
+		</control>
+		<control type="label">
+			<left>904</left>
+			<top>2</top>
+			<width>196</width>
+			<height>72</height>
+			<align>right</align>
+			<aligny>center</aligny>
+			<font>small</font>
+			<textcolor>gray400</textcolor>
+			<selectedcolor>gray400</selectedcolor>
+			<label>$INFO[ListItem.Duration]</label>
+		</control>
+	</include>
+
+	<!-- Small now-playing card, bottom right, while music plays in the background -->
+	<include name="NowPlayingMini">
+		<control type="group">
+			<left>1384</left>
+			<top>960</top>
+			<visible>Player.HasAudio + !Window.IsActive(visualisation)</visible>
+			<animation effect="slide" start="0,140" end="0,0" time="250" tween="cubic" easing="out">Visible</animation>
+			<include content="Box">
+				<param name="width" value="480" />
+				<param name="height" value="96" />
+				<param name="color" value="navy950" />
+			</include>
+			<control type="image">
+				<width>96</width>
+				<height>96</height>
+				<aspectratio>scale</aspectratio>
+				<texture background="true">$INFO[Player.Art(thumb)]</texture>
+			</control>
+			<control type="label">
+				<left>116</left>
+				<top>16</top>
+				<width>344</width>
+				<height>30</height>
+				<font>card</font>
+				<textcolor>white</textcolor>
+				<scroll>false</scroll>
+				<label>$INFO[MusicPlayer.Title]</label>
+			</control>
+			<control type="label">
+				<left>116</left>
+				<top>50</top>
+				<width>344</width>
+				<height>28</height>
+				<font>small</font>
+				<textcolor>gray400</textcolor>
+				<scroll>false</scroll>
+				<label>$INFO[MusicPlayer.Artist]</label>
+			</control>
+			<control type="progress">
+				<left>96</left>
+				<top>91</top>
+				<width>384</width>
+				<height>5</height>
+				<texturebg colordiffuse="gray600">white.png</texturebg>
+				<midtexture colordiffuse="wood">white.png</midtexture>
+				<info>Player.Progress</info>
+			</control>
+		</control>
+	</include>
+
+	<!-- ============ add-ons ============ -->
+
+	<!-- Add-on: its icon on a navy square, ring on focus, name and a second line under it -->
+	<include name="AddonTile">
+		<param name="focused" default="false" />
+		<param name="id" />
+		<definition>
+			<control type="group">
+				<animation effect="zoom" start="100" end="104" time="180" tween="cubic" easing="out" center="auto" condition="$PARAM[focused] + Control.HasFocus($PARAM[id])">Conditional</animation>
+				<include content="FocusRing">
+					<param name="width" value="234" />
+					<param name="height" value="234" />
+					<param name="visible" value="$PARAM[focused] + Control.HasFocus($PARAM[id])" />
+				</include>
+				<include content="Box">
+					<param name="left" value="7" />
+					<param name="top" value="7" />
+					<param name="width" value="220" />
+					<param name="height" value="220" />
+					<param name="color" value="navy800" />
+				</include>
+				<control type="image">
+					<left>37</left>
+					<top>37</top>
+					<width>160</width>
+					<height>160</height>
+					<aspectratio>keep</aspectratio>
+					<texture background="true">$INFO[ListItem.Icon]</texture>
+				</control>
+				<control type="label">
+					<left>7</left>
+					<top>240</top>
+					<width>220</width>
+					<height>28</height>
+					<font>card</font>
+					<textcolor>white</textcolor>
+					<selectedcolor>white</selectedcolor>
+					<scroll>false</scroll>
+					<label>$INFO[ListItem.Label]</label>
+				</control>
+				<control type="label">
+					<left>7</left>
+					<top>274</top>
+					<width>220</width>
+					<height>26</height>
+					<font>small</font>
+					<textcolor>gray400</textcolor>
+					<selectedcolor>gray400</selectedcolor>
+					<scroll>false</scroll>
+					<label>$VAR[AddonSub]</label>
+				</control>
+			</control>
+		</definition>
+	</include>
+
+	<!-- Action tile on the add-ons hub: icon, label, one-line description -->
+	<include name="ActionTile">
+		<control type="image">
+			<left>40</left>
+			<top>45</top>
+			<width>32</width>
+			<height>32</height>
+			<texture colordiffuse="white">$INFO[ListItem.Icon]</texture>
+		</control>
+		<control type="label">
+			<left>100</left>
+			<top>24</top>
+			<width>410</width>
+			<height>36</height>
+			<font>head</font>
+			<textcolor>white</textcolor>
+			<label>$INFO[ListItem.Label]</label>
+		</control>
+		<control type="label">
+			<left>100</left>
+			<top>70</top>
+			<width>410</width>
+			<height>30</height>
+			<font>small</font>
+			<textcolor>gray400</textcolor>
+			<label>$INFO[ListItem.Label2]</label>
+		</control>
+	</include>
+	<include name="ActionTileFocus">
+		<control type="image">
+			<left>40</left>
+			<top>45</top>
+			<width>32</width>
+			<height>32</height>
+			<texture colordiffuse="onwood">$INFO[ListItem.Icon]</texture>
+		</control>
+		<control type="label">
+			<left>100</left>
+			<top>24</top>
+			<width>410</width>
+			<height>36</height>
+			<font>head</font>
+			<textcolor>onwood</textcolor>
+			<label>$INFO[ListItem.Label]</label>
+		</control>
+		<control type="label">
+			<left>100</left>
+			<top>70</top>
+			<width>410</width>
+			<height>30</height>
+			<font>small</font>
+			<textcolor>onwood2</textcolor>
+			<label>$INFO[ListItem.Label2]</label>
+		</control>
+	</include>
+
+	<!-- ============ player ============ -->
+
+	<!-- Solid bar along the bottom: title, end time, progress, times.
+	     VideoOSD adds the buttons under it; the seek bar shows it alone. -->
+	<include name="PlayerBar">
+		<param name="top" />
+		<definition>
+			<control type="group">
+				<top>$PARAM[top]</top>
+				<include content="Box">
+					<param name="width" value="1920" />
+					<param name="height" value="400" />
+					<param name="color" value="navy950" />
+				</include>
+				<control type="label">
+					<left>96</left>
+					<top>40</top>
+					<width>1200</width>
+					<height>40</height>
+					<font>head</font>
+					<textcolor>white</textcolor>
+					<scroll>false</scroll>
+					<label>$VAR[PlayerTitle]</label>
+				</control>
+				<control type="label">
+					<left>1324</left>
+					<top>44</top>
+					<width>500</width>
+					<height>36</height>
+					<align>right</align>
+					<font>small</font>
+					<textcolor>gray400</textcolor>
+					<label>$VAR[PlayerEnds]</label>
+				</control>
+				<!-- buffered, then played -->
+				<control type="progress">
+					<left>96</left>
+					<top>102</top>
+					<width>1728</width>
+					<height>5</height>
+					<texturebg colordiffuse="gray600">white.png</texturebg>
+					<midtexture colordiffuse="gray400">white.png</midtexture>
+					<info>Player.ProgressCache</info>
+				</control>
+				<control type="progress">
+					<left>96</left>
+					<top>102</top>
+					<width>1728</width>
+					<height>5</height>
+					<!-- present but invisible: without a bg texture Kodi mis-sizes the bar,
+					     and a diffuse of 00000000 counts as "none" (draws white) -->
+					<texturebg colordiffuse="01000000">white.png</texturebg>
+					<midtexture colordiffuse="wood">white.png</midtexture>
+					<info>Player.Progress</info>
+				</control>
+				<control type="label">
+					<left>96</left>
+					<top>120</top>
+					<width>400</width>
+					<height>30</height>
+					<font>small</font>
+					<textcolor>white</textcolor>
+					<label>$INFO[Player.Time]</label>
+				</control>
+				<control type="label">
+					<left>1424</left>
+					<top>120</top>
+					<width>400</width>
+					<height>30</height>
+					<align>right</align>
+					<font>small</font>
+					<textcolor>gray400</textcolor>
+					<label>$INFO[Player.Duration]</label>
+				</control>
+			</control>
+		</definition>
+	</include>
+
+	<!-- Square icon button: outlined, fills with wood on focus -->
+	<include name="IconButton">
+		<param name="id" />
+		<param name="left" />
+		<param name="icon" />
+		<param name="onclick" />
+		<param name="onleft" />
+		<param name="onright" />
+		<definition>
+			<control type="button" id="$PARAM[id]">
+				<left>$PARAM[left]</left>
+				<top>0</top>
+				<width>64</width>
+				<height>64</height>
+				<label></label>
+				<texturefocus colordiffuse="wood">white.png</texturefocus>
+				<texturenofocus colordiffuse="navy800">white.png</texturenofocus>
+				<onclick>$PARAM[onclick]</onclick>
+				<onleft>$PARAM[onleft]</onleft>
+				<onright>$PARAM[onright]</onright>
+			</control>
+			<control type="image">
+				<left>$PARAM[left]</left>
+				<top>0</top>
+				<width>64</width>
+				<height>64</height>
+				<aspectratio>keep</aspectratio>
+				<texture colordiffuse="white">$PARAM[icon]</texture>
+				<visible>!Control.HasFocus($PARAM[id])</visible>
+				<animation effect="zoom" start="100" end="38" center="auto" time="0" condition="true">Conditional</animation>
+			</control>
+			<control type="image">
+				<left>$PARAM[left]</left>
+				<top>0</top>
+				<width>64</width>
+				<height>64</height>
+				<aspectratio>keep</aspectratio>
+				<texture colordiffuse="onwood">$PARAM[icon]</texture>
+				<visible>Control.HasFocus($PARAM[id])</visible>
+				<animation effect="zoom" start="100" end="38" center="auto" time="0" condition="true">Conditional</animation>
+			</control>
+		</definition>
+	</include>
+
+	<!-- ============ options panel ============ -->
+
+	<!-- Header chip: solid, wood on focus, width follows the label -->
+	<include name="Chip">
+		<param name="id" />
+		<param name="label" />
+		<param name="onclick" />
+		<param name="visible" default="true" />
+		<definition>
+			<control type="button" id="$PARAM[id]">
+				<width max="360">auto</width>
+				<height>52</height>
+				<font>small</font>
+				<textoffsetx>22</textoffsetx>
+				<aligny>center</aligny>
+				<textcolor>gray200</textcolor>
+				<focusedcolor>onwood</focusedcolor>
+				<texturefocus colordiffuse="wood">white.png</texturefocus>
+				<texturenofocus colordiffuse="navy800">white.png</texturenofocus>
+				<label>$PARAM[label]</label>
+				<onclick>$PARAM[onclick]</onclick>
+				<visible>$PARAM[visible]</visible>
+			</control>
+		</definition>
+	</include>
+
+	<!-- Row in the options panel: label left, current value right, wood on focus -->
+	<include name="OptionRowStyle">
+		<width>520</width>
+		<height>68</height>
+		<font>rail</font>
+		<textoffsetx>28</textoffsetx>
+		<aligny>center</aligny>
+		<textcolor>gray200</textcolor>
+		<focusedcolor>onwood</focusedcolor>
+		<disabledcolor>gray600</disabledcolor>
+		<invalidcolor>gray400</invalidcolor>
+		<texturefocus colordiffuse="wood">white.png</texturefocus>
+		<texturenofocus />
+		<radioposx>468</radioposx>
+		<radioposy>22</radioposy>
+		<radiowidth>24</radiowidth>
+		<radioheight>24</radioheight>
+		<textureradioonfocus colordiffuse="onwood">white.png</textureradioonfocus>
+		<textureradioonnofocus colordiffuse="wood">white.png</textureradioonnofocus>
+		<textureradioofffocus colordiffuse="onwood" border="2">frame.png</textureradioofffocus>
+		<textureradiooffnofocus colordiffuse="gray600" border="2">frame.png</textureradiooffnofocus>
+	</include>
+	<include name="OptionHeading">
+		<!-- In a grouplist every child is linked to its neighbours by id; a heading
+		     without an id is a dead end for Up/Down. With one, Kodi passes the move
+		     through it (it can't take focus). So every heading needs its own id. -->
+		<param name="label" />
+		<param name="id" />
+		<definition>
+			<control type="label" id="$PARAM[id]">
+				<width>520</width>
+				<height>54</height>
+				<textoffsetx>28</textoffsetx>
+				<textoffsety>22</textoffsety>
+				<font>label</font>
+				<textcolor>gray400</textcolor>
+				<label>$PARAM[label]</label>
+			</control>
+		</definition>
+	</include>
+	<include name="OptionButton">
+		<param name="id" />
+		<param name="label" />
+		<param name="label2" default="" />
+		<param name="onclick" default="noop" />
+		<param name="visible" default="true" />
+		<definition>
+			<control type="button" id="$PARAM[id]">
+				<include>OptionRowStyle</include>
+				<label>$PARAM[label]</label>
+				<label2>$PARAM[label2]</label2>
+				<onclick>$PARAM[onclick]</onclick>
+				<visible>$PARAM[visible]</visible>
+			</control>
+		</definition>
+	</include>
+	<!-- a toggle Kodi owns (it sets the state itself) -->
+	<include name="OptionToggle">
+		<param name="id" />
+		<param name="label" />
+		<param name="visible" default="true" />
+		<definition>
+			<control type="radiobutton" id="$PARAM[id]">
+				<include>OptionRowStyle</include>
+				<label>$PARAM[label]</label>
+				<visible>$PARAM[visible]</visible>
+			</control>
+		</definition>
+	</include>
+
+	<!-- Options for any media window (videos, music, pictures, programs, games,
+	     add-ons, PVR): slides in from the right when focus moves up out of the
+	     view, or from the rail's Options entry. The rows click Kodi's own
+	     media-window controls (3 sort, 4 order, 19/199 filter), so Kodi keeps
+	     doing the work. The window adds its own rows as nested content.
+	     return: the view to go back to. -->
+	<include name="OptionsPanel">
+		<param name="return" default="50" />
+		<param name="extras" default="OptionsNone" />
+		<definition>
+			<control type="button" id="3">
+				<left>-3000</left><top>-3000</top><width>1</width><height>1</height>
+				<texturefocus /><texturenofocus /><label></label><font></font>
+			</control>
+			<control type="button" id="4">
+				<left>-3000</left><top>-3000</top><width>1</width><height>1</height>
+				<texturefocus /><texturenofocus /><label></label><font></font>
+			</control>
+			<!-- chip row at the header's right: the common options, one press away.
+			     "Options" opens the full panel (9050). -->
+			<control type="grouplist" id="9040">
+				<onleft>noop</onleft>
+				<left>824</left>
+				<top>140</top>
+				<width>1000</width>
+				<height>52</height>
+				<orientation>horizontal</orientation>
+				<align>right</align>
+				<itemgap>8</itemgap>
+				<onup>SetFocus(9000,$VAR[TabIndex],absolute)</onup>
+				<ondown>SetFocus($PARAM[return])</ondown>
+				<onright>noop</onright>
+				<include content="Chip"><param name="id" value="9041" /><param name="label" value="Sort  ·  $INFO[Container.SortMethod]" /><param name="onclick" value="SendClick(3)" /><param name="visible" value="Control.IsEnabled(3)" /></include>
+				<include content="Chip"><param name="id" value="9042" /><param name="label" value="$INFO[Container.SortOrder]" /><param name="onclick" value="SendClick(4)" /><param name="visible" value="Control.IsEnabled(4)" /></include>
+				<include content="Chip"><param name="id" value="9043" /><param name="label" value="Layout  ·  $INFO[Container.Viewmode]" /><param name="onclick" value="Container.NextViewMode" /><param name="visible" value="Integer.IsGreater(Container.ViewCount,1)" /></include>
+				<include content="Chip"><param name="id" value="9044" /><param name="label" value="Filter" /><param name="onclick" value="SendClick(19)" /><param name="visible" value="Container.CanFilter + !Container.CanFilterAdvanced" /></include>
+				<include content="Chip"><param name="id" value="9045" /><param name="label" value="Filter" /><param name="onclick" value="Filter" /><param name="visible" value="Container.CanFilterAdvanced" /></include>
+				<include content="Chip"><param name="id" value="9046" /><param name="label" value="Options" /><param name="onclick" value="SetFocus(9050)" /></include>
+			</control>
+			<control type="group">
+				<visible allowhiddenfocus="true">ControlGroup(9050).HasFocus()</visible>
+				<animation effect="fade" start="0" end="100" time="160">Visible</animation>
+				<animation effect="fade" start="100" end="0" time="140">Hidden</animation>
+				<control type="image">
+					<width>1920</width>
+					<height>1080</height>
+					<texture colordiffuse="scrim">white.png</texture>
+				</control>
+				<control type="group">
+					<left>1336</left>
+					<animation effect="slide" start="584,0" end="0,0" time="260" tween="cubic" easing="out">Visible</animation>
+					<animation effect="slide" start="0,0" end="584,0" time="180" tween="cubic" easing="in">Hidden</animation>
+					<include content="Box">
+						<param name="width" value="584" />
+						<param name="height" value="1080" />
+						<param name="color" value="navy950" />
+					</include>
+					<include content="Box">
+						<param name="width" value="4" />
+						<param name="height" value="1080" />
+						<param name="color" value="wood" />
+					</include>
+					<control type="label">
+						<left>60</left>
+						<top>64</top>
+						<width>500</width>
+						<height>60</height>
+						<font>title</font>
+						<textcolor>white</textcolor>
+						<label>Options</label>
+					</control>
+					<control type="grouplist" id="9050">
+						<onup>noop</onup>
+						<ondown>noop</ondown>
+						<left>32</left>
+						<top>170</top>
+						<width>520</width>
+						<height>900</height>
+						<orientation>vertical</orientation>
+						<onleft>SetFocus($PARAM[return])</onleft>
+						<onright>noop</onright>
+						<onback>9046</onback>
+						<include content="OptionHeading"><param name="label" value="View" /><param name="id" value="9880" /></include>
+						<include content="OptionButton">
+							<param name="id" value="6051" />
+							<param name="label" value="Layout" />
+							<param name="label2" value="$INFO[Container.Viewmode]" />
+							<param name="onclick" value="Container.NextViewMode" />
+							<param name="visible" value="Integer.IsGreater(Container.ViewCount,1)" />
+						</include>
+						<include content="OptionButton">
+							<param name="id" value="6053" />
+							<param name="label" value="Sort by" />
+							<param name="label2" value="$INFO[Container.SortMethod]" />
+							<param name="onclick" value="SendClick(3)" />
+							<param name="visible" value="Control.IsEnabled(3)" />
+						</include>
+						<include content="OptionButton">
+							<param name="id" value="6052" />
+							<param name="label" value="Order" />
+							<param name="label2" value="$INFO[Container.SortOrder]" />
+							<param name="onclick" value="SendClick(4)" />
+							<param name="visible" value="Control.IsEnabled(4)" />
+						</include>
+						<include content="OptionButton">
+							<param name="id" value="19" />
+							<param name="label" value="Filter" />
+							<param name="visible" value="Container.CanFilter + !Container.CanFilterAdvanced" />
+						</include>
+						<include content="OptionButton">
+							<param name="id" value="199" />
+							<param name="label" value="Filter" />
+							<param name="onclick" value="Filter" />
+							<param name="visible" value="Container.CanFilterAdvanced" />
+						</include>
+						<include content="$PARAM[extras]" />
+						<include content="OptionHeading"><param name="label" value="More" /><param name="id" value="9881" /></include>
+						<control type="radiobutton" id="11">
+							<include>OptionRowStyle</include>
+							<label>$LOCALIZE[20336]</label>
+							<onclick>mastermode</onclick>
+							<selected>System.IsMaster</selected>
+							<visible>System.HasLocks</visible>
+						</control>
+						<include content="OptionButton">
+							<param name="id" value="9068" />
+							<param name="label" value="Settings" />
+							<param name="onclick" value="ActivateWindow(Settings)" />
+						</include>
+					</control>
+				</control>
+			</control>
+		</definition>
+	</include>
+
+	<include name="OptionsNone"><control type="label" id="9879"><width>1</width><height>1</height><visible>false</visible></control></include>
+	<!-- extra options rows per window kind -->
+	<include name="OptionsVideo">
+		<include content="OptionButton">
+			<param name="id" value="10" />
+			<param name="label" value="$LOCALIZE[20367]" />
+			<param name="visible" value="Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | Container.Content(episodes) | Container.Content(musicvideos)" />
+		</include>
+		<include content="OptionToggle">
+			<param name="id" value="16" />
+			<param name="label" value="$LOCALIZE[589]" />
+			<param name="visible" value="Container.Content(musicvideos)" />
+		</include>
+		<include content="LibraryOptions"><param name="kind" value="video" /></include>
+	</include>
+	<include name="OptionsMusic">
+		<include content="OptionToggle">
+			<param name="id" value="16" />
+			<param name="label" value="$LOCALIZE[589]" />
+		</include>
+		<include content="LibraryOptions"><param name="kind" value="music" /></include>
+	</include>
+	<!-- Video and music library rows for the options panel -->
+	<include name="LibraryOptions">
+		<param name="kind" />
+		<definition>
+			<include content="OptionHeading"><param name="label" value="Library" /><param name="id" value="9882" /></include>
+			<include content="OptionButton">
+				<param name="id" value="8" />
+				<param name="label" value="Search library" />
+				<param name="visible" value="String.IsEmpty(Container.PluginName)" />
+			</include>
+			<include content="OptionButton">
+				<param name="id" value="9061" />
+				<param name="label" value="Update library" />
+				<param name="label2" value="$VAR[ScanState]" />
+				<param name="onclick" value="UpdateLibrary($PARAM[kind])" />
+				<param name="visible" value="String.IsEmpty(Container.PluginName) + !Container.Content(addons)" />
+			</include>
+			<include content="OptionButton">
+				<param name="id" value="9062" />
+				<param name="label" value="Clean library" />
+				<param name="onclick" value="CleanLibrary($PARAM[kind])" />
+				<param name="visible" value="String.IsEmpty(Container.PluginName) + !Container.Content(addons)" />
+			</include>
+			<include content="OptionButton">
+				<param name="id" value="9063" />
+				<param name="label" value="Playlist" />
+				<param name="label2" value="$INFO[Playlist.Length($PARAM[kind]),, items]" />
+				<param name="onclick" value="ActivateWindow($PARAM[kind]playlist)" />
+			</include>
+		</definition>
+	</include>
+
+	<variable name="ScanState">
+		<value condition="Library.IsScanningVideo | Library.IsScanningMusic">Scanning…</value>
+		<value></value>
+	</variable>
+
+	<variable name="PlayingChip">
+		<value condition="Player.HasVideo + !String.IsEmpty(VideoPlayer.TVShowTitle)">$INFO[VideoPlayer.TVShowTitle]$INFO[Player.TimeRemaining,  ·  , left]</value>
+		<value condition="Player.HasVideo">$INFO[VideoPlayer.Title]$INFO[Player.TimeRemaining,  ·  , left]</value>
+		<value>$INFO[MusicPlayer.Title]$INFO[MusicPlayer.Artist,  ·  ]</value>
+	</variable>
+	<!-- Tab under the screen on show, so Up lands on it (0-based; Live TV is
+	     only in the bar when a TV add-on is enabled). Elsewhere: stay put. -->
+	<variable name="TabIndex">
+		<value condition="Window.IsActive(home)">0</value>
+		<value condition="Window.IsActive(videos)">1</value>
+		<value condition="String.StartsWith(Window.Property(xmlfile),MyPVR)">2</value>
+		<value condition="Window.IsActive(music) + System.HasPVRAddon">3</value>
+		<value condition="Window.IsActive(music)">2</value>
+		<value condition="[Window.IsActive(1152) | Window.IsActive(addonbrowser)] + System.HasPVRAddon">4</value>
+		<value condition="Window.IsActive(1152) | Window.IsActive(addonbrowser)">3</value>
+		<value condition="[Window.IsActive(1154) | Window.IsActive(pictures) | Window.IsActive(programs) | Window.IsActive(games) | Window.IsActive(weather) | Window.IsActive(videoplaylist) | Window.IsActive(musicplaylist) | Window.IsActive(favouritesbrowser)] + System.HasPVRAddon">5</value>
+		<value condition="Window.IsActive(1154) | Window.IsActive(pictures) | Window.IsActive(programs) | Window.IsActive(games) | Window.IsActive(weather) | Window.IsActive(videoplaylist) | Window.IsActive(musicplaylist) | Window.IsActive(favouritesbrowser)">4</value>
+		<value>$INFO[Container(9000).Position]</value>
+	</variable>
+	<variable name="WatchedNote">
+		<value condition="$EXP[WatchedFilterOn]">  ·  [COLOR wood]$INFO[Control.GetLabel(10)][/COLOR]</value>
+		<value></value>
+	</variable>
+	<variable name="EmptyTitle">
+		<value condition="$EXP[WatchedFilterOn]">Nothing to show with "$INFO[Control.GetLabel(10)]"</value>
+		<value condition="String.StartsWith(Container.FolderPath,videodb://tvshows)">No TV shows in the library yet</value>
+		<value>No movies in the library yet</value>
+	</variable>
+	<variable name="EmptyText">
+		<value condition="$EXP[WatchedFilterOn]">The watched filter is hiding everything here. Show all to see the whole library again.</value>
+		<value>Kodi only lists what it has scanned into its library. Open video files, pick the folder on your NAS, choose Set content from its menu (Movies or TV shows) and let it scan. Files you play straight from a folder don't appear here.</value>
+	</variable>
+	<variable name="ProfilesDown">
+		<value condition="Integer.IsGreater(Container(2).NumItems,0)">2</value>
+		<value>9001</value>
+	</variable>
+	<variable name="FolderCount">
+		<value condition="Integer.IsEqual(Container.NumItems,1)">1 item</value>
+		<value>$INFO[Container.NumItems,, items]</value>
+	</variable>
+	<variable name="HeroArt">
+		<value condition="Control.HasFocus(8610) + !String.IsEmpty(Container(8610).ListItem.Art(fanart))">$INFO[Container(8610).ListItem.Art(fanart)]</value>
+		<value condition="Control.HasFocus(8610) + Container(8610).ListItem.IsFolder">$VAR[FolderPreviewRecent]</value>
+		<value condition="Control.HasFocus(8610)">$INFO[Container(8610).ListItem.Art(thumb)]</value>
+		<value condition="Control.HasFocus(8620)">$INFO[Container(8620).ListItem.Art(fanart)]</value>
+		<value condition="Control.HasFocus(8630)">$INFO[Container(8630).ListItem.Art(fanart)]</value>
+		<value condition="Control.HasFocus(8640)">$INFO[Container(8640).ListItem.Art(fanart)]</value>
+		<value condition="!String.IsEmpty(Container(8600).ListItem.Art(fanart))">$INFO[Container(8600).ListItem.Art(fanart)]</value>
+		<value condition="Control.HasFocus(8600) + Container(8600).ListItem.IsFolder">$VAR[FolderPreviewHome]</value>
+		<value>$INFO[Container(8600).ListItem.Art(thumb)]</value>
+	</variable>
+	<variable name="HeroKind">
+		<value condition="Control.HasFocus(8620) | Control.HasFocus(8630)">Movie$INFO[Container(8691).ListItem.Label,  ·  ]</value>
+		<value condition="Control.HasFocus(8640)">TV show</value>
+		<value condition="Control.HasFocus(8610) + Container(8610).ListItem.IsFolder">Show</value>
+		<value condition="Control.HasFocus(8610)">Video</value>
+		<value condition="Container(8600).ListItem.IsFolder">Show</value>
+		<value>Video</value>
+	</variable>
+	<variable name="HeroHint">
+		<value condition="[Control.HasFocus(8610) + Container(8610).ListItem.IsFolder] | [!Control.HasFocus(8610) + !Control.HasFocus(8620) + !Control.HasFocus(8630) + !Control.HasFocus(8640) + Container(8600).ListItem.IsFolder]">Select to see its videos</value>
+		<value>Select to play</value>
+	</variable>
+	<variable name="VideosFolderLabel">
+		<value condition="String.IsEmpty(Skin.String(oak_videos))">Not chosen yet  ·  select to pick it</value>
+		<value>$INFO[Skin.String(oak_videos)]</value>
+	</variable>
+	<!-- In the Movies section, at the top of the videos folder (Back leaves to Home) -->
+	<expression name="MoviesRoot">String.IsEqual(Window(home).Property(oak_section),movies) + !String.IsEmpty(Skin.String(oak_videos)) + String.IsEqual(Container.FolderPath,Skin.String(oak_videos))</expression>
+	<expression name="MusicRoot">String.IsEqual(Window(home).Property(oak_section),music) + String.IsEqual(Container.FolderPath,musicdb://albums/)</expression>
+	<!-- Folder marker drawn over a tile (oak tab + badge) -->
+	<include name="FolderMark">
+		<param name="isfolder" />
+		<param name="x" default="7" />
+		<param name="tabtop" default="1" />
+		<param name="badgex" default="15" />
+		<param name="badgey" default="15" />
+		<param name="iconx" default="24" />
+		<param name="icony" default="24" />
+		<definition>
+				<!-- folder ("show"): oak tab on the top edge and a folder badge -->
+				<control type="group">
+					<visible>$PARAM[isfolder]</visible>
+					<include content="Box">
+						<param name="left" value="$PARAM[x]" />
+						<param name="top" value="$PARAM[tabtop]" />
+						<param name="width" value="64" />
+						<param name="height" value="6" />
+						<param name="color" value="wood" />
+					</include>
+					<include content="Box">
+						<param name="left" value="$PARAM[badgex]" />
+						<param name="top" value="$PARAM[badgey]" />
+						<param name="width" value="44" />
+						<param name="height" value="44" />
+						<param name="color" value="navy950" />
+					</include>
+					<control type="image">
+						<left>$PARAM[iconx]</left>
+						<top>$PARAM[icony]</top>
+						<width>26</width>
+						<height>26</height>
+						<texture colordiffuse="wood">icons/folder.png</texture>
+					</control>
+				</control>
+		</definition>
+	</include>
+
+	<!-- Home row tile (16:9): a video's frame, or for a folder ("show") the frame
+	     of its first video, marked as a folder. preview: $VAR[FolderPreview<row>] -->
+	<include name="FolderCard">
+		<param name="focused" default="false" />
+		<param name="id" />
+		<param name="preview" />
+		<param name="count" />
+		<definition>
+			<control type="group">
+				<animation effect="zoom" start="100" end="105" time="180" tween="cubic" easing="out" center="167,97" condition="$PARAM[focused] + Control.HasFocus($PARAM[id])">Conditional</animation>
+				<include content="FocusRing">
+					<param name="width" value="334" />
+					<param name="height" value="194" />
+					<param name="visible" value="$PARAM[focused] + Control.HasFocus($PARAM[id])" />
+				</include>
+				<include content="Box">
+					<param name="left" value="7" />
+					<param name="top" value="7" />
+					<param name="width" value="320" />
+					<param name="height" value="180" />
+					<param name="color" value="navy800" />
+				</include>
+				<control type="label">
+					<left>27</left>
+					<top>7</top>
+					<width>280</width>
+					<height>180</height>
+					<align>center</align>
+					<aligny>center</aligny>
+					<font>card</font>
+					<textcolor>gray200</textcolor>
+					<selectedcolor>gray200</selectedcolor>
+					<wrapmultiline>true</wrapmultiline>
+					<label>$INFO[ListItem.Label]</label>
+					<visible>String.IsEmpty(ListItem.Art(thumb))</visible>
+				</control>
+				<control type="image">
+					<left>7</left>
+					<top>7</top>
+					<width>320</width>
+					<height>180</height>
+					<aspectratio>scale</aspectratio>
+					<texture background="true">$VAR[CardArt]</texture>
+				</control>
+				<control type="image">
+					<left>7</left>
+					<top>7</top>
+					<width>320</width>
+					<height>180</height>
+					<aspectratio>scale</aspectratio>
+					<texture>$PARAM[preview]</texture>
+					<visible>ListItem.IsFolder</visible>
+				</control>
+				<control type="progress">
+					<left>7</left>
+					<top>182</top>
+					<width>320</width>
+					<height>5</height>
+					<texturebg colordiffuse="gray600">white.png</texturebg>
+					<midtexture colordiffuse="wood">white.png</midtexture>
+					<info>ListItem.PercentPlayed</info>
+					<visible>Integer.IsGreater(ListItem.PercentPlayed,0)</visible>
+				</control>
+				<include content="FolderMark">
+					<param name="isfolder" value="ListItem.IsFolder + !ListItem.IsParentFolder" />
+				</include>
+			</control>
+			<control type="label">
+				<left>7</left>
+				<top>206</top>
+				<width>320</width>
+				<height>30</height>
+				<font>card</font>
+				<textcolor>white</textcolor>
+				<selectedcolor>white</selectedcolor>
+				<scroll>false</scroll>
+				<label>$VAR[CardTitle]</label>
+			</control>
+		</definition>
+	</include>
+	<!-- ============ home rows (1.3) ============ -->
+
+	<!-- A row of the videos folder: header with count, 16:9 tiles. Folders are
+	     shows (they open in Movies), files play. -->
+	<include name="HomeFolderRow">
+		<param name="id" />
+		<param name="up" />
+		<param name="down" />
+		<param name="header" />
+		<param name="sort" />
+		<param name="order" />
+		<param name="name" />
+		<definition>
+			<!-- one row: a group, so the page grouplist only lays rows out (and drops
+			     hidden ones); the list's own onup/ondown move between rows -->
+			<control type="group">
+				<height>300</height>
+				<visible>!String.IsEmpty(Skin.String(oak_videos))</visible>
+				<control type="label">
+					<left>96</left>
+					<width>1400</width>
+					<height>44</height>
+					<font>head</font>
+					<textcolor>white</textcolor>
+					<label>$PARAM[header]$INFO[Container($PARAM[id]).NumItems,  ·  ,]</label>
+				</control>
+				<control type="label">
+					<left>96</left>
+					<top>60</top>
+					<width>1600</width>
+					<height>60</height>
+					<font>body</font>
+					<textcolor>gray400</textcolor>
+					<label>The videos folder is empty or can't be reached right now.</label>
+					<visible>Integer.IsEqual(Container($PARAM[id]).NumItems,0) + !Container($PARAM[id]).IsUpdating</visible>
+				</control>
+				<control type="fixedlist" id="$PARAM[id]">
+					<onleft>noop</onleft>
+					<onright>noop</onright>
+					<left>89</left>
+					<top>46</top>
+					<width>1831</width>
+					<height>254</height>
+					<orientation>horizontal</orientation>
+					<focusposition>0</focusposition>
+					<movement>0</movement>
+					<scrolltime tween="cubic" easing="out">300</scrolltime>
+					<preloaditems>2</preloaditems>
+					<onup>$PARAM[up]</onup>
+					<ondown>$PARAM[down]</ondown>
+					<!-- Back, like Estuary's rows: to the row's first item, then up to the tabs -->
+					<onback condition="Integer.IsGreater(Container($PARAM[id]).CurrentItem,1)">SetFocus($PARAM[id],0,absolute)</onback>
+					<onback condition="!Integer.IsGreater(Container($PARAM[id]).CurrentItem,1)">SetFocus(9000,0,absolute)</onback>
+					<onfocus>SetProperty(oak_section,movies,home)</onfocus>
+					<itemlayout width="342" height="254" infoupdate="1000">
+						<include content="FolderCard"><param name="id" value="$PARAM[id]" /><param name="preview" value="$VAR[FolderPreview$PARAM[name]]" /><param name="count" value="$VAR[FolderCount$PARAM[name]]" /></include>
+					</itemlayout>
+					<focusedlayout width="342" height="254" infoupdate="1000">
+						<include content="FolderCard"><param name="id" value="$PARAM[id]" /><param name="focused" value="true" /><param name="preview" value="$VAR[FolderPreview$PARAM[name]]" /><param name="count" value="$VAR[FolderCount$PARAM[name]]" /></include>
+					</focusedlayout>
+					<content target="videos" sortby="$PARAM[sort]" sortorder="$PARAM[order]">$INFO[Skin.String(oak_videos)]</content>
+				</control>
+			</control>
+		</definition>
+	</include>
+
+	<!-- A genre from Kodi's library (picker: a hidden list of genres, random order;
+	     index: which of them). Hidden until the library has that many genres. -->
+	<include name="HomeGenreRow">
+		<param name="id" />
+		<param name="up" />
+		<param name="down" />
+		<param name="picker" />
+		<param name="index" />
+		<definition>
+			<!-- one row: a group, so the page grouplist only lays rows out (and drops
+			     hidden ones); the list's own onup/ondown move between rows -->
+			<control type="group">
+				<height>300</height>
+				<visible>Integer.IsGreater(Container($PARAM[picker]).NumItems,$PARAM[index])</visible>
+				<control type="label">
+					<left>96</left>
+					<width>1400</width>
+					<height>44</height>
+					<font>head</font>
+					<textcolor>white</textcolor>
+					<label>$INFO[Container($PARAM[picker]).ListItemAbsolute($PARAM[index]).Label]$VAR[GenreRowKind$PARAM[picker]]</label>
+				</control>
+				<control type="fixedlist" id="$PARAM[id]">
+					<onleft>noop</onleft>
+					<onright>noop</onright>
+					<left>89</left>
+					<top>46</top>
+					<width>1831</width>
+					<height>254</height>
+					<orientation>horizontal</orientation>
+					<focusposition>0</focusposition>
+					<movement>0</movement>
+					<scrolltime tween="cubic" easing="out">300</scrolltime>
+					<preloaditems>2</preloaditems>
+					<onup>$PARAM[up]</onup>
+					<ondown>$PARAM[down]</ondown>
+					<!-- Back, like Estuary's rows: to the row's first item, then up to the tabs -->
+					<onback condition="Integer.IsGreater(Container($PARAM[id]).CurrentItem,1)">SetFocus($PARAM[id],0,absolute)</onback>
+					<onback condition="!Integer.IsGreater(Container($PARAM[id]).CurrentItem,1)">SetFocus(9000,0,absolute)</onback>
+					<onfocus>SetProperty(oak_section,files,home)</onfocus>
+					<itemlayout width="342" height="254">
+						<include content="FolderCard"><param name="id" value="$PARAM[id]" /><param name="preview" value="" /><param name="count" value="" /></include>
+					</itemlayout>
+					<focusedlayout width="342" height="254">
+						<include content="FolderCard"><param name="id" value="$PARAM[id]" /><param name="focused" value="true" /><param name="preview" value="" /><param name="count" value="" /></include>
+					</focusedlayout>
+					<content target="videos" sortby="random" limit="25">$INFO[Container($PARAM[picker]).ListItemAbsolute($PARAM[index]).FolderPath]</content>
+				</control>
+			</control>
+		</definition>
+	</include>
+	<variable name="GenreRowKind8691">
+		<value>  ·  movies</value>
+	</variable>
+	<variable name="GenreRowKind8692">
+		<value>  ·  TV shows</value>
+	</variable>
+
+	<!-- Home preview: the focused row's item, or the first row's while the
+	     cursor is up in the tabs -->
+	<variable name="HeroLabel">
+		<value condition="Control.HasFocus(8610)">$INFO[Container(8610).ListItem.Label]</value>
+		<value condition="Control.HasFocus(8620)">$INFO[Container(8620).ListItem.Label]</value>
+		<value condition="Control.HasFocus(8630)">$INFO[Container(8630).ListItem.Label]</value>
+		<value condition="Control.HasFocus(8640)">$INFO[Container(8640).ListItem.Label]</value>
+		<value condition="!String.IsEmpty(Skin.String(oak_videos))">$INFO[Container(8600).ListItem.Label]</value>
+		<value></value>
+	</variable>
+	<variable name="HeroPlot">
+		<value condition="Control.HasFocus(8610)">$INFO[Container(8610).ListItem.Plot]</value>
+		<value condition="Control.HasFocus(8620)">$INFO[Container(8620).ListItem.Plot]</value>
+		<value condition="Control.HasFocus(8630)">$INFO[Container(8630).ListItem.Plot]</value>
+		<value condition="Control.HasFocus(8640)">$INFO[Container(8640).ListItem.Plot]</value>
+		<value>$INFO[Container(8600).ListItem.Plot]</value>
+	</variable>
+
+	<!-- Home rows: Up / Down to the next row that is showing -->
+	<variable name="HomeDown8600">
+		<value condition="!String.IsEmpty(Skin.String(oak_videos))">8610</value>
+		<value>noop</value>
+	</variable>
+	<variable name="HomeDown8610">
+		<value condition="Integer.IsGreater(Container(8691).NumItems,0)">8620</value>
+		<value condition="Integer.IsGreater(Container(8692).NumItems,0)">8640</value>
+		<value>noop</value>
+	</variable>
+	<variable name="HomeDown8620">
+		<value condition="Integer.IsGreater(Container(8691).NumItems,1)">8630</value>
+		<value condition="Integer.IsGreater(Container(8692).NumItems,0)">8640</value>
+		<value>noop</value>
+	</variable>
+	<variable name="HomeDown8630">
+		<value condition="Integer.IsGreater(Container(8692).NumItems,0)">8640</value>
+		<value>noop</value>
+	</variable>
+	<variable name="HomeUp8620">
+		<value condition="!String.IsEmpty(Skin.String(oak_videos))">8610</value>
+		<value>SetFocus(9000,0,absolute)</value>
+	</variable>
+	<variable name="HomeUp8640">
+		<value condition="Integer.IsGreater(Container(8691).NumItems,1)">8630</value>
+		<value condition="Integer.IsGreater(Container(8691).NumItems,0)">8620</value>
+		<value condition="!String.IsEmpty(Skin.String(oak_videos))">8610</value>
+		<value>SetFocus(9000,0,absolute)</value>
+	</variable>
+	<!-- ============ variables ============ -->
+
+	<!-- search: title filters built from the field's text; empty field, no rows -->
+	<variable name="SearchPathMovies">
+		<value condition="String.IsEmpty(Control.GetLabel(9020).index(1))"></value>
+		<value>videodb://movies/titles/?xsp=%7B%22type%22%3A%22movies%22%2C%22rules%22%3A%7B%22and%22%3A%5B%7B%22field%22%3A%22title%22%2C%22operator%22%3A%22contains%22%2C%22value%22%3A%5B%22$INFO[Control.GetLabel(9020).index(1)]%22%5D%7D%5D%7D%2C%22order%22%3A%7B%22method%22%3A%22title%22%2C%22direction%22%3A%22ascending%22%7D%7D</value>
+	</variable>
+	<variable name="SearchPathShows">
+		<value condition="String.IsEmpty(Control.GetLabel(9020).index(1))"></value>
+		<value>videodb://tvshows/titles/?xsp=%7B%22type%22%3A%22tvshows%22%2C%22rules%22%3A%7B%22and%22%3A%5B%7B%22field%22%3A%22title%22%2C%22operator%22%3A%22contains%22%2C%22value%22%3A%5B%22$INFO[Control.GetLabel(9020).index(1)]%22%5D%7D%5D%7D%2C%22order%22%3A%7B%22method%22%3A%22title%22%2C%22direction%22%3A%22ascending%22%7D%7D</value>
+	</variable>
+	<variable name="SearchPathEpisodes">
+		<value condition="String.IsEmpty(Control.GetLabel(9020).index(1))"></value>
+		<value>videodb://tvshows/titles/-1/-1/?xsp=%7B%22type%22%3A%22episodes%22%2C%22rules%22%3A%7B%22and%22%3A%5B%7B%22field%22%3A%22title%22%2C%22operator%22%3A%22contains%22%2C%22value%22%3A%5B%22$INFO[Control.GetLabel(9020).index(1)]%22%5D%7D%5D%7D%2C%22order%22%3A%7B%22method%22%3A%22title%22%2C%22direction%22%3A%22ascending%22%7D%7D</value>
+	</variable>
+	<!-- search navigation past rows with no matches -->
+	<variable name="SearchFirstRow">
+		<value condition="Integer.IsGreater(Container(8691).NumItems,0)">8601</value>
+		<value condition="Integer.IsGreater(Container(8692).NumItems,0)">8602</value>
+		<value condition="Integer.IsGreater(Container(8693).NumItems,0)">8603</value>
+		<value>9020</value>
+	</variable>
+	<variable name="SearchBelowMovies">
+		<value condition="Integer.IsGreater(Container(8692).NumItems,0)">8602</value>
+		<value condition="Integer.IsGreater(Container(8693).NumItems,0)">8603</value>
+		<value>8601</value>
+	</variable>
+	<variable name="SearchAboveShows">
+		<value condition="Integer.IsGreater(Container(8691).NumItems,0)">8601</value>
+		<value>9020</value>
+	</variable>
+	<variable name="SearchBelowShows">
+		<value condition="Integer.IsGreater(Container(8693).NumItems,0)">8603</value>
+		<value>8602</value>
+	</variable>
+	<variable name="SearchAboveEpisodes">
+		<value condition="Integer.IsGreater(Container(8692).NumItems,0)">8602</value>
+		<value condition="Integer.IsGreater(Container(8691).NumItems,0)">8601</value>
+		<value>9020</value>
+	</variable>
+
+	<!-- music -->
+	<variable name="MusicTitle">
+		<value condition="Container.Content(albums) + String.Contains(Container.FolderPath,musicdb://artists/)">$INFO[Container.FolderName]</value>
+		<value condition="Container.Content(albums)">Albums</value>
+		<value condition="Container.Content(artists)">Artists</value>
+		<value condition="Container.Content(songs)">Songs</value>
+		<value condition="Container.Content(genres)">Genres</value>
+		<value condition="String.IsEqual(Container.FolderPath,musicdb://)">Music library</value>
+		<value condition="!String.IsEmpty(Container.FolderName)">$INFO[Container.FolderName]</value>
+		<value>Music</value>
+	</variable>
+	<variable name="MusicCount">
+		<value condition="Container.Content(albums)">$INFO[Container.NumItems,, albums]</value>
+		<value condition="Container.Content(artists)">$INFO[Container.NumItems,, artists]</value>
+		<value condition="Container.Content(songs)">$INFO[Container.NumItems,, songs]</value>
+		<value>$INFO[Container.NumItems,, items]</value>
+	</variable>
+	<variable name="MusicView">
+		<value condition="$EXP[AlbumPage]">53</value>
+		<value condition="Control.IsVisible(500)">500</value>
+		<value>50</value>
+	</variable>
+
+	<variable name="AddonSub">
+		<value condition="ListItem.Property(addon.isinstalled) + Window.IsActive(addonbrowser)">Installed$INFO[ListItem.AddonVersion,  ·  v]</value>
+		<value condition="!String.IsEmpty(ListItem.AddonVersion)">v$INFO[ListItem.AddonVersion]</value>
+		<value>$INFO[ListItem.Label2]</value>
+	</variable>
+	<!-- add-ons -->
+	<variable name="AddonBrowserTitle">
+		<value condition="String.StartsWith(Container.FolderPath,addons://user/)">Installed add-ons</value>
+		<value condition="String.StartsWith(Container.FolderPath,addons://outdated/)">Updates</value>
+		<value condition="String.StartsWith(Container.FolderPath,addons://search/)">Search add-ons</value>
+		<value condition="!String.IsEmpty(Container.FolderName)">$INFO[Container.FolderName]</value>
+		<value>Add-ons</value>
+	</variable>
+	<variable name="AddonView">
+		<value condition="Control.IsVisible(500)">500</value>
+		<value>50</value>
+	</variable>
+	<!-- library -->
+	<!-- library lookups behind the show page's play button; empty for add-on content -->
+	<variable name="ShowResumePath">
+		<value condition="$EXP[LibraryShow]">videodb://tvshows/titles/$VAR[ShowDBID]/-1/?xsp=%7B%22type%22%3A%22episodes%22%2C%22rules%22%3A%7B%22and%22%3A%5B%7B%22field%22%3A%22inprogress%22%2C%22operator%22%3A%22true%22%2C%22value%22%3A%5B%5D%7D%5D%7D%2C%22order%22%3A%7B%22method%22%3A%22lastplayed%22%2C%22direction%22%3A%22descending%22%7D%2C%22limit%22%3A1%7D</value>
+		<value></value>
+	</variable>
+	<variable name="ShowNextPath">
+		<value condition="$EXP[LibraryShow]">videodb://tvshows/titles/$VAR[ShowDBID]/-1/?xsp=%7B%22type%22%3A%22episodes%22%2C%22rules%22%3A%7B%22and%22%3A%5B%7B%22field%22%3A%22playcount%22%2C%22operator%22%3A%22is%22%2C%22value%22%3A%5B%220%22%5D%7D%5D%7D%2C%22order%22%3A%7B%22method%22%3A%22episode%22%2C%22direction%22%3A%22ascending%22%7D%2C%22limit%22%3A1%7D</value>
+		<value></value>
+	</variable>
+	<variable name="ListRowSub">
+		<value condition="ListItem.IsFolder + !ListItem.IsParentFolder + String.IsEmpty(ListItem.DBType) + Window.IsActive(videos)">Show$VAR[FolderCountMovies]</value>
+		<value condition="!String.IsEmpty(ListItem.Label2)">$INFO[ListItem.Label2]</value>
+		<value>$INFO[ListItem.Plot]</value>
+	</variable>
+	<variable name="EpisodeTitle">
+		<value condition="ListItem.IsParentFolder">Back</value>
+		<value condition="!String.IsEmpty(ListItem.Title)">$INFO[ListItem.Title]</value>
+		<value>$INFO[ListItem.Label]</value>
+	</variable>
+	<!-- show page title: library, then what an add-on provides -->
+	<variable name="ShowTitle">
+		<value condition="!String.IsEmpty(Container.ShowTitle)">$INFO[Container.ShowTitle]</value>
+		<value condition="!String.IsEmpty(ListItem.TVShowTitle)">$INFO[ListItem.TVShowTitle]</value>
+		<value condition="!String.IsEmpty(Container.PluginCategory)">$INFO[Container.PluginCategory]</value>
+		<value>$INFO[Container.FolderName]</value>
+	</variable>
+	<variable name="ShowDBID">
+		<value condition="!String.IsEmpty(ListItem.TvShowDBID)">$INFO[ListItem.TvShowDBID]</value>
+		<value>$INFO[Container.ListItemAbsolute(1).TvShowDBID]</value>
+	</variable>
+	<variable name="ShowFanart">
+		<value condition="!String.IsEmpty(ListItem.Art(tvshow.fanart))">$INFO[ListItem.Art(tvshow.fanart)]</value>
+		<value condition="!String.IsEmpty(Container.ListItemAbsolute(1).Art(tvshow.fanart))">$INFO[Container.ListItemAbsolute(1).Art(tvshow.fanart)]</value>
+		<value condition="!String.IsEmpty(ListItem.Art(fanart))">$INFO[ListItem.Art(fanart)]</value>
+		<value>$INFO[Container.ListItemAbsolute(0).Art(fanart)]</value>
+	</variable>
+	<variable name="ShowMeta">
+		<value condition="Container.Content(seasons) + Integer.IsEqual(Container.NumItems,1)">1 season</value>
+		<value condition="Container.Content(seasons)">$INFO[Container.NumItems,, seasons]</value>
+		<value>$INFO[Container.NumItems,, episodes]</value>
+	</variable>
+	<!-- episodes shown next to the seasons list: the focused season's, skipping ".." -->
+	<variable name="SeasonPath">
+		<value condition="Container(51).ListItem.IsParentFolder">$INFO[Container(51).ListItemAbsolute(1).FolderPath]</value>
+		<value>$INFO[Container(51).ListItem.FolderPath]</value>
+	</variable>
+	<variable name="ShowView">
+		<value condition="Container.Content(seasons)">9200</value>
+		<value>52</value>
+	</variable>
+	<variable name="LibraryTitle">
+		<value condition="!String.IsEmpty(Skin.String(oak_videos)) + String.IsEqual(Container.FolderPath,Skin.String(oak_videos))">Movies</value>
+		<value condition="String.IsEqual(Container.FolderPath,sources://video/)">Movies</value>
+		<value condition="String.StartsWith(Container.FolderPath,plugin://) + !String.IsEmpty(Container.PluginCategory)">$INFO[Container.PluginCategory]</value>
+		<value condition="String.StartsWith(Container.FolderPath,plugin://)">$INFO[Container.FolderName]</value>
+		<value condition="Container.Content(movies)">Movies</value>
+		<value condition="Container.Content(tvshows)">TV Shows</value>
+		<value condition="Container.Content(seasons) | Container.Content(episodes)">$INFO[Container.ShowTitle]</value>
+		<value condition="!String.IsEmpty(Container.PluginCategory)">$INFO[Container.PluginCategory]</value>
+		<value>$INFO[Container.FolderName]</value>
+	</variable>
+	<variable name="LibraryCount">
+		<value condition="[String.IsEmpty(Container.Content) | Container.Content(files)] + !String.StartsWith(Container.FolderPath,videodb://) + !String.StartsWith(Container.FolderPath,plugin://)">$VAR[FolderCount]</value>
+		<value condition="Container.Content(movies)">$INFO[Container.NumItems,, movies]</value>
+		<value condition="Container.Content(tvshows)">$INFO[Container.NumItems,, shows]</value>
+		<value condition="Container.Content(episodes)">$INFO[Container.NumItems,, episodes]</value>
+		<value>$INFO[Container.NumItems,, items]</value>
+	</variable>
+	<variable name="LibraryView">
+		<value condition="$EXP[EmptyLibrary]">9080</value>
+		<value condition="Container.Content(seasons)">51</value>
+		<value condition="Container.Content(episodes)">52</value>
+		<value condition="Control.IsVisible(500)">500</value>
+		<value>50</value>
+	</variable>
+	<variable name="ListRowTitle">
+		<value condition="ListItem.IsParentFolder">Back</value>
+		<value condition="String.IsEqual(ListItem.DBType,episode)">$INFO[ListItem.Episode,,.  ]$INFO[ListItem.Title]</value>
+		<value>$INFO[ListItem.Label]</value>
+	</variable>
+
+	<!-- player -->
+	<variable name="PlayerTitle">
+		<value condition="!String.IsEmpty(VideoPlayer.TVShowTitle)">$INFO[VideoPlayer.TVShowTitle]  ·  S$INFO[VideoPlayer.Season] E$INFO[VideoPlayer.Episode]  $INFO[VideoPlayer.Title]</value>
+		<value>$INFO[VideoPlayer.Title]</value>
+	</variable>
+	<variable name="PlayerEnds">
+		<value condition="Player.Paused">Paused  ·  ends at $INFO[Player.FinishTime]</value>
+		<value>Ends at $INFO[Player.FinishTime]</value>
+	</variable>
+	<!-- OSD navigation around the Next button, which only exists with a queue -->
+	<variable name="NextOrSubs">
+		<value condition="Integer.IsLess(Playlist.Position(video),Playlist.Length(video))">704</value>
+		<value>705</value>
+	</variable>
+	<variable name="NextOrStop">
+		<value condition="Integer.IsLess(Playlist.Position(video),Playlist.Length(video))">704</value>
+		<value>708</value>
+	</variable>
+	<variable name="OSDHint">
+		<value condition="Control.HasFocus(701)">Back 10 seconds</value>
+		<value condition="Control.HasFocus(702) + Player.Paused">Play</value>
+		<value condition="Control.HasFocus(702)">Pause</value>
+		<value condition="Control.HasFocus(703)">Forward 30 seconds</value>
+		<value condition="Control.HasFocus(708)">Stop</value>
+		<value condition="Control.HasFocus(705)">Subtitles$INFO[VideoPlayer.SubtitlesLanguage,  ·  ]</value>
+		<value condition="Control.HasFocus(706)">Audio$INFO[VideoPlayer.AudioLanguage,  ·  ]$INFO[VideoPlayer.AudioCodec,  ·  ]</value>
+		<value condition="Control.HasFocus(707)">More: video settings, bookmarks, playlist, info</value>
+	</variable>
+	<variable name="PlayPauseIcon">
+		<value condition="Player.Paused">icons/play.png</value>
+		<value>icons/pause.png</value>
+	</variable>
+
+	<!-- info dialog -->
+	<variable name="InfoKind">
+		<value condition="String.IsEqual(ListItem.DBType,movie)">Movie</value>
+		<value condition="String.IsEqual(ListItem.DBType,tvshow)">Series</value>
+		<value condition="String.IsEqual(ListItem.DBType,season)">Season</value>
+		<value condition="String.IsEqual(ListItem.DBType,episode)">Episode</value>
+		<value>Video</value>
+	</variable>
+	<variable name="InfoTitle">
+		<value condition="String.IsEqual(ListItem.DBType,episode)">$INFO[ListItem.Title]</value>
+		<value>$INFO[ListItem.Label]</value>
+	</variable>
+	<variable name="InfoMeta">
+		<value condition="String.IsEqual(ListItem.DBType,episode)">$INFO[ListItem.TVShowTitle]  ·  S$INFO[ListItem.Season] E$INFO[ListItem.Episode]$INFO[ListItem.Duration(mins),  ·  , min]</value>
+		<value condition="String.IsEqual(ListItem.DBType,tvshow) + String.IsEqual(ListItem.Property(TotalSeasons),1)">$INFO[ListItem.Year]  ·  1 season$INFO[ListItem.Property(TotalEpisodes),  ·  , episodes]</value>
+		<value condition="String.IsEqual(ListItem.DBType,tvshow)">$INFO[ListItem.Year]$INFO[ListItem.Property(TotalSeasons),  ·  , seasons]$INFO[ListItem.Property(TotalEpisodes),  ·  , episodes]</value>
+		<value condition="String.IsEmpty(ListItem.Year)">$INFO[ListItem.Duration(mins),, min]$INFO[ListItem.Rating,  ·  rated ]</value>
+		<value>$INFO[ListItem.Year]$INFO[ListItem.Duration(mins),  ·  , min]$INFO[ListItem.Rating,  ·  rated ]</value>
+	</variable>
+	<variable name="InfoPlayLabel">
+		<value condition="String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,season)">Browse</value>
+		<value condition="ListItem.IsResumable">Resume  $INFO[ListItem.PercentPlayed]%</value>
+		<value>Play</value>
+	</variable>
+
+	<variable name="ShowPlayLabel">
+		<value condition="!$EXP[LibraryShow]">Start watching</value>
+		<value condition="Integer.IsGreater(Container(9300).NumItems,0)">Resume  S$INFO[Container(9300).ListItem.Season] E$INFO[Container(9300).ListItem.Episode]</value>
+		<value condition="Integer.IsGreater(Container(9301).NumItems,0)">Play  S$INFO[Container(9301).ListItem.Season] E$INFO[Container(9301).ListItem.Episode]</value>
+		<value>Episodes</value>
+	</variable>
+	<variable name="EpisodeState">
+		<value condition="Integer.IsGreater(ListItem.PlayCount,0)">  ·  watched</value>
+		<value condition="ListItem.IsResumable">  ·  $INFO[ListItem.PercentPlayed]% watched</value>
+		<value></value>
+	</variable>
+
+	<variable name="CardArt">
+		<value condition="String.IsEqual(ListItem.DBType,episode)">$INFO[ListItem.Art(thumb)]</value>
+		<value condition="!String.IsEmpty(ListItem.Art(landscape))">$INFO[ListItem.Art(landscape)]</value>
+		<value condition="!String.IsEmpty(ListItem.Art(tvshow.landscape))">$INFO[ListItem.Art(tvshow.landscape)]</value>
+		<value condition="!String.IsEmpty(ListItem.Art(fanart))">$INFO[ListItem.Art(fanart)]</value>
+		<value>$INFO[ListItem.Art(thumb)]</value>
+	</variable>
+	<variable name="CardTitle">
+		<value condition="String.IsEqual(ListItem.DBType,episode)">$INFO[ListItem.TVShowTitle]</value>
+		<value>$INFO[ListItem.Label]</value>
+	</variable>
+	<variable name="PosterArt">
+		<value condition="!String.IsEmpty(ListItem.Art(poster))">$INFO[ListItem.Art(poster)]</value>
+		<value condition="!String.IsEmpty(ListItem.Art(tvshow.poster))">$INFO[ListItem.Art(tvshow.poster)]</value>
+		<value>$INFO[ListItem.Art(thumb)]</value>
+	</variable>
+
+	<!-- ============ top bar ============ -->
+
+	<!-- One tab: gray text; white with a short wood bar under it when it is the
+	     section on screen; wood fill when focused. -->
+	<include name="TabItem">
+		<param name="focused" default="false" />
+		<definition>
+			<control type="group">
+				<visible>$PARAM[focused] + Control.HasFocus(9000)</visible>
+				<include content="Box">
+					<param name="top" value="0" />
+					<param name="width" value="156" />
+					<param name="height" value="56" />
+					<param name="color" value="wood" />
+				</include>
+				<control type="label">
+					<width>156</width>
+					<height>56</height>
+					<align>center</align>
+					<aligny>center</aligny>
+					<font>rail</font>
+					<textcolor>onwood</textcolor>
+					<selectedcolor>onwood</selectedcolor>
+					<label>$INFO[ListItem.Label]</label>
+				</control>
+			</control>
+			<control type="group">
+				<visible>!$PARAM[focused] | !Control.HasFocus(9000)</visible>
+				<control type="label">
+					<width>156</width>
+					<height>56</height>
+					<align>center</align>
+					<aligny>center</aligny>
+					<font>rail</font>
+					<textcolor>white</textcolor>
+					<selectedcolor>white</selectedcolor>
+					<label>$INFO[ListItem.Label]</label>
+					<visible>[String.IsEqual(ListItem.Label,Playing) + [Window.IsActive(fullscreenvideo) | Window.IsActive(visualisation)]] | [String.IsEqual(ListItem.Label,Home) + Window.IsActive(home)] | [String.IsEqual(ListItem.Label,Search) + Window.IsActive(1151)] | [String.IsEqual(ListItem.Label,Add-ons) + [Window.IsActive(1152) | Window.IsActive(addonbrowser)]] | [String.IsEqual(ListItem.Label,Music) + Window.IsActive(music)] | [String.IsEqual(ListItem.Label,Live TV) + String.StartsWith(Window.Property(xmlfile),MyPVR)] | [String.IsEqual(ListItem.Label,Favourites) + Window.IsActive(favouritesbrowser)] | [String.IsEqual(ListItem.Label,More) + [Window.IsActive(1154) | Window.IsActive(pictures) | Window.IsActive(programs) | Window.IsActive(games) | Window.IsActive(weather) | Window.IsActive(videoplaylist) | Window.IsActive(musicplaylist)]] | [String.IsEqual(ListItem.Label,Settings) + [Window.IsActive(settings) | Window.IsActive(SettingsCategory.xml)]] | [String.IsEqual(ListItem.Label,Movies) + Window.IsActive(videos)] | [String.IsEqual(ListItem.Label,TV Shows) + Window.IsActive(videos) + [Container.Content(tvshows) | Container.Content(seasons) | Container.Content(episodes)] + String.StartsWith(Container.FolderPath,videodb://)]</visible>
+				</control>
+				<control type="label">
+					<width>156</width>
+					<height>56</height>
+					<align>center</align>
+					<aligny>center</aligny>
+					<font>rail</font>
+					<textcolor>gray400</textcolor>
+					<selectedcolor>gray400</selectedcolor>
+					<label>$INFO[ListItem.Label]</label>
+					<visible>![String.IsEqual(ListItem.Label,Playing) + [Window.IsActive(fullscreenvideo) | Window.IsActive(visualisation)]] | [String.IsEqual(ListItem.Label,Home) + Window.IsActive(home)] | [String.IsEqual(ListItem.Label,Search) + Window.IsActive(1151)] | [String.IsEqual(ListItem.Label,Add-ons) + [Window.IsActive(1152) | Window.IsActive(addonbrowser)]] | [String.IsEqual(ListItem.Label,Music) + Window.IsActive(music)] | [String.IsEqual(ListItem.Label,Live TV) + String.StartsWith(Window.Property(xmlfile),MyPVR)] | [String.IsEqual(ListItem.Label,Favourites) + Window.IsActive(favouritesbrowser)] | [String.IsEqual(ListItem.Label,More) + [Window.IsActive(1154) | Window.IsActive(pictures) | Window.IsActive(programs) | Window.IsActive(games) | Window.IsActive(weather) | Window.IsActive(videoplaylist) | Window.IsActive(musicplaylist)]] | [String.IsEqual(ListItem.Label,Settings) + [Window.IsActive(settings) | Window.IsActive(SettingsCategory.xml)]] | [String.IsEqual(ListItem.Label,Movies) + Window.IsActive(videos)] | [String.IsEqual(ListItem.Label,TV Shows) + Window.IsActive(videos) + [Container.Content(tvshows) | Container.Content(seasons) | Container.Content(episodes)] + String.StartsWith(Container.FolderPath,videodb://)]</visible>
+				</control>
+				<include content="Box">
+					<param name="left" value="58" />
+					<param name="top" value="50" />
+					<param name="width" value="40" />
+					<param name="height" value="3" />
+					<param name="color" value="wood" />
+					<param name="visible" value="[String.IsEqual(ListItem.Label,Playing) + [Window.IsActive(fullscreenvideo) | Window.IsActive(visualisation)]] | [String.IsEqual(ListItem.Label,Home) + Window.IsActive(home)] | [String.IsEqual(ListItem.Label,Search) + Window.IsActive(1151)] | [String.IsEqual(ListItem.Label,Add-ons) + [Window.IsActive(1152) | Window.IsActive(addonbrowser)]] | [String.IsEqual(ListItem.Label,Music) + Window.IsActive(music)] | [String.IsEqual(ListItem.Label,Live TV) + String.StartsWith(Window.Property(xmlfile),MyPVR)] | [String.IsEqual(ListItem.Label,Favourites) + Window.IsActive(favouritesbrowser)] | [String.IsEqual(ListItem.Label,More) + [Window.IsActive(1154) | Window.IsActive(pictures) | Window.IsActive(programs) | Window.IsActive(games) | Window.IsActive(weather) | Window.IsActive(videoplaylist) | Window.IsActive(musicplaylist)]] | [String.IsEqual(ListItem.Label,Settings) + [Window.IsActive(settings) | Window.IsActive(SettingsCategory.xml)]] | [String.IsEqual(ListItem.Label,Movies) + Window.IsActive(videos)] | [String.IsEqual(ListItem.Label,TV Shows) + Window.IsActive(videos) + [Container.Content(tvshows) | Container.Content(seasons) | Container.Content(episodes)] + String.StartsWith(Container.FolderPath,videodb://)]" />
+				</include>
+			</control>
+		</definition>
+	</include>
+
+	<!-- Icon in the top bar's right group: a radiobutton whose (always on) radio
+	     texture is the icon, so it can sit in a grouplist -->
+	<include name="BarIcon">
+		<param name="id" />
+		<param name="icon" />
+		<param name="onclick" />
+		<param name="active" default="false" />
+		<definition>
+			<!-- "selected" marks the screen it opens: white icon instead of gray -->
+			<control type="radiobutton" id="$PARAM[id]">
+				<width>56</width>
+				<height>56</height>
+				<label></label>
+				<texturefocus colordiffuse="wood">white.png</texturefocus>
+				<texturenofocus />
+				<radioposx>15</radioposx>
+				<radioposy>15</radioposy>
+				<radiowidth>26</radiowidth>
+				<radioheight>26</radioheight>
+				<selected>$PARAM[active]</selected>
+				<textureradioonfocus colordiffuse="onwood">$PARAM[icon]</textureradioonfocus>
+				<textureradioonnofocus colordiffuse="white">$PARAM[icon]</textureradioonnofocus>
+				<textureradioofffocus colordiffuse="onwood">$PARAM[icon]</textureradioofffocus>
+				<textureradiooffnofocus colordiffuse="gray400">$PARAM[icon]</textureradiooffnofocus>
+				<onclick>$PARAM[onclick]</onclick>
+			</control>
+		</definition>
+	</include>
+
+	<!-- Top bar shared by every full-screen window: Back (not on Home), the
+	     section tabs, then Playing / Search / Settings / clock on the right.
+	     Kept under the old name "Rail"; onright is where Down goes. -->
+	<include name="Rail">
+		<param name="onright" />
+		<definition>
+		<control type="group">
+			<include content="Box">
+				<param name="width" value="1920" />
+				<param name="height" value="112" />
+				<param name="color" value="navy950" />
+			</include>
+			<control type="button" id="9098">
+				<left>72</left>
+				<top>28</top>
+				<width>56</width>
+				<height>56</height>
+				<label></label>
+				<texturefocus colordiffuse="wood">white.png</texturefocus>
+				<texturenofocus />
+				<onclick>Back</onclick>
+				<onright>9000</onright>
+				<ondown>$PARAM[onright]</ondown>
+				<visible>!Window.IsActive(home)</visible>
+			</control>
+			<control type="image">
+				<left>87</left>
+				<top>43</top>
+				<width>26</width>
+				<height>26</height>
+				<texture colordiffuse="gray400">icons/chevron.png</texture>
+				<visible>!Window.IsActive(home) + !Control.HasFocus(9098)</visible>
+			</control>
+			<control type="image">
+				<left>87</left>
+				<top>43</top>
+				<width>26</width>
+				<height>26</height>
+				<texture colordiffuse="onwood">icons/chevron.png</texture>
+				<visible>Control.HasFocus(9098)</visible>
+			</control>
+			<control type="list" id="9000">
+				<left>72</left>
+				<top>28</top>
+				<width>1380</width>
+				<height>56</height>
+				<orientation>horizontal</orientation>
+				<animation effect="slide" end="72,0" time="0" condition="!Window.IsActive(home)">Conditional</animation>
+				<scrolltime>0</scrolltime>
+				<onleft condition="!Window.IsActive(home)">9098</onleft>
+				<onleft condition="Window.IsActive(home)">noop</onleft>
+				<onright>9094</onright>
+				<ondown>$PARAM[onright]</ondown>
+				<itemlayout width="156" height="56">
+					<include content="TabItem" />
+				</itemlayout>
+				<focusedlayout width="156" height="56">
+					<include content="TabItem"><param name="focused" value="true" /></include>
+				</focusedlayout>
+				<content>
+					<item>
+						<label>Home</label>
+						<icon>icons/home.png</icon>
+						<onclick condition="Window.IsActive(home)">SetFocus(8010)</onclick>
+						<onclick condition="!Window.IsActive(home)">ActivateWindow(Home)</onclick>
+					</item>
+					<item>
+						<label>Movies</label>
+						<icon>icons/film.png</icon>
+						<onclick>SetProperty(oak_section,movies,home)</onclick>
+						<onclick condition="Window.IsActive(videos) + !String.IsEmpty(Skin.String(oak_videos))">Container.Update($INFO[Skin.String(oak_videos)],replace)</onclick>
+						<onclick condition="!Window.IsActive(videos) + !String.IsEmpty(Skin.String(oak_videos))">ActivateWindow(Videos,$INFO[Skin.String(oak_videos)],return)</onclick>
+						<onclick condition="Window.IsActive(videos) + String.IsEmpty(Skin.String(oak_videos))">Container.Update(sources://video/,replace)</onclick>
+						<onclick condition="!Window.IsActive(videos) + String.IsEmpty(Skin.String(oak_videos))">ActivateWindow(Videos,sources://video/,return)</onclick>
+					</item>
+					<item>
+						<label>Live TV</label>
+						<icon>icons/live.png</icon>
+						<onclick>ActivateWindow(TVChannels)</onclick>
+						<visible>System.HasPVRAddon</visible>
+					</item>
+					<item>
+						<label>Music</label>
+						<icon>icons/music.png</icon>
+						<onclick>SetProperty(oak_section,music,home)</onclick>
+						<onclick condition="Window.IsActive(music)">Container.Update(musicdb://albums/,replace)</onclick>
+						<onclick condition="!Window.IsActive(music)">ActivateWindow(Music,musicdb://albums/,return)</onclick>
+					</item>
+					<item>
+						<label>Add-ons</label>
+						<icon>icons/addons.png</icon>
+						<onclick>ActivateWindow(1152)</onclick>
+					</item>
+					<item>
+						<label>More</label>
+						<icon>icons/more.png</icon>
+						<onclick>ActivateWindow(1154)</onclick>
+					</item>
+				</content>
+			</control>
+			<control type="grouplist" id="9094">
+				<left>1040</left>
+				<top>28</top>
+				<width>600</width>
+				<height>56</height>
+				<orientation>horizontal</orientation>
+				<align>right</align>
+				<itemgap>8</itemgap>
+				<onleft>9000</onleft>
+				<onright>noop</onright>
+				<ondown>$PARAM[onright]</ondown>
+				<control type="button" id="9097">
+					<width max="300">auto</width>
+					<height>56</height>
+					<font>small</font>
+					<textoffsetx>22</textoffsetx>
+					<aligny>center</aligny>
+					<textcolor>gray200</textcolor>
+					<focusedcolor>onwood</focusedcolor>
+					<texturefocus colordiffuse="wood">white.png</texturefocus>
+					<texturenofocus colordiffuse="navy800">white.png</texturenofocus>
+					<label>[COLOR wood]■[/COLOR]  $VAR[PlayingChip]</label>
+					<onclick condition="Player.HasVideo">ActivateWindow(fullscreenvideo)</onclick>
+					<onclick condition="!Player.HasVideo">ActivateWindow(visualisation)</onclick>
+					<visible>Player.HasMedia</visible>
+				</control>
+				<include content="BarIcon"><param name="id" value="9096" /><param name="icon" value="icons/search.png" /><param name="onclick" value="ActivateWindow(1151)" /><param name="active" value="Window.IsActive(1151)" /></include>
+				<include content="BarIcon"><param name="id" value="9095" /><param name="icon" value="icons/settings.png" /><param name="onclick" value="ActivateWindow(Settings)" /><param name="active" value="Window.IsActive(settings) | Window.IsActive(SettingsCategory.xml) | Window.IsActive(systeminfo) | Window.IsActive(profiles) | Window.IsActive(eventlog) | Window.IsActive(filemanager)" /></include>
+			</control>
+			<control type="label">
+				<left>1648</left>
+				<top>28</top>
+				<width>176</width>
+				<height>56</height>
+				<align>right</align>
+				<aligny>center</aligny>
+				<font>head</font>
+				<textcolor>white</textcolor>
+				<label>$INFO[System.Time]</label>
+			</control>
+		</control>
+		</definition>
+	</include>
+
+	<!-- ============ billboard ============ -->
+
+	<!-- ============ home rows ============ -->
+
+	<!-- A row is a group in Home.xml holding RowHeader, a list include and RowDetail.
+	     (Passing a list's layouts through an include with nested content left
+	     the container empty, so each list is an include of its own.) -->
+
+	<include name="RowHeader">
+		<param name="id" />
+		<param name="header" />
+		<definition>
+			<control type="label">
+				<left>96</left>
+				<top>0</top>
+				<width>1600</width>
+				<height>40</height>
+				<font>head</font>
+				<textcolor>white</textcolor>
+				<label>$PARAM[header]</label>
+				<visible>Integer.IsGreater(Container($PARAM[id]).NumItems,0)</visible>
+			</control>
+		</definition>
+	</include>
+
+	<!-- Title and facts of the focused item, under the row -->
+	<include name="RowDetail">
+		<param name="id" />
+		<param name="top" default="250" />
+		<definition>
+			<control type="grouplist">
+				<onleft>noop</onleft>
+				<onright>noop</onright>
+				<left>96</left>
+				<top>$PARAM[top]</top>
+				<width>1600</width>
+				<height>40</height>
+				<orientation>horizontal</orientation>
+				<itemgap>14</itemgap>
+				<visible>Control.HasFocus($PARAM[id])</visible>
+				<control type="label">
+					<width>auto</width>
+					<height>40</height>
+					<font>card</font>
+					<textcolor>white</textcolor>
+					<label>$INFO[Container($PARAM[id]).ListItem.Label]</label>
+					<visible>!String.IsEqual(Container($PARAM[id]).ListItem.DBType,episode)</visible>
+				</control>
+				<control type="label">
+					<width>auto</width>
+					<height>40</height>
+					<font>card</font>
+					<textcolor>white</textcolor>
+					<label>$INFO[Container($PARAM[id]).ListItem.TVShowTitle]</label>
+					<visible>String.IsEqual(Container($PARAM[id]).ListItem.DBType,episode)</visible>
+				</control>
+				<control type="label">
+					<width>auto</width>
+					<height>40</height>
+					<font>small</font>
+					<textcolor>gray400</textcolor>
+					<label>S$INFO[Container($PARAM[id]).ListItem.Season]  E$INFO[Container($PARAM[id]).ListItem.Episode]  ·  $INFO[Container($PARAM[id]).ListItem.Title]</label>
+					<visible>String.IsEqual(Container($PARAM[id]).ListItem.DBType,episode)</visible>
+				</control>
+				<control type="label">
+					<width>auto</width>
+					<height>40</height>
+					<font>small</font>
+					<textcolor>gray400</textcolor>
+					<label>$INFO[Container($PARAM[id]).ListItem.Year]$INFO[Container($PARAM[id]).ListItem.Genre,  ·  ]$INFO[Container($PARAM[id]).ListItem.Duration(mins),  ·  , min]</label>
+					<visible>!String.IsEqual(Container($PARAM[id]).ListItem.DBType,episode)</visible>
+				</control>
+			</control>
+		</definition>
+	</include>
+
+	<!-- Shared list behaviour: horizontal, focus pinned to the left edge.
+	     Up/down are explicit: the page grouplist only navigates its direct
+	     children, and each row is wrapped in a group. -->
+	<include name="RowListCommon">
+		<left>89</left>
+		<top>47</top>
+		<width>1831</width>
+		<orientation>horizontal</orientation>
+		<focusposition>0</focusposition>
+		<movement>0</movement>
+		<scrolltime tween="cubic" easing="out">350</scrolltime>
+		<onleft>noop</onleft>
+		<onright>noop</onright>
+		<onfocus>SetProperty(lastrow,$INFO[System.CurrentControlId],home)</onfocus>
+		<preloaditems>2</preloaditems>
+	</include>
+
+	<!-- Select on a home card: shows open their seasons in the library (the show page), movies the info dialog.
+	     Anything else (episodes) falls through to Kodi's default: play. -->
+	<include name="OpenOnClick">
+		<param name="id" />
+		<definition>
+			<onclick condition="String.IsEqual(Container($PARAM[id]).ListItem.DBType,tvshow)">ActivateWindow(Videos,videodb://tvshows/titles/$INFO[Container($PARAM[id]).ListItem.DBID]/,return)</onclick>
+			<onclick condition="String.IsEqual(Container($PARAM[id]).ListItem.DBType,movie)">Action(Info)</onclick>
+		</definition>
+	</include>
+
+	<!-- Landscape cards -->
+	<include name="CardList">
+		<param name="id" />
+		<param name="up" />
+		<param name="down" />
+		<param name="content" />
+		<param name="limit" default="15" />
+		<definition>
+			<control type="fixedlist" id="$PARAM[id]">
+				<include>RowListCommon</include>
+				<include content="OpenOnClick"><param name="id" value="$PARAM[id]" /></include>
+				<height>200</height>
+				<onup>$PARAM[up]</onup>
+				<ondown>$PARAM[down]</ondown>
+				<itemlayout width="344" height="200">
+					<include content="CardItem"><param name="id" value="$PARAM[id]" /></include>
+				</itemlayout>
+				<focusedlayout width="344" height="200">
+					<include content="CardItem"><param name="id" value="$PARAM[id]" /><param name="focused" value="true" /></include>
+				</focusedlayout>
+				<content target="videos" limit="$PARAM[limit]">$PARAM[content]</content>
+			</control>
+		</definition>
+	</include>
+
+	<!-- One landscape card: 330x186 art at (7,7), title strip, progress -->
+	<include name="CardItem">
+		<param name="focused" default="false" />
+		<param name="id" />
+		<definition>
+			<control type="group">
+				<animation effect="zoom" start="100" end="104" time="180" tween="cubic" easing="out" center="auto" condition="$PARAM[focused] + Control.HasFocus($PARAM[id])">Conditional</animation>
+				<include content="FocusRing">
+					<param name="width" value="344" />
+					<param name="height" value="200" />
+					<param name="visible" value="$PARAM[focused] + Control.HasFocus($PARAM[id])" />
+				</include>
+				<control type="image">
+					<left>7</left>
+					<top>7</top>
+					<width>330</width>
+					<height>186</height>
+					<aspectratio>scale</aspectratio>
+					<texture background="true">$VAR[CardArt]</texture>
+				</control>
+				<include content="Box">
+					<param name="left" value="7" />
+					<param name="top" value="151" />
+					<param name="width" value="330" />
+					<param name="height" value="42" />
+					<param name="color" value="navy950" />
+				</include>
+				<control type="label">
+					<left>21</left>
+					<top>151</top>
+					<width>302</width>
+					<height>38</height>
+					<font>card</font>
+					<textcolor>white</textcolor>
+					<selectedcolor>white</selectedcolor>
+					<scroll>false</scroll>
+					<label>$VAR[CardTitle]</label>
+				</control>
+				<control type="progress">
+					<left>7</left>
+					<top>188</top>
+					<width>330</width>
+					<height>5</height>
+					<texturebg colordiffuse="gray600">white.png</texturebg>
+					<midtexture colordiffuse="wood">white.png</midtexture>
+					<info>ListItem.PercentPlayed</info>
+					<visible>Integer.IsGreater(ListItem.PercentPlayed,0)</visible>
+				</control>
+			</control>
+		</definition>
+	</include>
+
+</includes>

@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	Player controls (OK during playback, and on pause: Timers.xml): the player
+	bar with buttons under it, and the clock top right. Back closes it. The
+	button row stops at both ends.
+
+	ids: 701 back 10s · 702 play/pause · 703 forward 30s · 708 stop · 704 next ·
+	705 subtitle settings · 706 audio settings · 707 more (Custom_1153_PlayerMenu)
+-->
+<window>
+	<defaultcontrol always="true">702</defaultcontrol>
+	<animation type="WindowOpen" reversible="false">
+		<effect type="fade" start="0" end="100" time="180" />
+		<effect type="slide" start="0,60" end="0,0" time="260" tween="cubic" easing="out" />
+	</animation>
+	<animation type="WindowClose" reversible="false">
+		<effect type="fade" start="100" end="0" time="160" />
+		<effect type="slide" start="0,0" end="0,60" time="200" tween="cubic" easing="in" />
+	</animation>
+	<controls>
+		<include content="Box">
+			<param name="left" value="1684" />
+			<param name="top" value="48" />
+			<param name="width" value="140" />
+			<param name="height" value="48" />
+			<param name="color" value="navy950" />
+		</include>
+		<control type="label">
+			<left>1684</left>
+			<top>48</top>
+			<width>140</width>
+			<height>48</height>
+			<align>center</align>
+			<aligny>center</aligny>
+			<font>card</font>
+			<textcolor>white</textcolor>
+			<label>$INFO[System.Time]</label>
+		</control>
+
+		<include content="PlayerBar">
+			<param name="top" value="790" />
+		</include>
+
+		<control type="group">
+			<top>960</top>
+			<include content="IconButton">
+				<param name="id" value="701" />
+				<param name="left" value="96" />
+				<param name="icon" value="icons/back.png" />
+				<param name="onclick" value="Seek(-10)" />
+				<param name="onleft" value="noop" />
+				<param name="onright" value="702" />
+			</include>
+			<include content="IconButton">
+				<param name="id" value="702" />
+				<param name="left" value="172" />
+				<param name="icon" value="$VAR[PlayPauseIcon]" />
+				<param name="onclick" value="PlayerControl(Play)" />
+				<param name="onleft" value="701" />
+				<param name="onright" value="703" />
+			</include>
+			<include content="IconButton">
+				<param name="id" value="703" />
+				<param name="left" value="248" />
+				<param name="icon" value="icons/fwd.png" />
+				<param name="onclick" value="Seek(30)" />
+				<param name="onleft" value="702" />
+				<param name="onright" value="708" />
+			</include>
+
+			<include content="IconButton">
+				<param name="id" value="708" />
+				<param name="left" value="324" />
+				<param name="icon" value="icons/stop.png" />
+				<param name="onclick" value="PlayerControl(Stop)" />
+				<param name="onleft" value="703" />
+				<param name="onright" value="SetFocus($VAR[NextOrSubs])" />
+			</include>
+
+			<!-- right side: next episode (only with a queue), subtitles, audio, more -->
+			<control type="button" id="704">
+				<left>1376</left>
+				<top>0</top>
+				<width>220</width>
+				<height>64</height>
+				<label>Next episode</label>
+				<font>button</font>
+				<align>center</align>
+				<aligny>center</aligny>
+				<textcolor>white</textcolor>
+				<focusedcolor>onwood</focusedcolor>
+				<texturefocus colordiffuse="wood">white.png</texturefocus>
+				<texturenofocus colordiffuse="navy800">white.png</texturenofocus>
+				<onclick>PlayerControl(Next)</onclick>
+				<onleft>708</onleft>
+				<onright>705</onright>
+				<visible>Integer.IsLess(Playlist.Position(video),Playlist.Length(video))</visible>
+			</control>
+			<include content="IconButton">
+				<param name="id" value="705" />
+				<param name="left" value="1608" />
+				<param name="icon" value="icons/subs.png" />
+				<param name="onclick" value="ActivateWindow(osdsubtitlesettings)" />
+				<param name="onleft" value="SetFocus($VAR[NextOrStop])" />
+				<param name="onright" value="706" />
+			</include>
+			<include content="IconButton">
+				<param name="id" value="706" />
+				<param name="left" value="1684" />
+				<param name="icon" value="icons/audio.png" />
+				<param name="onclick" value="ActivateWindow(osdaudiosettings)" />
+				<param name="onleft" value="705" />
+				<param name="onright" value="707" />
+			</include>
+			<include content="IconButton">
+				<param name="id" value="707" />
+				<param name="left" value="1760" />
+				<param name="icon" value="icons/list.png" />
+				<param name="onclick" value="ActivateWindow(1153)" />
+				<param name="onleft" value="706" />
+				<param name="onright" value="noop" />
+			</include>
+			<!-- what the focused button does -->
+			<control type="label">
+				<left>420</left>
+				<top>0</top>
+				<width>940</width>
+				<height>64</height>
+				<align>center</align>
+				<aligny>center</aligny>
+				<font>small</font>
+				<textcolor>gray400</textcolor>
+				<label>$VAR[OSDHint]</label>
+			</control>
+		</control>
+	</controls>
+</window>

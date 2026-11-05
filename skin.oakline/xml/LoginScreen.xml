@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Profile picker at start-up (only with more than one profile and the
+     login screen on). Kodi fills 52; 20 opens the power menu. -->
+<window>
+	<defaultcontrol always="true">52</defaultcontrol>
+	<backgroundcolor>navy900</backgroundcolor>
+	<include>ScreenEase</include>
+	<controls>
+		<include content="PageHeader">
+			<param name="title" value="Who's watching?" />
+			<param name="sub" value="$INFO[System.Time]  ·  $INFO[System.Date]" />
+		</include>
+		<control type="fixedlist" id="52">
+			<onleft>noop</onleft>
+			<onright>noop</onright>
+			<left>184</left>
+			<top>340</top>
+			<width>1640</width>
+			<height>340</height>
+			<orientation>horizontal</orientation>
+			<focusposition>0</focusposition>
+			<scrolltime tween="cubic" easing="out">300</scrolltime>
+			<ondown>20</ondown>
+			<itemlayout width="300" height="340">
+				<include content="ProfileTile"><param name="id" value="52" /></include>
+			</itemlayout>
+			<focusedlayout width="300" height="340">
+				<include content="ProfileTile"><param name="id" value="52" /><param name="focused" value="true" /></include>
+			</focusedlayout>
+		</control>
+		<control type="button" id="20">
+			<left>184</left>
+			<top>900</top>
+			<include>ButtonStyle</include>
+			<label>Power</label>
+			<onclick>ActivateWindow(ShutdownMenu)</onclick>
+			<onup>52</onup>
+		</control>
+	</controls>
+</window>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Channel list over live TV (select while watching): Kodi fills 11. -->
+<window>
+	<defaultcontrol always="true">11</defaultcontrol>
+	<animation type="WindowOpen" reversible="false">
+		<effect type="fade" start="0" end="100" time="180" />
+		<effect type="slide" start="-80,0" end="0,0" time="240" tween="cubic" easing="out" />
+	</animation>
+	<animation type="WindowClose" reversible="false">
+		<effect type="fade" start="100" end="0" time="150" />
+	</animation>
+	<controls>
+		<include content="Box">
+			<param name="width" value="1000" />
+			<param name="height" value="1080" />
+			<param name="color" value="navy950" />
+		</include>
+		<control type="label" id="2">
+			<left>48</left>
+			<top>48</top>
+			<width>900</width>
+			<height>48</height>
+			<font>head</font>
+			<textcolor>white</textcolor>
+		</control>
+		<control type="list" id="11">
+			<onup>noop</onup>
+			<ondown>noop</ondown>
+			<left>24</left>
+			<top>120</top>
+			<width>952</width>
+			<height>936</height>
+			<orientation>vertical</orientation>
+			<scrolltime tween="cubic" easing="out">250</scrolltime>
+			<itemlayout width="952" height="104" infoupdate="5000">
+				<include content="OSDChannelRow"><param name="text" value="white" /><param name="sub" value="gray400" /></include>
+			</itemlayout>
+			<focusedlayout width="952" height="104" infoupdate="5000">
+				<include content="Box">
+					<param name="width" value="952" />
+					<param name="height" value="104" />
+					<param name="color" value="wood" />
+				</include>
+				<include content="OSDChannelRow"><param name="text" value="onwood" /><param name="sub" value="onwood2" /></include>
+			</focusedlayout>
+		</control>
+	</controls>
+</window>

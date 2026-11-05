@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	Home (1.3): the top bar, a preview of the focused item, then rows:
+	  8600 your videos folder A-Z          (folders are shows: they open in Movies)
+	  8610 the same folder, newest first
+	  8620 / 8630 two movie genres, 8640 a TV genre (from Kodi's library;
+	        hidden until the library has them; a different pick each visit)
+	The rows sit in a vertical grouplist (8001), the way Estuary builds its
+	home rows: Up/Down move between visible rows and the list scrolls itself;
+	Up from the first row goes to the tabs. Until a videos folder is chosen a
+	setup card takes the place of the first two rows.
+
+	ids: 9000 tabs (Home opens here: the rows load after the window)
+	     8001 rows · 8010 setup buttons · 8691/8692 genre pickers · 87xx folder loaders
+-->
+<window>
+	<defaultcontrol always="true">9000</defaultcontrol>
+	<!-- back on Home: the tab cursor sits on Home, not on the tab you left from -->
+	<onload>SetFocus(9000,0,absolute)</onload>
+	<backgroundcolor>navy900</backgroundcolor>
+	<include>ScreenEase</include>
+	<controls>
+		<include content="Box">
+			<param name="width" value="1920" />
+			<param name="height" value="1080" />
+		</include>
+
+		<!-- ============ preview of the focused item ============ -->
+		<control type="group">
+			<visible>!String.IsEmpty(Skin.String(oak_videos)) | Control.HasFocus(8620) | Control.HasFocus(8630) | Control.HasFocus(8640)</visible>
+			<control type="image">
+				<left>0</left>
+				<top>112</top>
+				<width>1920</width>
+				<height>440</height>
+				<aspectratio>scale</aspectratio>
+				<fadetime>200</fadetime>
+				<texture>$VAR[HeroArt]</texture>
+			</control>
+			<include content="Box">
+				<param name="left" value="96" />
+				<param name="top" value="152" />
+				<param name="width" value="780" />
+				<param name="height" value="360" />
+				<param name="color" value="navy950" />
+			</include>
+			<control type="label">
+				<left>140</left>
+				<top>184</top>
+				<width>692</width>
+				<height>24</height>
+				<font>label</font>
+				<textcolor>gray400</textcolor>
+				<label>$VAR[HeroKind]</label>
+			</control>
+			<control type="label">
+				<left>140</left>
+				<top>212</top>
+				<width>692</width>
+				<height>96</height>
+				<aligny>center</aligny>
+				<font>display</font>
+				<textcolor>white</textcolor>
+				<scroll>false</scroll>
+				<label>$VAR[HeroLabel]</label>
+			</control>
+			<control type="textbox">
+				<left>140</left>
+				<top>318</top>
+				<width>692</width>
+				<height>120</height>
+				<font>body</font>
+				<textcolor>gray200</textcolor>
+				<label>$VAR[HeroPlot]</label>
+			</control>
+			<control type="label">
+				<left>140</left>
+				<top>456</top>
+				<width>692</width>
+				<height>36</height>
+				<font>small</font>
+				<textcolor>wood</textcolor>
+				<label>$VAR[HeroHint]</label>
+			</control>
+		</control>
+
+		<!-- ============ setup card (no videos folder yet) ============ -->
+		<control type="group">
+			<left>96</left>
+			<top>180</top>
+			<visible>String.IsEmpty(Skin.String(oak_videos))</visible>
+			<include content="Box">
+				<param name="width" value="1100" />
+				<param name="height" value="360" />
+				<param name="color" value="navy950" />
+			</include>
+			<control type="label">
+				<left>48</left>
+				<top>40</top>
+				<width>1000</width>
+				<height>60</height>
+				<font>title</font>
+				<textcolor>white</textcolor>
+				<label>Where are your videos?</label>
+			</control>
+			<control type="textbox">
+				<left>48</left>
+				<top>120</top>
+				<width>1000</width>
+				<height>120</height>
+				<font>body</font>
+				<textcolor>gray200</textcolor>
+				<label>Pick the folder on your NAS that holds your videos. Videos in it show here and under Movies; a folder inside it is treated as a show, and opens to the videos it holds. You can change it later under Settings.</label>
+			</control>
+		</control>
+
+		<!-- ============ rows ============ -->
+		<control type="grouplist" id="8001">
+			<left>0</left>
+			<top>564</top>
+			<width>1920</width>
+			<height>516</height>
+			<orientation>vertical</orientation>
+			<itemgap>0</itemgap>
+			<scrolltime tween="cubic" easing="out">350</scrolltime>
+			<onup>SetFocus(9000,$VAR[TabIndex],absolute)</onup>
+			<ondown>noop</ondown>
+
+			<!-- setup buttons (no videos folder yet) -->
+			<control type="grouplist" id="8010">
+				<onleft>noop</onleft>
+				<onright>noop</onright>
+				<left>144</left>
+				<width>1000</width>
+				<height>100</height>
+				<orientation>horizontal</orientation>
+				<itemgap>14</itemgap>
+				<visible>String.IsEmpty(Skin.String(oak_videos))</visible>
+				<control type="button" id="8011">
+					<include>ButtonStyle</include>
+					<label>Choose videos folder</label>
+					<onclick>Skin.SetPath(oak_videos)</onclick>
+				</control>
+				<control type="button" id="8012">
+					<include>ButtonStyle</include>
+					<label>Add a source first</label>
+					<onclick>SetProperty(oak_section,files,home)</onclick>
+					<onclick>ActivateWindow(Videos,sources://video/,return)</onclick>
+				</control>
+			</control>
+
+			<include content="HomeFolderRow">
+				<param name="id" value="8600" />
+				<param name="up" value="SetFocus(9000,0,absolute)" />
+				<param name="down" value="SetFocus($VAR[HomeDown8600])" />
+				<param name="header" value="Movies and shows" />
+				<param name="sort" value="label" />
+				<param name="order" value="ascending" />
+				<param name="name" value="Home" />
+			</include>
+			<include content="HomeFolderRow">
+				<param name="id" value="8610" />
+				<param name="up" value="8600" />
+				<param name="down" value="SetFocus($VAR[HomeDown8610])" />
+				<param name="header" value="Recently added" />
+				<param name="sort" value="date" />
+				<param name="order" value="descending" />
+				<param name="name" value="Recent" />
+			</include>
+			<include content="HomeGenreRow">
+				<param name="id" value="8620" />
+				<param name="up" value="SetFocus($VAR[HomeUp8620])" />
+				<param name="down" value="SetFocus($VAR[HomeDown8620])" />
+				<param name="picker" value="8691" />
+				<param name="index" value="0" />
+			</include>
+			<include content="HomeGenreRow">
+				<param name="id" value="8630" />
+				<param name="up" value="8620" />
+				<param name="down" value="SetFocus($VAR[HomeDown8630])" />
+				<param name="picker" value="8691" />
+				<param name="index" value="1" />
+			</include>
+			<include content="HomeGenreRow">
+				<param name="id" value="8640" />
+				<param name="up" value="SetFocus($VAR[HomeUp8640])" />
+				<param name="down" value="noop" />
+				<param name="picker" value="8692" />
+				<param name="index" value="0" />
+			</include>
+		</control>
+
+		<!-- ============ loaders ============ -->
+		<control type="list" id="8691">
+			<left>-4000</left>
+			<width>10</width>
+			<height>10</height>
+			<itemlayout width="10" height="10" />
+			<focusedlayout width="10" height="10" />
+			<content target="videos" sortby="random">videodb://movies/genres/</content>
+		</control>
+		<control type="list" id="8692">
+			<left>-4000</left>
+			<width>10</width>
+			<height>10</height>
+			<itemlayout width="10" height="10" />
+			<focusedlayout width="10" height="10" />
+			<content target="videos" sortby="random">videodb://tvshows/genres/</content>
+		</control>
+		<include>FolderLoadersHome</include>
+		<include>FolderLoadersRecent</include>
+
+		<include>NowPlayingMini</include>
+		<include content="Rail">
+			<param name="onright" value="SetFocus(8001)" />
+		</include>
+	</controls>
+</window>

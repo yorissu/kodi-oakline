@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Skin settings (Settings > Interface > Skin > Configure skin):
+     theme (light, dark, or auto by time of day), clock, videos folder.
+     The colours are Kodi's "Colours" setting; scripts/theme.py sets them. -->
+<window>
+	<defaultcontrol always="true">9000</defaultcontrol>
+	<!-- a theme change reloads the skin: come back on the row that was picked -->
+	<onload condition="!String.IsEmpty(Window(home).Property(oak_skinsettings_focus))">SetFocus($INFO[Window(home).Property(oak_skinsettings_focus)])</onload>
+	<onload>ClearProperty(oak_skinsettings_focus,home)</onload>
+	<backgroundcolor>navy900</backgroundcolor>
+	<include>ScreenEase</include>
+	<controls>
+		<include content="PageHeader">
+			<param name="title" value="Oakline" />
+			<param name="sub" value="Skin settings" />
+		</include>
+		<control type="grouplist" id="9000">
+			<left>184</left>
+			<top>250</top>
+			<width>1160</width>
+			<height>700</height>
+			<orientation>vertical</orientation>
+			<onleft>noop</onleft>
+			<onup>9099</onup>
+			<onright>9099</onright>
+			<ondown>noop</ondown>
+			<include content="OptionHeading"><param name="label" value="Theme" /><param name="id" value="9890" /></include>
+			<control type="radiobutton" id="9002">
+				<width>1160</width>
+				<radioposx>1108</radioposx>
+				<include>OptionRowStyle</include>
+				<label>Dark  ·  navy, oak and warm white</label>
+				<selected>!String.IsEqual(Skin.String(oak_theme_mode),auto) + !String.IsEqual(Skin.CurrentColourTheme,light)</selected>
+				<onclick>SetProperty(oak_skinsettings_focus,9002,home)</onclick>
+				<onclick>RunScript(special://skin/scripts/theme.py,dark)</onclick>
+			</control>
+			<control type="radiobutton" id="9003">
+				<width>1160</width>
+				<radioposx>1108</radioposx>
+				<include>OptionRowStyle</include>
+				<label>Light  ·  warm white, navy text, oak</label>
+				<selected>!String.IsEqual(Skin.String(oak_theme_mode),auto) + String.IsEqual(Skin.CurrentColourTheme,light)</selected>
+				<onclick>SetProperty(oak_skinsettings_focus,9003,home)</onclick>
+				<onclick>RunScript(special://skin/scripts/theme.py,light)</onclick>
+			</control>
+			<control type="radiobutton" id="9007">
+				<width>1160</width>
+				<radioposx>1108</radioposx>
+				<include>OptionRowStyle</include>
+				<label>Auto  ·  light by day, dark at night</label>
+				<selected>String.IsEqual(Skin.String(oak_theme_mode),auto)</selected>
+				<onclick>SetProperty(oak_skinsettings_focus,9007,home)</onclick>
+				<onclick>RunScript(special://skin/scripts/theme.py,auto)</onclick>
+			</control>
+			<control type="button" id="9008">
+				<width>1160</width>
+				<include>OptionRowStyle</include>
+				<label>Auto  ·  day begins</label>
+				<label2>$VAR[DayBegins]</label2>
+				<onclick>SetProperty(oak_skinsettings_focus,9008,home)</onclick>
+				<onclick>RunScript(special://skin/scripts/theme.py,time,day)</onclick>
+			</control>
+			<control type="button" id="9009">
+				<width>1160</width>
+				<include>OptionRowStyle</include>
+				<label>Auto  ·  night begins</label>
+				<label2>$VAR[NightBegins]</label2>
+				<onclick>SetProperty(oak_skinsettings_focus,9009,home)</onclick>
+				<onclick>RunScript(special://skin/scripts/theme.py,time,night)</onclick>
+			</control>
+			<include content="OptionHeading"><param name="label" value="Clock" /><param name="id" value="9891" /></include>
+			<control type="radiobutton" id="9006">
+				<width>1160</width>
+				<radioposx>1108</radioposx>
+				<include>OptionRowStyle</include>
+				<label>24-hour clock</label>
+				<selected>String.IsEmpty(System.Time(xx))</selected>
+				<onclick>RunScript(special://skin/scripts/clock.py,toggle)</onclick>
+			</control>
+			<include content="OptionHeading"><param name="label" value="Movies" /><param name="id" value="9892" /></include>
+			<control type="button" id="9005">
+				<width>1160</width>
+				<include>OptionRowStyle</include>
+				<label>Videos folder</label>
+				<label2>$VAR[VideosFolderLabel]</label2>
+				<onclick>Skin.SetPath(oak_videos)</onclick>
+			</control>
+			<include content="OptionHeading"><param name="label" value="Kodi" /><param name="id" value="9893" /></include>
+			<control type="button" id="9004">
+				<width>1160</width>
+				<include>OptionRowStyle</include>
+				<label>Interface settings</label>
+				<label2>Skin, fonts, language, screensaver</label2>
+				<onclick>ActivateWindow(InterfaceSettings)</onclick>
+			</control>
+		</control>
+		<include content="CloseButton"><param name="label" value="Done" /><param name="ondown" value="9000" /></include>
+	</controls>
+</window>

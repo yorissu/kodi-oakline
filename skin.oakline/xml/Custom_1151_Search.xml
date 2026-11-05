@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	Search: one field, then rows of matching movies, shows and episodes.
+	The field (9020) is a Kodi edit control: Enter opens the on-screen
+	keyboard, a real keyboard types straight into it. Rows search titles
+	with smart-playlist filters built from the field's text (SearchPath vars).
+
+	ids: 9020 field · 8601 movies · 8602 shows · 8603 episodes · 8691-8693 loaders
+-->
+<window type="window" id="1151">
+	<defaultcontrol always="true">9020</defaultcontrol>
+	<backgroundcolor>navy900</backgroundcolor>
+	<include>ScreenEase</include>
+	<controls>
+		<include content="Box">
+			<param name="width" value="1920" />
+			<param name="height" value="1080" />
+		</include>
+
+		<control type="label">
+			<left>96</left>
+			<top>124</top>
+			<width>900</width>
+			<height>84</height>
+			<aligny>center</aligny>
+			<font>title</font>
+			<textcolor>white</textcolor>
+			<label>Search</label>
+		</control>
+
+		<!-- ============ field ============ -->
+		<include content="Box">
+			<param name="left" value="96" />
+			<param name="top" value="244" />
+			<param name="width" value="1728" />
+			<param name="height" value="80" />
+			<param name="color" value="navy800" />
+		</include>
+		<include content="FocusRing">
+			<param name="left" value="89" />
+			<param name="top" value="237" />
+			<param name="width" value="1742" />
+			<param name="height" value="94" />
+			<param name="visible" value="Control.HasFocus(9020)" />
+		</include>
+		<control type="image">
+			<left>124</left>
+			<top>270</top>
+			<width>28</width>
+			<height>28</height>
+			<texture colordiffuse="gray400">icons/search.png</texture>
+		</control>
+		<control type="edit" id="9020">
+			<left>176</left>
+			<top>244</top>
+			<width>1618</width>
+			<height>80</height>
+			<font>input</font>
+			<textcolor>white</textcolor>
+			<focusedcolor>white</focusedcolor>
+			<hinttext>Movies, shows, episodes</hinttext>
+			<aligny>center</aligny>
+			<texturefocus />
+			<texturenofocus />
+			<onleft>noop</onleft>
+			<onup>SetFocus(9000,$VAR[TabIndex],absolute)</onup>
+			<ondown>SetFocus($VAR[SearchFirstRow])</ondown>
+		</control>
+
+		<control type="label">
+			<left>96</left>
+			<top>380</top>
+			<width>1728</width>
+			<height>40</height>
+			<font>body</font>
+			<textcolor>gray400</textcolor>
+			<label>Press Enter to type. Matches show up as you go.</label>
+			<visible>String.IsEmpty(Control.GetLabel(9020).index(1))</visible>
+		</control>
+		<control type="label">
+			<left>96</left>
+			<top>380</top>
+			<width>1728</width>
+			<height>40</height>
+			<font>body</font>
+			<textcolor>gray400</textcolor>
+			<label>Nothing in the library matches “$INFO[Control.GetLabel(9020).index(1)]”.</label>
+			<visible>!String.IsEmpty(Control.GetLabel(9020).index(1)) + !Integer.IsGreater(Container(8691).NumItems,0) + !Integer.IsGreater(Container(8692).NumItems,0) + !Integer.IsGreater(Container(8693).NumItems,0) + !Container(8691).IsUpdating + !Container(8692).IsUpdating + !Container(8693).IsUpdating</visible>
+		</control>
+
+		<!-- ============ results ============ -->
+		<control type="grouplist" id="9030">
+			<onup>noop</onup>
+			<ondown>noop</ondown>
+			<left>0</left>
+			<top>360</top>
+			<width>1920</width>
+			<height>720</height>
+			<orientation>vertical</orientation>
+			<itemgap>0</itemgap>
+			<scrolltime tween="cubic" easing="out">350</scrolltime>
+			<control type="group">
+				<height>330</height>
+				<visible>Integer.IsGreater(Container(8691).NumItems,0)</visible>
+				<include content="RowHeader"><param name="id" value="8601" /><param name="header" value="Movies" /></include>
+				<include content="CardList"><param name="id" value="8601" /><param name="content" value="$VAR[SearchPathMovies]" /><param name="up" value="9020" /><param name="down" value="SetFocus($VAR[SearchBelowMovies])" /></include>
+				<include content="RowDetail"><param name="id" value="8601" /></include>
+			</control>
+			<control type="group">
+				<height>330</height>
+				<visible>Integer.IsGreater(Container(8692).NumItems,0)</visible>
+				<include content="RowHeader"><param name="id" value="8602" /><param name="header" value="TV shows" /></include>
+				<include content="CardList"><param name="id" value="8602" /><param name="content" value="$VAR[SearchPathShows]" /><param name="up" value="SetFocus($VAR[SearchAboveShows])" /><param name="down" value="SetFocus($VAR[SearchBelowShows])" /></include>
+				<include content="RowDetail"><param name="id" value="8602" /></include>
+			</control>
+			<control type="group">
+				<height>330</height>
+				<visible>Integer.IsGreater(Container(8693).NumItems,0)</visible>
+				<include content="RowHeader"><param name="id" value="8603" /><param name="header" value="Episodes" /></include>
+				<include content="CardList"><param name="id" value="8603" /><param name="content" value="$VAR[SearchPathEpisodes]" /><param name="up" value="SetFocus($VAR[SearchAboveEpisodes])" /><param name="down" value="noop" /></include>
+				<include content="RowDetail"><param name="id" value="8603" /></include>
+			</control>
+		</control>
+
+		<!-- loaders: decide which rows exist (a list in a hidden group never loads) -->
+		<control type="list" id="8691">
+			<left>-4000</left>
+			<width>10</width>
+			<height>10</height>
+			<itemlayout width="10" height="10" />
+			<focusedlayout width="10" height="10" />
+			<content target="videos">$VAR[SearchPathMovies]</content>
+		</control>
+		<control type="list" id="8692">
+			<left>-4000</left>
+			<width>10</width>
+			<height>10</height>
+			<itemlayout width="10" height="10" />
+			<focusedlayout width="10" height="10" />
+			<content target="videos">$VAR[SearchPathShows]</content>
+		</control>
+		<control type="list" id="8693">
+			<left>-4000</left>
+			<width>10</width>
+			<height>10</height>
+			<itemlayout width="10" height="10" />
+			<focusedlayout width="10" height="10" />
+			<content target="videos">$VAR[SearchPathEpisodes]</content>
+		</control>
+
+		<include>NowPlayingMini</include>
+		<include content="Rail">
+			<param name="onright" value="SetFocus(9020)" />
+		</include>
+	</controls>
+</window>

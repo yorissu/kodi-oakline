@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	Pick one (or several) from a list: setting values, sources, versions...
+	Kodi uses list 3 (plain) or 6 (with thumbs), heading 1, and buttons
+	5 (extra), 8 (also extra) and 7 (cancel), hiding the ones it doesn't need.
+-->
+<window>
+	<defaultcontrol always="true">3</defaultcontrol>
+	<controls>
+		<include>DialogScrim</include>
+		<control type="group">
+			<left>460</left>
+			<top>150</top>
+			<include>DialogEase</include>
+			<include content="DialogPanel">
+				<param name="width" value="1000" />
+				<param name="height" value="780" />
+			</include>
+
+			<control type="list" id="3">
+				<onup>noop</onup>
+				<left>24</left>
+				<top>112</top>
+				<width>952</width>
+				<height>564</height>
+				<orientation>vertical</orientation>
+				<onright>9001</onright>
+				<ondown>9001</ondown>
+				<itemlayout width="952" height="64">
+					<include>SelectRow</include>
+				</itemlayout>
+				<focusedlayout width="952" height="64">
+					<include content="Box">
+						<param name="width" value="952" />
+						<param name="height" value="64" />
+						<param name="color" value="wood" />
+						<param name="visible" value="Control.HasFocus(3)" />
+					</include>
+					<control type="group">
+						<visible>Control.HasFocus(3)</visible>
+						<include>SelectRowFocus</include>
+					</control>
+					<control type="group">
+						<visible>!Control.HasFocus(3)</visible>
+						<include>SelectRow</include>
+					</control>
+				</focusedlayout>
+			</control>
+			<control type="list" id="6">
+				<onup>noop</onup>
+				<left>24</left>
+				<top>112</top>
+				<width>952</width>
+				<height>564</height>
+				<orientation>vertical</orientation>
+				<onright>9001</onright>
+				<ondown>9001</ondown>
+				<itemlayout width="952" height="96">
+					<include>SelectRowThumb</include>
+				</itemlayout>
+				<focusedlayout width="952" height="96">
+					<include content="Box">
+						<param name="width" value="952" />
+						<param name="height" value="96" />
+						<param name="color" value="wood" />
+						<param name="visible" value="Control.HasFocus(6)" />
+					</include>
+					<control type="group">
+						<visible>Control.HasFocus(6)</visible>
+						<include>SelectRowThumbFocus</include>
+					</control>
+					<control type="group">
+						<visible>!Control.HasFocus(6)</visible>
+						<include>SelectRowThumb</include>
+					</control>
+				</focusedlayout>
+			</control>
+
+			<control type="grouplist" id="9001">
+				<onleft>noop</onleft>
+				<onright>noop</onright>
+				<left>40</left>
+				<top>688</top>
+				<width>920</width>
+				<height>60</height>
+				<orientation>horizontal</orientation>
+				<itemgap>16</itemgap>
+				<onup>3</onup>
+				<include content="DialogButton"><param name="id" value="5" /></include>
+				<include content="DialogButton"><param name="id" value="8" /></include>
+				<include content="DialogButton"><param name="id" value="7" /></include>
+			</control>
+		</control>
+	</controls>
+</window>

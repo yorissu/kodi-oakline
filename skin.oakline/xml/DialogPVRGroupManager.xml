@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Live TV channel groups: groups (13) and the actions Kodi enables. 26 add, 27 rename, 28 delete, 25 hide, 35 thumbnails, 34 TV/radio, 29 OK. -->
+<window>
+	<defaultcontrol always="true">13</defaultcontrol>
+	<controls>
+		<include>DialogScrim</include>
+		<control type="group">
+			<left>360</left>
+			<top>130</top>
+			<include>DialogEase</include>
+			<include content="DialogPanel">
+				<param name="width" value="1200" />
+				<param name="height" value="820" />
+				<param name="heading_id" value="9002" />
+			</include>
+			<control type="label">
+				<left>40</left>
+				<top>32</top>
+				<width>1120</width>
+				<height>44</height>
+				<font>head</font>
+				<textcolor>white</textcolor>
+				<label>Channel groups</label>
+			</control>
+			<include content="PlainList"><param name="id" value="13" /><param name="left" value="24" /><param name="top" value="100" /><param name="width" value="560" /><param name="height" value="680" /><param name="onright" value="9001" /></include>
+			<control type="label" id="20"><visible>false</visible></control>
+			<control type="grouplist" id="9001">
+				<onup>noop</onup>
+				<ondown>noop</ondown>
+				<left>620</left>
+				<top>100</top>
+				<width>540</width>
+				<height>680</height>
+				<orientation>vertical</orientation>
+				<itemgap>8</itemgap>
+				<onleft>13</onleft>
+				<control type="button" id="26"><width>540</width><include>SettingRowStyle</include><label>Add group</label></control>
+				<control type="button" id="27"><width>540</width><include>SettingRowStyle</include><label>Rename</label><visible>Control.IsEnabled(27)</visible></control>
+				<include content="FormRadio"><param name="id" value="25" /><param name="label" value="Hide group" /><param name="width" value="540" /><param name="radiox" value="488" /></include>
+				<control type="button" id="28"><width>540</width><include>SettingRowStyle</include><label>Delete</label><visible>Control.IsEnabled(28)</visible></control>
+				<control type="button" id="35"><width>540</width><include>SettingRowStyle</include><label>Regenerate thumbnails</label></control>
+				<control type="togglebutton" id="34"><width>540</width><include>SettingRowStyle</include><label>Show radio groups</label><altlabel>Show TV groups</altlabel><alttexturefocus colordiffuse="wood">white.png</alttexturefocus><alttexturenofocus /></control>
+				<control type="button" id="29"><width>540</width><include>SettingRowStyle</include><label>Done</label></control>
+			</control>
+		</control>
+	</controls>
+</window>

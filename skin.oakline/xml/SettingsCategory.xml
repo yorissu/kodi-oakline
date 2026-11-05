@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	A settings section (Player, Media, Interface, ...). Kodi fills it:
+	3 category buttons (cloned from 10), 5 the settings (cloned from the
+	templates 7-15), 6 the focused setting's description, 20 the settings
+	level, 2 the section name.
+-->
+<window>
+	<defaultcontrol always="true">3</defaultcontrol>
+	<backgroundcolor>navy900</backgroundcolor>
+	<include>ScreenEase</include>
+	<controls>
+		<include content="Box">
+			<param name="width" value="1920" />
+			<param name="height" value="1080" />
+		</include>
+		<control type="label">
+			<left>96</left>
+			<top>124</top>
+			<width>1688</width>
+			<height>84</height>
+			<aligny>center</aligny>
+			<font>title</font>
+			<textcolor>white</textcolor>
+			<label>$INFO[Control.GetLabel(2)]</label>
+		</control>
+		<control type="label" id="2">
+			<visible>false</visible>
+		</control>
+
+		<!-- categories -->
+		<control type="grouplist" id="3">
+			<left>96</left>
+			<top>270</top>
+			<width>400</width>
+			<height>672</height>
+			<orientation>vertical</orientation>
+			<itemgap>4</itemgap>
+			<onleft>noop</onleft>
+			<onup>SetFocus(9000,$VAR[TabIndex],absolute)</onup>
+			<onright>5</onright>
+			<ondown>20</ondown>
+		</control>
+		<include content="CategoryButton">
+			<param name="id" value="10" />
+			<param name="width" value="400" />
+		</include>
+
+		<!-- settings -->
+		<include content="Box">
+			<param name="left" value="624" />
+			<param name="top" value="270" />
+			<param name="width" value="1" />
+			<param name="height" value="672" />
+			<param name="color" value="navy700" />
+		</include>
+		<control type="grouplist" id="5">
+			<ondown>noop</ondown>
+			<left>664</left>
+			<top>270</top>
+			<width>1160</width>
+			<height>672</height>
+			<orientation>vertical</orientation>
+			<itemgap>2</itemgap>
+			<scrolltime tween="cubic" easing="out">250</scrolltime>
+			<onleft>3</onleft>
+			<onup>SetFocus(9000,$VAR[TabIndex],absolute)</onup>
+			<onright>noop</onright>
+		</control>
+		<include content="SettingTemplates">
+			<param name="width" value="1160" />
+			<param name="radiox" value="1108" />
+		</include>
+
+		<!-- bottom: level, description -->
+		<control type="button" id="20">
+			<left>96</left>
+			<top>976</top>
+			<width>400</width>
+			<height>60</height>
+			<font>small</font>
+			<textoffsetx>24</textoffsetx>
+			<aligny>center</aligny>
+			<textcolor>gray400</textcolor>
+			<focusedcolor>onwood</focusedcolor>
+			<texturefocus colordiffuse="wood">white.png</texturefocus>
+			<texturenofocus colordiffuse="navy800">white.png</texturenofocus>
+			<onclick>SettingsLevelChange</onclick>
+			<onup>3</onup>
+			<!-- the bottom of the page: Down stops here (no wrapping anywhere in Oakline) -->
+			<ondown>noop</ondown>
+			<onright>5</onright>
+			<onleft>noop</onleft>
+		</control>
+		<control type="textbox" id="6">
+			<left>664</left>
+			<top>978</top>
+			<width>1160</width>
+			<height>90</height>
+			<font>small</font>
+			<textcolor>gray400</textcolor>
+			<autoscroll time="3000" delay="5000" repeat="5000">true</autoscroll>
+		</control>
+
+		<include>NowPlayingMini</include>
+		<include content="Rail">
+			<param name="onright" value="SetFocus(3)" />
+		</include>
+	</controls>
+</window>

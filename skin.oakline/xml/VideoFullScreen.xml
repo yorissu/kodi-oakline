@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Fullscreen video: nothing over the picture. The seek bar and OSD are their own windows. -->
+<window>
+	<defaultcontrol></defaultcontrol>
+	<controls />
+</window>

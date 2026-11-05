@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Mouse pointer: 1 normal, 2 over a control, 3 dragging, 4 clicking. -->
+<window>
+	<controls>
+		<control type="image" id="1">
+			<width>40</width>
+			<height>40</height>
+			<texture colordiffuse="white">pointer.png</texture>
+		</control>
+		<control type="image" id="2">
+			<width>40</width>
+			<height>40</height>
+			<texture colordiffuse="wood">pointer.png</texture>
+		</control>
+		<control type="image" id="3">
+			<width>40</width>
+			<height>40</height>
+			<texture colordiffuse="wood">pointer.png</texture>
+		</control>
+		<control type="image" id="4">
+			<width>36</width>
+			<height>36</height>
+			<texture colordiffuse="wood">pointer.png</texture>
+		</control>
+	</controls>
+</window>

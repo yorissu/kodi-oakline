@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fonts>
+	<fontset id="Default" idloc="15109">
+		<!-- font13 is required by Kodi as the fallback font -->
+		<font>
+			<name>font13</name>
+			<filename>NotoSans-Regular.ttf</filename>
+			<size>26</size>
+		</font>
+		<font>
+			<name>label</name>
+			<filename>NotoSans-Regular.ttf</filename>
+			<size>17</size>
+			<style>bold uppercase</style>
+		</font>
+		<font>
+			<name>small</name>
+			<filename>NotoSans-Regular.ttf</filename>
+			<size>21</size>
+		</font>
+		<font>
+			<name>card</name>
+			<filename>NotoSans-Regular.ttf</filename>
+			<size>21</size>
+			<style>bold</style>
+		</font>
+		<font>
+			<name>body</name>
+			<filename>NotoSans-Regular.ttf</filename>
+			<size>24</size>
+		</font>
+		<font>
+			<name>button</name>
+			<filename>NotoSans-Regular.ttf</filename>
+			<size>22</size>
+			<style>bold</style>
+		</font>
+		<font>
+			<name>rail</name>
+			<filename>NotoSans-Regular.ttf</filename>
+			<size>24</size>
+		</font>
+		<font>
+			<name>head</name>
+			<filename>NotoSans-Regular.ttf</filename>
+			<size>28</size>
+			<style>bold</style>
+		</font>
+		<font>
+			<name>input</name>
+			<filename>NotoSans-Regular.ttf</filename>
+			<size>40</size>
+		</font>
+		<!-- big titles that sit in a box (billboard, details): long names still fit -->
+		<font>
+			<name>display</name>
+			<filename>NotoSans-Regular.ttf</filename>
+			<size>62</size>
+			<style>bold</style>
+		</font>
+		<font>
+			<name>title</name>
+			<filename>NotoSans-Regular.ttf</filename>
+			<size>64</size>
+			<style>bold</style>
+		</font>
+		<font>
+			<name>rank</name>
+			<filename>NotoSans-Regular.ttf</filename>
+			<size>230</size>
+			<style>bold</style>
+		</font>
+	</fontset>
+</fonts>

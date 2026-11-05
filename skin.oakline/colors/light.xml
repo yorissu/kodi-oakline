@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Oak · Light. Same roles as defaults.xml: warm white surfaces, navy text,
+     a slightly deeper oak so focus still reads on the pale background. -->
+<colors>
+	<color name="navy950">FFFBFAF7</color>
+	<color name="navy900">FFF1EEE8</color>
+	<color name="navy800">FFE4E0D8</color>
+	<color name="navy700">FFD2CDC3</color>
+	<color name="gray600">FFB3AEA5</color>
+	<color name="gray400">FF667080</color>
+	<color name="gray200">FF2B3749</color>
+	<color name="white">FF0C1726</color>
+	<color name="wood">FFBE8C45</color>
+	<color name="onwood">FF08111D</color>
+	<color name="onwood2">FF1D3150</color>
+	<color name="scrim">8C1D3150</color>
+</colors>

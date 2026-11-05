@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Volume, top right, while it changes. Kodi drives progress 29999. -->
+<window>
+	<zorder>2</zorder>
+	<animation effect="fade" start="0" end="100" time="150">WindowOpen</animation>
+	<animation effect="fade" start="100" end="0" time="250">WindowClose</animation>
+	<controls>
+		<control type="group">
+			<left>1384</left>
+			<top>48</top>
+			<include content="Box">
+				<param name="width" value="480" />
+				<param name="height" value="72" />
+				<param name="color" value="navy950" />
+			</include>
+			<control type="image">
+				<left>24</left>
+				<top>22</top>
+				<width>28</width>
+				<height>28</height>
+				<texture colordiffuse="white">icons/audio.png</texture>
+			</control>
+			<control type="progress" id="29999">
+				<left>76</left>
+				<top>33</top>
+				<width>380</width>
+				<height>6</height>
+				<texturebg colordiffuse="gray600">white.png</texturebg>
+				<midtexture colordiffuse="wood">white.png</midtexture>
+				<info>Player.Volume</info>
+				<visible>!Player.Muted</visible>
+			</control>
+			<control type="label">
+				<left>76</left>
+				<top>0</top>
+				<width>300</width>
+				<height>72</height>
+				<aligny>center</aligny>
+				<font>card</font>
+				<textcolor>white</textcolor>
+				<label>Muted</label>
+				<visible>Player.Muted</visible>
+			</control>
+		</control>
+	</controls>
+</window>

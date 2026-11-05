@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Event log (what Kodi did and what failed). 50 the events; 4 level, 22 "and higher". -->
+<window>
+	<defaultcontrol always="true">9030</defaultcontrol>
+	<!-- the log can be empty, and an empty list can't take focus: start on the
+	     buttons, then move to the list when it has entries -->
+	<onload condition="Integer.IsGreater(Container(50).NumItems,0)">SetFocus(50)</onload>
+	<backgroundcolor>navy900</backgroundcolor>
+	<include>ScreenEase</include>
+	<controls>
+		<include content="Box">
+			<param name="width" value="1920" />
+			<param name="height" value="1080" />
+		</include>
+		<control type="label">
+			<left>96</left>
+			<top>124</top>
+			<width>1000</width>
+			<height>84</height>
+			<aligny>center</aligny>
+			<font>title</font>
+			<textcolor>white</textcolor>
+			<label>Event log</label>
+		</control>
+		<control type="grouplist" id="9030">
+			<onleft>noop</onleft>
+			<onright>noop</onright>
+			<onup>SetFocus(9000,$VAR[TabIndex],absolute)</onup>
+			<left>1024</left>
+			<top>140</top>
+			<width>800</width>
+			<height>60</height>
+			<orientation>horizontal</orientation>
+			<align>right</align>
+			<itemgap>14</itemgap>
+			<ondown>50</ondown>
+			<control type="togglebutton" id="4">
+				<include>ButtonStyle</include>
+				<label>Newest first</label>
+				<altlabel>Oldest first</altlabel>
+				<alttexturefocus colordiffuse="wood">white.png</alttexturefocus>
+				<alttexturenofocus colordiffuse="navy800">white.png</alttexturenofocus>
+			</control>
+			<control type="radiobutton" id="22">
+				<width>330</width>
+				<include>ButtonStyle</include>
+				<label>Include higher levels</label>
+				<radioposx>286</radioposx>
+				<radioposy>22</radioposy>
+				<textureradioonfocus colordiffuse="onwood">white.png</textureradioonfocus>
+				<textureradioonnofocus colordiffuse="wood">white.png</textureradioonnofocus>
+				<textureradioofffocus colordiffuse="onwood" border="2">frame.png</textureradioofffocus>
+				<textureradiooffnofocus colordiffuse="gray600" border="2">frame.png</textureradiooffnofocus>
+				<radiowidth>20</radiowidth>
+				<radioheight>20</radioheight>
+			</control>
+		</control>
+		<control type="list" id="50">
+			<ondown>noop</ondown>
+			<left>96</left>
+			<top>296</top>
+			<width>1728</width>
+			<height>784</height>
+			<orientation>vertical</orientation>
+			<onleft>noop</onleft>
+			<onup>9030</onup>
+			<itemlayout width="1640" height="104"><include>ListRow</include></itemlayout>
+			<focusedlayout width="1640" height="104">
+				<include content="Box">
+					<param name="top" value="2" />
+					<param name="width" value="1640" />
+					<param name="height" value="100" />
+					<param name="color" value="navy800" />
+					<param name="visible" value="Control.HasFocus(50)" />
+				</include>
+				<include content="FocusRing">
+					<param name="top" value="2" />
+					<param name="width" value="1640" />
+					<param name="height" value="100" />
+					<param name="visible" value="Control.HasFocus(50)" />
+				</include>
+				<include>ListRow</include>
+			</focusedlayout>
+		</control>
+		<include content="Rail">
+			<param name="onright" value="SetFocus(9030)" />
+		</include>
+	</controls>
+</window>

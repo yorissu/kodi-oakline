@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	Screen calibration (System > Display > Video calibration): drag the corners
+	to the edges of the TV picture. Movers 8 / 9 corners, 10 subtitle line,
+	11 pixel ratio, 12 (unused here); 2-4 instructions and values.
+-->
+<window>
+	<defaultcontrol always="true">8</defaultcontrol>
+	<backgroundcolor>navy900</backgroundcolor>
+	<controls>
+		<include content="Box">
+			<param name="width" value="1920" />
+			<param name="height" value="1080" />
+		</include>
+		<control type="group">
+			<left>460</left>
+			<top>420</top>
+			<include content="Box">
+				<param name="width" value="1000" />
+				<param name="height" value="240" />
+				<param name="color" value="navy950" />
+			</include>
+			<control type="label" id="2">
+				<left>40</left>
+				<top>36</top>
+				<width>920</width>
+				<height>40</height>
+				<align>center</align>
+				<font>head</font>
+				<textcolor>white</textcolor>
+			</control>
+			<control type="label" id="3">
+				<left>40</left>
+				<top>96</top>
+				<width>920</width>
+				<height>32</height>
+				<align>center</align>
+				<font>body</font>
+				<textcolor>gray200</textcolor>
+			</control>
+			<control type="label" id="4">
+				<left>40</left>
+				<top>150</top>
+				<width>920</width>
+				<height>32</height>
+				<align>center</align>
+				<font>small</font>
+				<textcolor>gray400</textcolor>
+				<label>Arrows move  ·  Enter next  ·  Back done</label>
+			</control>
+		</control>
+		<control type="mover" id="8">
+			<left>0</left>
+			<top>0</top>
+			<width>64</width>
+			<height>64</height>
+			<texturefocus colordiffuse="wood">calib-topleft.png</texturefocus>
+			<texturenofocus colordiffuse="gray600">calib-topleft.png</texturenofocus>
+		</control>
+		<control type="mover" id="9">
+			<right>0</right>
+			<bottom>0</bottom>
+			<width>64</width>
+			<height>64</height>
+			<texturefocus colordiffuse="wood">calib-bottomright.png</texturefocus>
+			<texturenofocus colordiffuse="gray600">calib-bottomright.png</texturenofocus>
+		</control>
+		<control type="mover" id="10">
+			<left>760</left>
+			<top>900</top>
+			<width>400</width>
+			<height>8</height>
+			<texturefocus colordiffuse="wood">white.png</texturefocus>
+			<texturenofocus colordiffuse="gray600">white.png</texturenofocus>
+		</control>
+		<control type="resize" id="11">
+			<left>860</left>
+			<top>240</top>
+			<width>200</width>
+			<height>200</height>
+			<texturefocus colordiffuse="wood" border="3">frame.png</texturefocus>
+			<texturenofocus colordiffuse="gray600" border="3">frame.png</texturenofocus>
+		</control>
+		<control type="mover" id="12">
+			<visible>false</visible>
+		</control>
+	</controls>
+</window>

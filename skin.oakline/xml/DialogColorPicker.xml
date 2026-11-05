@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Colour picker (settings that take a colour, e.g. subtitles): swatches in 6, 7 cancel. -->
+<window>
+	<defaultcontrol always="true">6</defaultcontrol>
+	<controls>
+		<include>DialogScrim</include>
+		<control type="group">
+			<left>360</left>
+			<top>160</top>
+			<include>DialogEase</include>
+			<include content="DialogPanel">
+				<param name="width" value="1200" />
+				<param name="height" value="760" />
+				<param name="heading_id" value="9002" />
+			</include>
+			<control type="label">
+				<left>40</left>
+				<top>32</top>
+				<width>1120</width>
+				<height>44</height>
+				<font>head</font>
+				<textcolor>white</textcolor>
+				<label>$INFO[Control.GetLabel(1)]</label>
+			</control>
+			<control type="label" id="1"><visible>false</visible></control>
+			<control type="panel" id="6">
+				<onleft>noop</onleft>
+				<onright>noop</onright>
+				<onup>noop</onup>
+				<left>33</left>
+				<top>100</top>
+				<width>1134</width>
+				<height>520</height>
+				<orientation>vertical</orientation>
+				<ondown>9001</ondown>
+				<itemlayout width="126" height="130">
+					<control type="image"><left>12</left><top>12</top><width>102</width><height>80</height><texture colordiffuse="$INFO[ListItem.Label2]">white.png</texture></control>
+					<control type="label"><left>12</left><top>94</top><width>102</width><height>30</height><font>small</font><textcolor>gray400</textcolor><align>center</align><label>$INFO[ListItem.Label]</label></control>
+				</itemlayout>
+				<focusedlayout width="126" height="130">
+					<include content="FocusRing"><param name="left" value="6" /><param name="top" value="6" /><param name="width" value="114" /><param name="height" value="92" /><param name="visible" value="Control.HasFocus(6)" /></include>
+					<control type="image"><left>12</left><top>12</top><width>102</width><height>80</height><texture colordiffuse="$INFO[ListItem.Label2]">white.png</texture></control>
+					<control type="label"><left>12</left><top>94</top><width>102</width><height>30</height><font>small</font><textcolor>white</textcolor><align>center</align><label>$INFO[ListItem.Label]</label></control>
+				</focusedlayout>
+			</control>
+			<control type="grouplist" id="9001">
+				<onleft>noop</onleft>
+				<onright>noop</onright>
+				<left>40</left>
+				<top>660</top>
+				<width>1120</width>
+				<height>60</height>
+				<orientation>horizontal</orientation>
+				<itemgap>14</itemgap>
+				<onup>6</onup>
+				<control type="button" id="7">
+					<include>ButtonStyle</include>
+					<label>Cancel</label>
+				</control>
+			</control>
+		</control>
+	</controls>
+</window>

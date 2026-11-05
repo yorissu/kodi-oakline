@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Video versions and extras of a movie (Info > Versions / Extras). List 50; 21 play, 22 set default, 23 remove, 24 rename, 25 choose art, 26 add, 27 add from library, 28 close. -->
+<window>
+	<defaultcontrol always="true">50</defaultcontrol>
+	<controls>
+		<include>DialogScrim</include>
+		<control type="group">
+			<left>260</left>
+			<top>130</top>
+			<include>DialogEase</include>
+			<include content="DialogPanel">
+				<param name="width" value="1400" />
+				<param name="height" value="820" />
+				<param name="heading_id" value="9002" />
+			</include>
+			<control type="label">
+				<left>40</left>
+				<top>32</top>
+				<width>1320</width>
+				<height>44</height>
+				<font>head</font>
+				<textcolor>white</textcolor>
+				<label>$INFO[ListItem.Label]</label>
+			</control>
+			<include content="PlainList"><param name="id" value="50" /><param name="left" value="24" /><param name="top" value="100" /><param name="width" value="620" /><param name="height" value="680" /><param name="label" value="$INFO[ListItem.Label]$INFO[ListItem.Label2,  ·  ]" /><param name="onright" value="101" /></include>
+			<control type="grouplist" id="101">
+				<onup>noop</onup>
+				<ondown>noop</ondown>
+				<left>700</left>
+				<top>100</top>
+				<width>660</width>
+				<height>680</height>
+				<orientation>vertical</orientation>
+				<itemgap>8</itemgap>
+				<onleft>50</onleft>
+				<control type="button" id="21"><width>660</width><include>SettingRowStyle</include><label>Play</label></control>
+				<control type="button" id="22"><width>660</width><include>SettingRowStyle</include><label>Set as default</label><visible>Control.IsEnabled(22)</visible></control>
+				<control type="button" id="24"><width>660</width><include>SettingRowStyle</include><label>Rename</label><visible>Control.IsEnabled(24)</visible></control>
+				<control type="button" id="25"><width>660</width><include>SettingRowStyle</include><label>Choose art</label><visible>Control.IsEnabled(25)</visible></control>
+				<control type="button" id="23"><width>660</width><include>SettingRowStyle</include><label>Remove</label><visible>Control.IsEnabled(23)</visible></control>
+				<control type="button" id="26"><width>660</width><include>SettingRowStyle</include><label>Add</label><visible>Control.IsEnabled(26)</visible></control>
+				<control type="button" id="27"><width>660</width><include>SettingRowStyle</include><label>Add from library</label><visible>Control.IsEnabled(27)</visible></control>
+				<control type="button" id="28"><width>660</width><include>SettingRowStyle</include><label>Close</label></control>
+			</control>
+		</control>
+	</controls>
+</window>

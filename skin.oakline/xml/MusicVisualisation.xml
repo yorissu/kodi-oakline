@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	Now playing (fullscreen music): big cover, title, artist and album,
+	progress, what's next. Enter opens MusicOSD with the controls.
+-->
+<window>
+	<include>ScreenEase</include>
+	<controls>
+		<include content="Box">
+			<param name="width" value="1920" />
+			<param name="height" value="1080" />
+		</include>
+		<control type="image">
+			<width>1920</width>
+			<height>1080</height>
+			<aspectratio>scale</aspectratio>
+			<texture background="true" colordiffuse="40FFFFFF">$INFO[Player.Art(fanart)]</texture>
+		</control>
+
+		<include content="Box">
+			<param name="left" value="160" />
+			<param name="top" value="160" />
+			<param name="width" value="560" />
+			<param name="height" value="560" />
+			<param name="color" value="navy800" />
+		</include>
+		<control type="image">
+			<left>160</left>
+			<top>160</top>
+			<width>560</width>
+			<height>560</height>
+			<aspectratio>scale</aspectratio>
+			<texture background="true">$INFO[Player.Art(thumb)]</texture>
+		</control>
+
+		<control type="group">
+			<left>800</left>
+			<top>200</top>
+			<control type="label">
+				<width>960</width>
+				<height>24</height>
+				<font>label</font>
+				<textcolor>gray400</textcolor>
+				<label>Now playing$INFO[MusicPlayer.TrackNumber,  ·  track ]$INFO[MusicPlayer.Album,  ·  ]</label>
+			</control>
+			<control type="label">
+				<top>36</top>
+				<width>960</width>
+				<height>96</height>
+				<aligny>center</aligny>
+				<font>title</font>
+				<textcolor>white</textcolor>
+				<scroll>false</scroll>
+				<label>$INFO[MusicPlayer.Title]</label>
+			</control>
+			<control type="label">
+				<top>140</top>
+				<width>960</width>
+				<height>40</height>
+				<font>input</font>
+				<textcolor>gray200</textcolor>
+				<scroll>false</scroll>
+				<label>$INFO[MusicPlayer.Artist]</label>
+			</control>
+			<control type="label">
+				<top>196</top>
+				<width>960</width>
+				<height>30</height>
+				<font>small</font>
+				<textcolor>gray400</textcolor>
+				<label>$INFO[MusicPlayer.Year]$INFO[MusicPlayer.Genre,  ·  ]</label>
+			</control>
+
+			<!-- progress -->
+			<control type="progress">
+				<top>440</top>
+				<width>960</width>
+				<height>5</height>
+				<texturebg colordiffuse="gray600">white.png</texturebg>
+				<midtexture colordiffuse="wood">white.png</midtexture>
+				<info>Player.Progress</info>
+			</control>
+			<control type="label">
+				<top>458</top>
+				<width>400</width>
+				<height>30</height>
+				<font>small</font>
+				<textcolor>white</textcolor>
+				<label>$INFO[Player.Time]</label>
+			</control>
+			<control type="label">
+				<left>560</left>
+				<top>458</top>
+				<width>400</width>
+				<height>30</height>
+				<align>right</align>
+				<font>small</font>
+				<textcolor>gray400</textcolor>
+				<label>$INFO[Player.Duration]</label>
+			</control>
+		</control>
+
+		<!-- up next -->
+		<control type="group">
+			<left>160</left>
+			<top>800</top>
+			<visible>!String.IsEmpty(MusicPlayer.offset(1).Title)</visible>
+			<include content="Box">
+				<param name="width" value="1600" />
+				<param name="height" value="1" />
+				<param name="color" value="navy700" />
+			</include>
+			<control type="label">
+				<top>28</top>
+				<width>1600</width>
+				<height>30</height>
+				<font>small</font>
+				<textcolor>gray400</textcolor>
+				<label>Up next   [COLOR white]$INFO[MusicPlayer.offset(1).Title][/COLOR]$INFO[MusicPlayer.offset(1).Artist,  ·  ]</label>
+			</control>
+		</control>
+		<include content="CloseButton"><param name="label" value="Close" /><param name="ondown" value="noop" /></include>
+	</controls>
+</window>

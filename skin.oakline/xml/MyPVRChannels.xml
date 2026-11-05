@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Live TV channels (also Radio). Rows: number, logo, channel, what is on now. -->
+<window>
+	<defaultcontrol always="true">50</defaultcontrol>
+	<backgroundcolor>navy900</backgroundcolor>
+	<views>50</views>
+	<include>ScreenEase</include>
+	<controls>
+		<include content="PVRHeader"><param name="section" value="Channels" /></include>
+		<include content="PVRTabs"><param name="ondown" value="50" /></include>
+		<control type="list" id="50">
+			<ondown>noop</ondown>
+			<left>96</left>
+			<top>336</top>
+			<width>1728</width>
+			<height>744</height>
+			<orientation>vertical</orientation>
+			<scrolltime tween="cubic" easing="out">300</scrolltime>
+			<onleft>noop</onleft>
+			<onup>9070</onup>
+			<viewtype label="Channels">list</viewtype>
+			<itemlayout width="1728" height="108" infoupdate="5000">
+				<include content="ChannelRow" />
+			</itemlayout>
+			<focusedlayout width="1728" height="108" infoupdate="5000">
+				<include content="Box">
+					<param name="top" value="2" />
+					<param name="width" value="1728" />
+					<param name="height" value="104" />
+					<param name="color" value="navy800" />
+					<param name="visible" value="Control.HasFocus(50)" />
+				</include>
+				<include content="FocusRing">
+					<param name="top" value="2" />
+					<param name="width" value="1728" />
+					<param name="height" value="104" />
+					<param name="visible" value="Control.HasFocus(50)" />
+				</include>
+				<include content="ChannelRow" />
+			</focusedlayout>
+		</control>
+		<include content="EmptyNote">
+			<param name="text" value="No channels. Install and set up a PVR client add-on to watch live TV." />
+			<param name="visible" value="Integer.IsEqual(Container.NumItems,0)" />
+		</include>
+		<include>NowPlayingMini</include>
+		<include content="Rail">
+			<param name="onright" value="SetFocus(50)" />
+		</include>
+		<include content="OptionsPanel">
+			<param name="return" value="50" />
+			<param name="extras" value="OptionsPVRChannels" />
+		</include>
+	</controls>
+</window>

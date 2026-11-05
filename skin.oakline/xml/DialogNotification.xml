@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Toast, top right: solid navy panel with a wood edge -->
+<window>
+	<zorder>2</zorder>
+	<animation effect="fade" start="0" end="100" time="150">WindowOpen</animation>
+	<animation effect="fade" start="100" end="0" time="150">WindowClose</animation>
+	<controls>
+		<control type="group">
+			<left>1300</left>
+			<top>124</top>
+			<include content="Box">
+				<param name="width" value="560" />
+				<param name="height" value="110" />
+				<param name="color" value="navy950" />
+			</include>
+			<include content="Box">
+				<param name="width" value="4" />
+				<param name="height" value="110" />
+				<param name="color" value="wood" />
+			</include>
+			<control type="image" id="400">
+				<visible>false</visible>
+			</control>
+			<control type="fadelabel" id="401">
+				<left>32</left>
+				<top>18</top>
+				<width>500</width>
+				<height>32</height>
+				<font>card</font>
+				<textcolor>white</textcolor>
+			</control>
+			<control type="fadelabel" id="402">
+				<left>32</left>
+				<top>60</top>
+				<width>500</width>
+				<height>32</height>
+				<font>small</font>
+				<textcolor>gray400</textcolor>
+			</control>
+		</control>
+	</controls>
+</window>

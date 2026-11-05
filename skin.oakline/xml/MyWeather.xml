@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Weather (More > Weather). Needs a weather add-on (Settings > Services >
+     Weather). Button 20 cycles locations; the rest is info labels. -->
+<window>
+	<defaultcontrol always="true">9010</defaultcontrol>
+	<backgroundcolor>navy900</backgroundcolor>
+	<include>ScreenEase</include>
+	<controls>
+		<include content="PageHeader">
+			<param name="title" value="Weather" />
+			<param name="sub" value="$INFO[Weather.Location]$INFO[Window(weather).Property(Updated),  ·  updated ]" />
+		</include>
+		<include content="EmptyNote">
+			<param name="text" value="No weather service set up. Choose one under Settings, Services, Weather." />
+			<param name="visible" value="!Weather.IsFetched + String.IsEmpty(Window(weather).Property(Current.Condition))" />
+		</include>
+
+		<control type="group">
+			<left>96</left>
+			<top>310</top>
+			<visible>!String.IsEmpty(Window(weather).Property(Current.Condition))</visible>
+			<control type="label">
+				<left>0</left>
+				<top>10</top>
+				<width>800</width>
+				<height>120</height>
+				<font>display</font>
+				<textcolor>white</textcolor>
+				<label>$INFO[Window(weather).Property(Current.Temperature)]$INFO[System.TemperatureUnits]</label>
+			</control>
+			<control type="label">
+				<left>0</left>
+				<top>130</top>
+				<width>800</width>
+				<height>40</height>
+				<font>head</font>
+				<textcolor>gray200</textcolor>
+				<label>$INFO[Window(weather).Property(Current.Condition)]</label>
+			</control>
+			<control type="label">
+				<left>1000</left>
+				<top>20</top>
+				<width>640</width>
+				<height>160</height>
+				<font>body</font>
+				<textcolor>gray400</textcolor>
+				<label>Feels like $INFO[Window(weather).Property(Current.FeelsLike)]$INFO[System.TemperatureUnits][CR]Humidity $INFO[Window(weather).Property(Current.Humidity)][CR]Wind $INFO[Window(weather).Property(Current.Wind)]$INFO[Window(weather).Property(Current.WindDirection),  ·  ]</label>
+			</control>
+			<!-- next days -->
+			<control type="grouplist">
+				<onleft>noop</onleft>
+				<onright>noop</onright>
+				<top>300</top>
+				<width>1728</width>
+				<height>300</height>
+				<orientation>horizontal</orientation>
+				<itemgap>16</itemgap>
+				<include content="WeatherDay"><param name="n" value="0" /></include>
+				<include content="WeatherDay"><param name="n" value="1" /></include>
+				<include content="WeatherDay"><param name="n" value="2" /></include>
+				<include content="WeatherDay"><param name="n" value="3" /></include>
+				<include content="WeatherDay"><param name="n" value="4" /></include>
+				<include content="WeatherDay"><param name="n" value="5" /></include>
+			</control>
+		</control>
+
+		<control type="grouplist" id="9010">
+			<onright>noop</onright>
+			<onup>SetFocus(9000,$VAR[TabIndex],absolute)</onup>
+			<left>96</left>
+			<top>980</top>
+			<width>1000</width>
+			<height>60</height>
+			<orientation>horizontal</orientation>
+			<onleft>noop</onleft>
+			<control type="button" id="20">
+				<include>ButtonStyle</include>
+				<label>Next location</label>
+				<onclick>Weather.LocationNext</onclick>
+				<onleft>noop</onleft>
+				<visible>Integer.IsGreater(Weather.LocationsCount,1)</visible>
+			</control>
+			<control type="button" id="21">
+				<include>ButtonStyle</include>
+				<label>Weather settings</label>
+				<onclick>ActivateWindow(ServiceSettings)</onclick>
+				<onleft>noop</onleft>
+				<visible>!Integer.IsGreater(Weather.LocationsCount,1)</visible>
+			</control>
+		</control>
+		<include>NowPlayingMini</include>
+		<include content="Rail">
+			<param name="onright" value="SetFocus(9010)" />
+		</include>
+	</controls>
+</window>

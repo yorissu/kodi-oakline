@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	Album / artist / song info (Info key in music). Same band as the video
+	info dialog, square cover instead of fanart when there is none.
+	ids Kodi drives: 8 play · 6 refresh · 10 choose art · 7 rating · 12 artist/album
+	info · 50 tracks (album) or discography (artist)
+-->
+<window>
+	<defaultcontrol always="true">9000</defaultcontrol>
+	<animation effect="fade" start="0" end="100" time="200">WindowOpen</animation>
+	<animation effect="fade" start="100" end="0" time="150">WindowClose</animation>
+	<controls>
+		<include content="DetailsBand">
+			<param name="fanart" value="$INFO[ListItem.Art(fanart)]" />
+			<param name="kind" value="$VAR[MusicInfoKind]$INFO[ListItem.Genre,  ·  ]" />
+			<param name="title" value="$INFO[ListItem.Label]" />
+			<param name="meta" value="$VAR[MusicInfoMeta]" />
+			<param name="plot" value="$VAR[MusicInfoText]" />
+		</include>
+		<control type="image">
+			<left>1404</left>
+			<top>96</top>
+			<width>420</width>
+			<height>420</height>
+			<aspectratio>scale</aspectratio>
+			<texture background="true">$INFO[ListItem.Art(thumb)]</texture>
+		</control>
+
+		<control type="grouplist" id="9000">
+			<onleft>noop</onleft>
+			<onright>noop</onright>
+			<onup>9099</onup>
+			<left>140</left>
+			<top>418</top>
+			<width>692</width>
+			<height>60</height>
+			<orientation>horizontal</orientation>
+			<itemgap>14</itemgap>
+			<ondown condition="Integer.IsGreater(Container(50).NumItems,0)">50</ondown>
+			<ondown condition="!Integer.IsGreater(Container(50).NumItems,0)">9001</ondown>
+			<control type="button" id="8">
+				<include>ButtonStyle</include>
+				<label>Play</label>
+				<visible>Control.IsEnabled(8)</visible>
+			</control>
+			<control type="button" id="12">
+				<include>ButtonStyle</include>
+				<label>$VAR[MusicInfoOther]</label>
+				<visible>Control.IsEnabled(12)</visible>
+			</control>
+		</control>
+
+		<!-- tracks or discography -->
+		<control type="label">
+			<left>96</left>
+			<top>580</top>
+			<width>800</width>
+			<height>40</height>
+			<font>head</font>
+			<textcolor>white</textcolor>
+			<label>$VAR[MusicInfoListTitle]</label>
+			<visible>Integer.IsGreater(Container(50).NumItems,0)</visible>
+		</control>
+		<control type="list" id="50">
+			<left>96</left>
+			<top>630</top>
+			<width>1728</width>
+			<height>260</height>
+			<orientation>vertical</orientation>
+			<scrolltime tween="cubic" easing="out">250</scrolltime>
+			<onup>9000</onup>
+			<ondown>9001</ondown>
+			<itemlayout width="1728" height="52">
+				<include content="InfoListRow"><param name="text" value="gray200" /><param name="sub" value="gray400" /></include>
+			</itemlayout>
+			<focusedlayout width="1728" height="52">
+				<include content="Box">
+					<param name="width" value="1728" />
+					<param name="height" value="52" />
+					<param name="color" value="wood" />
+					<param name="visible" value="Control.HasFocus(50)" />
+				</include>
+				<control type="group">
+					<visible>Control.HasFocus(50)</visible>
+					<include content="InfoListRow"><param name="text" value="onwood" /><param name="sub" value="onwood2" /></include>
+				</control>
+				<control type="group">
+					<visible>!Control.HasFocus(50)</visible>
+					<include content="InfoListRow"><param name="text" value="gray200" /><param name="sub" value="gray400" /></include>
+				</control>
+			</focusedlayout>
+		</control>
+
+		<control type="grouplist" id="9001">
+			<onleft>noop</onleft>
+			<onright>noop</onright>
+			<left>96</left>
+			<top>920</top>
+			<width>1728</width>
+			<height>60</height>
+			<orientation>horizontal</orientation>
+			<itemgap>4</itemgap>
+			<onup condition="Integer.IsGreater(Container(50).NumItems,0)">50</onup>
+			<onup condition="!Integer.IsGreater(Container(50).NumItems,0)">9000</onup>
+			<control type="button" id="7">
+				<include>LinkStyle</include>
+				<label>Your rating$INFO[ListItem.UserRating,  ·  ]</label>
+				<visible>Control.IsEnabled(7)</visible>
+			</control>
+			<control type="button" id="10">
+				<include>LinkStyle</include>
+				<label>Choose art</label>
+				<visible>Control.IsEnabled(10)</visible>
+			</control>
+			<control type="button" id="6">
+				<include>LinkStyle</include>
+				<label>Refresh</label>
+				<visible>Control.IsEnabled(6)</visible>
+			</control>
+		</control>
+		<include content="CloseButton"><param name="label" value="Close" /><param name="ondown" value="9000" /></include>
+	</controls>
+</window>

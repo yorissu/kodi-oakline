@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	Settings dialog (player OSD settings and the like): Kodi clones the
+	templates 7-15 into grouplist 5;
+	buttons 28 OK, 29 cancel, 30 defaults; heading 2.
+	Same layout as DialogAddonSettings.xml.
+-->
+<window>
+	<defaultcontrol always="true">5</defaultcontrol>
+	<controls>
+		<include>DialogScrim</include>
+		<control type="group">
+			<left>440</left>
+			<top>110</top>
+			<include>DialogEase</include>
+			<include content="DialogPanel">
+				<param name="width" value="1040" />
+				<param name="height" value="860" />
+				<param name="heading_id" value="2" />
+			</include>
+			<control type="grouplist" id="5">
+				<onup>noop</onup>
+				<left>40</left>
+				<top>100</top>
+				<width>960</width>
+				<height>600</height>
+				<orientation>vertical</orientation>
+				<itemgap>2</itemgap>
+				<onleft>9000</onleft>
+				<onright>9000</onright>
+				<ondown>9000</ondown>
+			</control>
+			<include content="SettingTemplates">
+				<param name="width" value="960" />
+				<param name="radiox" value="908" />
+			</include>
+			<control type="grouplist" id="9000">
+				<onleft>noop</onleft>
+				<onright>noop</onright>
+				<left>308</left>
+				<top>760</top>
+				<width>692</width>
+				<height>60</height>
+				<orientation>horizontal</orientation>
+				<align>right</align>
+				<itemgap>16</itemgap>
+				<onup>5</onup>
+				<include content="DialogButton"><param name="id" value="28" /></include>
+				<include content="DialogButton"><param name="id" value="29" /></include>
+				<include content="DialogButton"><param name="id" value="30" /></include>
+			</control>
+		</control>
+	</controls>
+</window>

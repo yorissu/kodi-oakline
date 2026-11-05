@@ -1,0 +1,9 @@
+
+dist/
+site/
+zips/
+.venv
+*.pyc
+__pycache__/
+# local only: the portable test Kodi and its fake library (tools/kodidev.py setup)
+dev/

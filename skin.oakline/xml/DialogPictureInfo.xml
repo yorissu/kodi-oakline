@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Picture details (Info key on a photo or in the slideshow). Kodi fills
+     list 5 with EXIF rows: label = field, label2 = value. -->
+<window>
+	<defaultcontrol always="true">5</defaultcontrol>
+	<controls>
+		<include>DialogScrim</include>
+		<control type="group">
+			<left>360</left>
+			<top>120</top>
+			<include>DialogEase</include>
+			<include content="DialogPanel">
+				<param name="width" value="1200" />
+				<param name="height" value="840" />
+				<param name="heading_id" value="9002" />
+			</include>
+			<control type="label">
+				<left>40</left>
+				<top>32</top>
+				<width>1120</width>
+				<height>44</height>
+				<font>head</font>
+				<textcolor>white</textcolor>
+				<label>$INFO[ListItem.Label]</label>
+			</control>
+			<control type="list" id="5">
+				<onup>noop</onup>
+				<ondown>noop</ondown>
+				<left>24</left>
+				<top>100</top>
+				<width>1152</width>
+				<height>704</height>
+				<orientation>vertical</orientation>
+				<scrolltime tween="cubic" easing="out">250</scrolltime>
+				<itemlayout width="1152" height="64">
+					<include content="InfoListRow"><param name="height" value="64" /><param name="text" value="gray200" /><param name="sub" value="gray400" /></include>
+				</itemlayout>
+				<focusedlayout width="1152" height="64">
+					<include content="Box">
+						<param name="width" value="1152" />
+						<param name="height" value="64" />
+						<param name="color" value="wood" />
+					</include>
+					<include content="InfoListRow"><param name="height" value="64" /><param name="text" value="onwood" /><param name="sub" value="onwood2" /></include>
+				</focusedlayout>
+			</control>
+		</control>
+	</controls>
+</window>

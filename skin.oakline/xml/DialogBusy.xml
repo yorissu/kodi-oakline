@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Busy indicator: a small wood bar that pulses, bottom right -->
+<window>
+	<zorder>2</zorder>
+	<controls>
+		<include content="Box">
+			<param name="left" value="1784" />
+			<param name="top" value="1000" />
+			<param name="width" value="40" />
+			<param name="height" value="6" />
+			<param name="color" value="wood" />
+		</include>
+		<control type="image">
+			<left>1784</left>
+			<top>1000</top>
+			<width>40</width>
+			<height>6</height>
+			<texture colordiffuse="navy950">white.png</texture>
+			<animation effect="fade" start="0" end="80" time="600" pulse="true" condition="true">Conditional</animation>
+		</control>
+	</controls>
+</window>

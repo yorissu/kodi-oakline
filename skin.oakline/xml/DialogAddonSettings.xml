@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	Add-on settings: Kodi clones the
+	templates 7-15 into grouplist 5, categories from 10 into 3, description in 6;
+	buttons 28 OK, 29 cancel, 30 defaults; heading 2.
+	Same layout as DialogSettings.xml.
+-->
+<window>
+	<defaultcontrol always="true">3</defaultcontrol>
+	<controls>
+		<include>DialogScrim</include>
+		<control type="group">
+			<left>320</left>
+			<top>110</top>
+			<include>DialogEase</include>
+			<include content="DialogPanel">
+				<param name="width" value="1280" />
+				<param name="height" value="860" />
+				<param name="heading_id" value="2" />
+			</include>
+			<control type="grouplist" id="3">
+				<onup>noop</onup>
+				<ondown>noop</ondown>
+				<left>40</left>
+				<top>100</top>
+				<width>240</width>
+				<height>600</height>
+				<orientation>vertical</orientation>
+				<itemgap>4</itemgap>
+				<onright>5</onright>
+			</control>
+			<include content="CategoryButton">
+				<param name="id" value="10" />
+				<param name="width" value="240" />
+			</include>
+			<include content="Box">
+				<param name="left" value="280" />
+				<param name="top" value="100" />
+				<param name="width" value="1" />
+				<param name="height" value="600" />
+				<param name="color" value="navy700" />
+			</include>
+			<control type="textbox" id="6">
+				<left>300</left>
+				<top>724</top>
+				<width>420</width>
+				<height>80</height>
+				<font>small</font>
+				<textcolor>gray400</textcolor>
+			</control>
+			<control type="radiobutton" id="20">
+				<visible>false</visible>
+			</control>
+			<control type="grouplist" id="5">
+				<onup>noop</onup>
+				<left>300</left>
+				<top>100</top>
+				<width>940</width>
+				<height>600</height>
+				<orientation>vertical</orientation>
+				<itemgap>2</itemgap>
+				<onleft>3</onleft>
+				<onright>9000</onright>
+				<ondown>9000</ondown>
+			</control>
+			<include content="SettingTemplates">
+				<param name="width" value="940" />
+				<param name="radiox" value="888" />
+			</include>
+			<control type="grouplist" id="9000">
+				<onleft>noop</onleft>
+				<onright>noop</onright>
+				<left>548</left>
+				<top>760</top>
+				<width>692</width>
+				<height>60</height>
+				<orientation>horizontal</orientation>
+				<align>right</align>
+				<itemgap>16</itemgap>
+				<onup>5</onup>
+				<include content="DialogButton"><param name="id" value="28" /></include>
+				<include content="DialogButton"><param name="id" value="29" /></include>
+				<include content="DialogButton"><param name="id" value="30" /></include>
+			</control>
+		</control>
+	</controls>
+</window>

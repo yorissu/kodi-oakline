@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Long text (changelogs, add-on licences, logs). 1 heading, 5 the text. -->
+<window>
+	<defaultcontrol always="true">5</defaultcontrol>
+	<controls>
+		<include>DialogScrim</include>
+		<control type="group">
+			<left>260</left>
+			<top>90</top>
+			<include>DialogEase</include>
+			<include content="DialogPanel">
+				<param name="width" value="1400" />
+				<param name="height" value="900" />
+			</include>
+			<control type="textbox" id="5">
+				<left>40</left>
+				<top>112</top>
+				<width>1320</width>
+				<height>748</height>
+				<font>body</font>
+				<textcolor>gray200</textcolor>
+				<pagecontrol>3000</pagecontrol>
+			</control>
+			<control type="scrollbar" id="3000">
+				<left>1372</left>
+				<top>112</top>
+				<width>6</width>
+				<height>748</height>
+				<texturesliderbackground colordiffuse="navy800">white.png</texturesliderbackground>
+				<texturesliderbar colordiffuse="gray600">white.png</texturesliderbar>
+				<texturesliderbarfocus colordiffuse="wood">white.png</texturesliderbarfocus>
+				<orientation>vertical</orientation>
+				<showonepage>false</showonepage>
+				<onleft>5</onleft>
+			</control>
+		</control>
+		<include content="CloseButton"><param name="label" value="Close" /><param name="ondown" value="5" /></include>
+	</controls>
+</window>

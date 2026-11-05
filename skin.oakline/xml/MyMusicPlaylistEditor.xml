@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Music playlist editor: Kodi's file browser plus the playlist. 6 open, 7 save, 8 clear; lists 50 (files) and 100 (playlist). -->
+<window>
+	<views>50</views>
+	<defaultcontrol always="true">50</defaultcontrol>
+	<controls>
+		<include>DialogScrim</include>
+		<control type="group">
+			<left>160</left>
+			<top>90</top>
+			<include>DialogEase</include>
+			<include content="DialogPanel">
+				<param name="width" value="1600" />
+				<param name="height" value="900" />
+				<param name="heading_id" value="9002" />
+			</include>
+			<control type="label">
+				<left>40</left>
+				<top>32</top>
+				<width>1520</width>
+				<height>44</height>
+				<font>head</font>
+				<textcolor>white</textcolor>
+				<label>Playlist editor</label>
+			</control>
+			<include content="PlainList"><param name="id" value="50" /><param name="left" value="24" /><param name="top" value="100" /><param name="width" value="760" /><param name="height" value="680" /><param name="onright" value="100" /></include>
+			<include content="PlainList"><param name="id" value="100" /><param name="left" value="816" /><param name="top" value="100" /><param name="width" value="760" /><param name="height" value="680" /><param name="onleft" value="50" /></include>
+			<control type="grouplist" id="9001">
+				<onleft>noop</onleft>
+				<onright>noop</onright>
+				<left>40</left>
+				<top>800</top>
+				<width>1520</width>
+				<height>60</height>
+				<orientation>horizontal</orientation>
+				<itemgap>14</itemgap>
+				<onup>50</onup>
+				<control type="button" id="6">
+					<include>ButtonStyle</include>
+					<label>Open</label>
+				</control>
+				<control type="button" id="7">
+					<include>ButtonStyle</include>
+					<label>Save</label>
+				</control>
+				<control type="button" id="8">
+					<include>ButtonStyle</include>
+					<label>Clear</label>
+				</control>
+			</control>
+		</control>
+	</controls>
+</window>

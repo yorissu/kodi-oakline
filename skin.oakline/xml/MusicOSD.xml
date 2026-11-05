@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	Music controls over the now-playing screen (Enter while it's up).
+	ids: 801 previous · 802 play/pause · 803 next · 804 shuffle · 805 repeat
+-->
+<window>
+	<defaultcontrol always="true">802</defaultcontrol>
+	<animation effect="fade" start="0" end="100" time="150">WindowOpen</animation>
+	<animation effect="fade" start="100" end="0" time="150">WindowClose</animation>
+	<controls>
+		<control type="group">
+			<left>800</left>
+			<top>740</top>
+			<include content="IconButton">
+				<param name="id" value="801" />
+				<param name="left" value="0" />
+				<param name="icon" value="icons/prev.png" />
+				<param name="onclick" value="PlayerControl(Previous)" />
+				<param name="onleft" value="805" />
+				<param name="onright" value="802" />
+			</include>
+			<include content="IconButton">
+				<param name="id" value="802" />
+				<param name="left" value="76" />
+				<param name="icon" value="$VAR[PlayPauseIcon]" />
+				<param name="onclick" value="PlayerControl(Play)" />
+				<param name="onleft" value="801" />
+				<param name="onright" value="803" />
+			</include>
+			<include content="IconButton">
+				<param name="id" value="803" />
+				<param name="left" value="152" />
+				<param name="icon" value="icons/next.png" />
+				<param name="onclick" value="PlayerControl(Next)" />
+				<param name="onleft" value="802" />
+				<param name="onright" value="804" />
+			</include>
+			<include content="IconButton">
+				<param name="id" value="804" />
+				<param name="left" value="820" />
+				<param name="icon" value="icons/shuffle.png" />
+				<param name="onclick" value="PlayerControl(Random)" />
+				<param name="onleft" value="803" />
+				<param name="onright" value="805" />
+			</include>
+			<include content="IconButton">
+				<param name="id" value="805" />
+				<param name="left" value="896" />
+				<param name="icon" value="icons/repeat.png" />
+				<param name="onclick" value="PlayerControl(Repeat)" />
+				<param name="onleft" value="804" />
+				<param name="onright" value="801" />
+			</include>
+			<!-- shuffle / repeat state: a wood line under the button while on -->
+			<include content="Box">
+				<param name="left" value="836" />
+				<param name="top" value="72" />
+				<param name="width" value="32" />
+				<param name="height" value="4" />
+				<param name="color" value="wood" />
+				<param name="visible" value="Playlist.IsRandom" />
+			</include>
+			<include content="Box">
+				<param name="left" value="912" />
+				<param name="top" value="72" />
+				<param name="width" value="32" />
+				<param name="height" value="4" />
+				<param name="color" value="wood" />
+				<param name="visible" value="Playlist.IsRepeat | Playlist.IsRepeatOne" />
+			</include>
+		</control>
+	</controls>
+</window>
